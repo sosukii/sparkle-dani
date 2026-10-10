@@ -12,23 +12,23 @@ usePageSeo({
 })
 
 const makes = [
-  { icon: 'heart', title: 'Игрушки-амигуруми', text: 'Мягкие друзья с вышитыми глазками и характером. Одни живут на полке, другие путешествуют в рюкзаке.', tint: 'bg-rose-soft' },
-  { icon: 'sparkle', title: 'Тёплые вещи', text: 'Шарфы, шапки и варежки, в которых хочется гулять дольше, даже когда за окном зима.', tint: 'bg-lilac-soft' },
-  { icon: 'bag', title: 'Мелочи для себя', text: 'Бисерные украшения, сумочки, косметички и костеры — маленькие детали, которые делают день ярче.', tint: 'bg-mint-soft' },
+  { icon: 'heart', title: 'Игрушки-амигуруми', text: 'Мягкие друзья с вышитыми глазками и собственным характером. Одни охраняют уют на полке, другие отправляются с вами в рюкзаке на край света.', tint: 'bg-rose-soft' },
+  { icon: 'sparkle', title: 'Тёплые вещи', text: 'Шарфы, шапки и варежки, в которых хочется гулять до первой звезды, даже когда за окном совсем не лето.', tint: 'bg-lilac-soft' },
+  { icon: 'bag', title: 'Мелочи для себя', text: 'Бисерные серьги и браслеты, сумочки, косметички и костеры. Маленькие детали, с которыми день получается ярче.', tint: 'bg-mint-soft' },
 ] as const
 
 const process = [
-  { n: 1, title: 'Идея', text: 'Всё начинается с настроения: любимая история, цвет или просто «хочу вот такое». Делаю наброски и подбираю палитру.' },
-  { n: 2, title: 'Пряжа', text: 'Выбираю материалы, которые приятно держать в руках: мягкие, плотные и красивые в цвете.' },
-  { n: 3, title: 'Вязание', text: 'Петля за петлёй, ряд за рядом. Это самая медленная и самая любимая часть пути.' },
-  { n: 4, title: 'Финальные штрихи', text: 'Вышиваю мордочки, пришиваю помпоны, проверяю каждый шов и упаковываю так, чтобы можно было дарить сразу.' },
+  { n: 1, title: 'Идея', text: 'Всё начинается с настроения: герой любимой истории, цвет, который не отпускает, или просто «хочу вот такое». Набрасываю эскиз и подбираю палитру.' },
+  { n: 2, title: 'Пряжа', text: 'Выбираю материалы, которые приятно держать в руках: мягкие, надёжные и с красивым, глубоким цветом.' },
+  { n: 3, title: 'Вязание', text: 'Петля за петлёй, ряд за рядом. Самая неторопливая и самая любимая часть пути.' },
+  { n: 4, title: 'Финальные штрихи', text: 'Вышиваю мордочки, пришиваю помпоны, всё внимательно проверяю и аккуратно упаковываю: изделие можно сразу дарить.' },
 ]
 
 const values = [
-  { title: 'Только вручную', text: 'Никаких конвейеров: у каждого изделия чуть-чуть свой характер.' },
-  { title: 'Честные описания', text: 'Размеры, материалы и сроки — как есть, без сюрпризов.' },
-  { title: 'Живое общение', text: 'Всё обсуждаем лично в Telegram — можно уточнить детали и задать любой вопрос.' },
-  { title: 'Уют и радость', text: 'Хочу, чтобы от каждого изделия становилось чуть теплее на душе.' },
+  { title: 'Только вручную', text: 'Без конвейера: у каждого изделия чуть-чуть свой характер, и это не недочёт, а изюминка.' },
+  { title: 'Честные описания', text: 'Размеры, материалы и сроки — как есть, чтобы ожидания совпадали с реальностью.' },
+  { title: 'Живое общение', text: 'Все детали мы обсуждаем лично в Telegram — спрашивайте о чём угодно.' },
+  { title: 'Уют и радость', text: 'Хочу, чтобы от каждого изделия на душе становилось чуть теплее.' },
 ]
 </script>
 
@@ -40,7 +40,7 @@ const values = [
         <p class="eyebrow">Обо мне</p>
         <h1 class="mt-4 text-5xl sm:text-6xl lg:text-7xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span>!</h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-          Я вяжу маленькие радости — игрушки, тёплые вещи и украшения, в которых живёт настроение любимых историй. Если вы тоже любите уютные мелочи с характером, вы в правильном месте.
+          Я вяжу крючком маленькие радости: игрушек с характером, шарфы, в которые хочется закутаться, и мелочи, от которых обычный день становится чуточку сказочнее. Многое — по мотивам историй, которые люблю сама. Если вы узнаёте в этом себя, заходите: вам здесь рады.
         </p>
         <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8 no-underline">
           <AppIcon name="telegram" :size="18" /> {{ CONTACT_LABEL }}
@@ -57,7 +57,7 @@ const values = [
     </section>
 
     <section class="container-page py-12 lg:py-16" aria-labelledby="about-makes">
-      <SectionHead id="about-makes" eyebrow="Что я делаю" title="Три любимых направления" />
+      <SectionHead id="about-makes" eyebrow="Что я делаю" title="Что выходит из-под моего крючка" />
       <ul class="mt-8 grid gap-5 md:grid-cols-3">
         <li v-for="m in makes" :key="m.title" class="rounded-card p-8" :class="m.tint">
           <AppIcon :name="m.icon" :size="28" class="text-berry" />
@@ -91,7 +91,7 @@ const values = [
     </section>
 
     <section v-if="fandoms.length" class="container-page py-12 lg:py-16" aria-labelledby="about-fandoms">
-      <SectionHead id="about-fandoms" eyebrow="Вдохновение" title="Миры, которые я люблю" />
+      <SectionHead id="about-fandoms" eyebrow="Вдохновение" title="Миры, в которые я влюблена" />
       <ul class="mt-6 flex flex-wrap gap-3">
         <li v-for="f in fandoms" :key="f.id">
           <NuxtLink :to="{ path: '/catalog', query: { fandom: f.id } }" class="chip no-underline">
@@ -104,7 +104,7 @@ const values = [
     <section class="container-page pt-12 lg:pt-16">
       <div class="rounded-[2rem] bg-ink px-6 py-14 text-center text-paper sm:px-12">
         <h2 class="text-3xl sm:text-5xl">Хотите что-то <span class="font-display italic text-rose">особенное</span>?</h2>
-        <p class="mx-auto mt-4 max-w-xl text-paper/80">Выберите изделие из каталога или напишите мне — обсудим идею и подберём подходящее.</p>
+        <p class="mx-auto mt-4 max-w-xl text-paper/80">Выберите изделие из каталога или напишите мне: обсудим вашу идею и придумаем, как её связать.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <NuxtLink to="/catalog" class="btn bg-paper text-ink no-underline hover:bg-rose">В каталог</NuxtLink>
           <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn border-2 border-paper/70 text-paper no-underline hover:bg-paper hover:text-ink">
