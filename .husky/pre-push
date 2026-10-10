@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# Если дерево коммита уже прошло pre-commit — повторять не нужно; иначе гоняем полный набор.
+set -e
+CURRENT=$(git rev-parse 'HEAD^{tree}')
+VERIFIED=$(cat .git/last-verified-tree 2>/dev/null || echo none)
+if [ "$CURRENT" = "$VERIFIED" ]; then
+  echo "pre-push: это дерево уже проверено pre-commit — пропускаю повторный прогон."
+else
+  echo "pre-push: дерево не проверялось (коммит создан не через hook?) — запускаю полный набор."
+  npm test
+fi
