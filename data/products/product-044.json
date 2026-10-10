@@ -1,0 +1,47 @@
+{
+  "id": "product-044",
+  "slug": "chehol-dlya-naushnikov-volna-044",
+  "title": "Чехол для наушников «волна»",
+  "description": "Мягкий вязаный чехол на молнии для мелочей, которые вечно теряются в сумке. Вдохновлено миром «Genshin Impact». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 900,
+  "currency": "RUB",
+  "category": "bags",
+  "type": "case",
+  "fandom": "genshin",
+  "colors": [
+    "blue"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 5,
+  "images": [
+    {
+      "src": "/images/products/product-044-1.jpg",
+      "alt": "Чехол для наушников «волна» — чехол и косметичка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-044-2.jpg",
+      "alt": "Чехол для наушников «волна» — чехол и косметичка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа"
+    },
+    {
+      "label": "Размер",
+      "value": "18 × 11 см"
+    },
+    {
+      "label": "Застёжка",
+      "value": "Молния"
+    }
+  ],
+  "createdAt": "2026-07-25",
+  "isDemo": true
+}

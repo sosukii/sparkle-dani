@@ -1,0 +1,43 @@
+{
+  "id": "product-028",
+  "slug": "varezhki-zimnee-oblako-028",
+  "title": "Варежки «зимнее облако»",
+  "description": "Тёплые варежки на каждый день. Плотная вязка, мягкая подкладка внутри. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 1900,
+  "currency": "RUB",
+  "category": "warm-wear",
+  "type": "mittens",
+  "fandom": null,
+  "colors": [
+    "white"
+  ],
+  "warmth": "warm",
+  "availability": "in_stock",
+  "stock": 2,
+  "images": [
+    {
+      "src": "/images/products/product-028-1.jpg",
+      "alt": "Варежки «зимнее облако» — варежки ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-028-2.jpg",
+      "alt": "Варежки «зимнее облако» — варежки ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Шерсть с акрилом"
+    },
+    {
+      "label": "Размер",
+      "value": "M (универсальный)"
+    }
+  ],
+  "createdAt": "2026-08-18",
+  "isDemo": true
+}

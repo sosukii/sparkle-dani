@@ -1,0 +1,50 @@
+{
+  "id": "product-007",
+  "slug": "kosmicheskaya-sputnitsa-007",
+  "title": "Космическая спутница",
+  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Genshin Impact». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3900,
+  "currency": "RUB",
+  "category": "toys",
+  "type": "amigurumi",
+  "fandom": "genshin",
+  "colors": [
+    "yellow"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 14,
+    "max": 21
+  },
+  "images": [
+    {
+      "src": "/images/products/product-007-1.jpg",
+      "alt": "Космическая спутница — игрушка-амигуруми ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-007-2.jpg",
+      "alt": "Космическая спутница — игрушка-амигуруми ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа, холлофайбер"
+    },
+    {
+      "label": "Высота",
+      "value": "20 см"
+    },
+    {
+      "label": "Уход",
+      "value": "Ручная стирка при 30 °C"
+    }
+  ],
+  "createdAt": "2026-09-19",
+  "isDemo": true
+}

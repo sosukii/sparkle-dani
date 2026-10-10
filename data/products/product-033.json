@@ -1,0 +1,46 @@
+{
+  "id": "product-033",
+  "slug": "sergi-tsvety-siren-033",
+  "title": "Серьги-цветы «сирень»",
+  "description": "Лёгкие серьги из бисера, собранные вручную. Фурнитура гипоаллергенная. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 1400,
+  "currency": "RUB",
+  "category": "jewelry",
+  "type": "earrings",
+  "fandom": null,
+  "colors": [
+    "lilac"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 5,
+    "max": 8
+  },
+  "images": [
+    {
+      "src": "/images/products/product-033-1.jpg",
+      "alt": "Серьги-цветы «сирень» — серьги ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-033-2.jpg",
+      "alt": "Серьги-цветы «сирень» — серьги ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Бисер, ювелирная фурнитура"
+    },
+    {
+      "label": "Длина",
+      "value": "5 см"
+    }
+  ],
+  "createdAt": "2026-08-11",
+  "isDemo": true
+}

@@ -1,0 +1,34 @@
+{
+  "id": "product-023",
+  "slug": "shapka-s-pomponom-zefir-023",
+  "title": "Шапка с помпоном «зефир»",
+  "description": "Уютная шапка с мягкой резинкой по краю. Хорошо держит форму и не колется. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 2200,
+  "currency": "RUB",
+  "category": "warm-wear",
+  "type": "hat",
+  "fandom": null,
+  "colors": [
+    "pink"
+  ],
+  "warmth": "warm",
+  "availability": "in_stock",
+  "stock": 3,
+  "images": [
+    {
+      "src": "/images/products/product-023-1.jpg",
+      "alt": "Шапка с помпоном «зефир» — шапка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-023-2.jpg",
+      "alt": "Шапка с помпоном «зефир» — шапка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [],
+  "createdAt": "2026-08-26",
+  "isDemo": true
+}

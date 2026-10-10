@@ -1,0 +1,43 @@
+{
+  "id": "product-025",
+  "slug": "shapochka-moh-025",
+  "title": "Шапочка «мох»",
+  "description": "Уютная шапка с мягкой резинкой по краю. Хорошо держит форму и не колется. Вдохновлено миром «Studio Ghibli». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 2300,
+  "currency": "RUB",
+  "category": "warm-wear",
+  "type": "hat",
+  "fandom": "ghibli",
+  "colors": [
+    "green"
+  ],
+  "warmth": "demi",
+  "availability": "in_stock",
+  "stock": 2,
+  "images": [
+    {
+      "src": "/images/products/product-025-1.jpg",
+      "alt": "Шапочка «мох» — шапка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-025-2.jpg",
+      "alt": "Шапочка «мох» — шапка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Шерсть с акрилом"
+    },
+    {
+      "label": "Обхват головы",
+      "value": "54–58 см"
+    }
+  ],
+  "createdAt": "2026-08-23",
+  "isDemo": true
+}

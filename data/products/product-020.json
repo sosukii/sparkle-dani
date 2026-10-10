@@ -1,0 +1,50 @@
+{
+  "id": "product-020",
+  "slug": "sharf-lunnaya-noch-020",
+  "title": "Шарф «лунная ночь»",
+  "description": "Мягкий шарф, который приятно носить каждый день. Связан в одном полотне без швов, края аккуратно обработаны. Вдохновлено миром «Сейлор Мун». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3800,
+  "currency": "RUB",
+  "category": "warm-wear",
+  "type": "scarf",
+  "fandom": "sailor-moon",
+  "colors": [
+    "lilac"
+  ],
+  "warmth": "warm",
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 14,
+    "max": 21
+  },
+  "images": [
+    {
+      "src": "/images/products/product-020-1.jpg",
+      "alt": "Шарф «лунная ночь» — шарф ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-020-2.jpg",
+      "alt": "Шарф «лунная ночь» — шарф ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Шерсть с акрилом"
+    },
+    {
+      "label": "Размер",
+      "value": "180 × 25 см"
+    },
+    {
+      "label": "Уход",
+      "value": "Ручная стирка при 30 °C"
+    }
+  ],
+  "createdAt": "2026-08-30",
+  "isDemo": true
+}

@@ -1,0 +1,43 @@
+{
+  "id": "product-030",
+  "slug": "sergi-zvezdochki-030",
+  "title": "Серьги «звёздочки»",
+  "description": "Лёгкие серьги из бисера, собранные вручную. Фурнитура гипоаллергенная. Вдохновлено миром «Сейлор Мун». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 1100,
+  "currency": "RUB",
+  "category": "jewelry",
+  "type": "earrings",
+  "fandom": "sailor-moon",
+  "colors": [
+    "pink"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 4,
+  "images": [
+    {
+      "src": "/images/products/product-030-1.jpg",
+      "alt": "Серьги «звёздочки» — серьги ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-030-2.jpg",
+      "alt": "Серьги «звёздочки» — серьги ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Бисер, ювелирная фурнитура"
+    },
+    {
+      "label": "Длина",
+      "value": "5 см"
+    }
+  ],
+  "createdAt": "2026-08-15",
+  "isDemo": true
+}

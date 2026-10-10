@@ -1,0 +1,50 @@
+{
+  "id": "product-053",
+  "slug": "pled-mozaika-myata-053",
+  "title": "Плед-мозаика «мята»",
+  "description": "Большой мягкий плед ручной вязки. Согреет в холодный вечер и украсит диван. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 6900,
+  "currency": "RUB",
+  "category": "home",
+  "type": "blanket",
+  "fandom": null,
+  "colors": [
+    "mint"
+  ],
+  "warmth": "demi",
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 21,
+    "max": 30
+  },
+  "images": [
+    {
+      "src": "/images/products/product-053-1.jpg",
+      "alt": "Плед-мозаика «мята» — плед ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-053-2.jpg",
+      "alt": "Плед-мозаика «мята» — плед ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Пряжа-велюр"
+    },
+    {
+      "label": "Размер",
+      "value": "120 × 150 см"
+    },
+    {
+      "label": "Уход",
+      "value": "Деликатная стирка при 30 °C"
+    }
+  ],
+  "createdAt": "2026-07-12",
+  "isDemo": true
+}

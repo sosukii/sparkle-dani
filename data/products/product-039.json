@@ -1,0 +1,50 @@
+{
+  "id": "product-039",
+  "slug": "shopper-latte-039",
+  "title": "Шоппер «латте»",
+  "description": "Вместительная сумка, связанная крючком. Плотное полотно хорошо держит форму, внутри есть хлопковая подкладка. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3900,
+  "currency": "RUB",
+  "category": "bags",
+  "type": "bag",
+  "fandom": null,
+  "colors": [
+    "beige"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 14,
+    "max": 21
+  },
+  "images": [
+    {
+      "src": "/images/products/product-039-1.jpg",
+      "alt": "Шоппер «латте» — сумка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-039-2.jpg",
+      "alt": "Шоппер «латте» — сумка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковый шнур"
+    },
+    {
+      "label": "Размер",
+      "value": "32 × 28 см"
+    },
+    {
+      "label": "Подкладка",
+      "value": "Хлопок"
+    }
+  ],
+  "createdAt": "2026-08-02",
+  "isDemo": true
+}

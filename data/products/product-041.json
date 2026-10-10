@@ -1,0 +1,37 @@
+{
+  "id": "product-041",
+  "slug": "sumochka-rozovaya-luna-041",
+  "title": "Сумочка «розовая луна»",
+  "description": "Вместительная сумка, связанная крючком. Плотное полотно хорошо держит форму, внутри есть хлопковая подкладка. Вдохновлено миром «Сейлор Мун». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3500,
+  "currency": "RUB",
+  "category": "bags",
+  "type": "bag",
+  "fandom": "sailor-moon",
+  "colors": [
+    "pink"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 14,
+    "max": 21
+  },
+  "images": [
+    {
+      "src": "/images/products/product-041-1.jpg",
+      "alt": "Сумочка «розовая луна» — сумка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-041-2.jpg",
+      "alt": "Сумочка «розовая луна» — сумка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [],
+  "createdAt": "2026-07-30",
+  "isDemo": true
+}

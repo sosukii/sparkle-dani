@@ -1,0 +1,50 @@
+{
+  "id": "product-002",
+  "slug": "mohnatyy-lesnoy-drug-002",
+  "title": "Мохнатый лесной друг",
+  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Studio Ghibli». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3600,
+  "currency": "RUB",
+  "category": "toys",
+  "type": "amigurumi",
+  "fandom": "ghibli",
+  "colors": [
+    "green"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 10,
+    "max": 14
+  },
+  "images": [
+    {
+      "src": "/images/products/product-002-1.jpg",
+      "alt": "Мохнатый лесной друг — игрушка-амигуруми ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-002-2.jpg",
+      "alt": "Мохнатый лесной друг — игрушка-амигуруми ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа, холлофайбер"
+    },
+    {
+      "label": "Высота",
+      "value": "20 см"
+    },
+    {
+      "label": "Уход",
+      "value": "Ручная стирка при 30 °C"
+    }
+  ],
+  "createdAt": "2026-09-26",
+  "isDemo": true
+}

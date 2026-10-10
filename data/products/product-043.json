@@ -1,0 +1,47 @@
+{
+  "id": "product-043",
+  "slug": "kosmetichka-lavanda-043",
+  "title": "Косметичка «лаванда»",
+  "description": "Мягкий вязаный чехол на молнии для мелочей, которые вечно теряются в сумке. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 1500,
+  "currency": "RUB",
+  "category": "bags",
+  "type": "case",
+  "fandom": null,
+  "colors": [
+    "lilac"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 3,
+  "images": [
+    {
+      "src": "/images/products/product-043-1.jpg",
+      "alt": "Косметичка «лаванда» — чехол и косметичка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-043-2.jpg",
+      "alt": "Косметичка «лаванда» — чехол и косметичка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа"
+    },
+    {
+      "label": "Размер",
+      "value": "18 × 11 см"
+    },
+    {
+      "label": "Застёжка",
+      "value": "Молния"
+    }
+  ],
+  "createdAt": "2026-07-27",
+  "isDemo": true
+}

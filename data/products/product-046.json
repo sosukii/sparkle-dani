@@ -1,0 +1,47 @@
+{
+  "id": "product-046",
+  "slug": "chehol-dlya-ochkov-limon-046",
+  "title": "Чехол для очков «лимон»",
+  "description": "Мягкий вязаный чехол на молнии для мелочей, которые вечно теряются в сумке. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 1100,
+  "currency": "RUB",
+  "category": "bags",
+  "type": "case",
+  "fandom": null,
+  "colors": [
+    "yellow"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 4,
+  "images": [
+    {
+      "src": "/images/products/product-046-1.jpg",
+      "alt": "Чехол для очков «лимон» — чехол и косметичка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-046-2.jpg",
+      "alt": "Чехол для очков «лимон» — чехол и косметичка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа"
+    },
+    {
+      "label": "Размер",
+      "value": "18 × 11 см"
+    },
+    {
+      "label": "Застёжка",
+      "value": "Молния"
+    }
+  ],
+  "createdAt": "2026-07-22",
+  "isDemo": true
+}

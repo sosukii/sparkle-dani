@@ -1,4 +1,6 @@
+import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
+import type { NitroConfig } from 'nitropack'
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-10-01',
@@ -35,6 +37,14 @@ export default defineNuxtConfig({
     urls: ['/', '/catalog', '/about', '/delivery'],
     sources: ['/api/_sitemap-urls'],
     exclude: ['/cart', '/search'],
+  },
+  hooks: {
+    // data/ не публичная: JSON читается только серверным слоем и попадает в production-сборку как server asset.
+    'nitro:config'(config) {
+      const nitroConfig = config as NitroConfig
+      nitroConfig.serverAssets ??= []
+      nitroConfig.serverAssets.push({ baseName: 'data', dir: fileURLToPath(new URL('./data', import.meta.url)) })
+    },
   },
   routeRules: {
     '/about': { prerender: true },

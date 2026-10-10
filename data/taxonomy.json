@@ -1,0 +1,149 @@
+{
+  "fandoms": [
+    {
+      "id": "ghibli",
+      "label": "Studio Ghibli"
+    },
+    {
+      "id": "sailor-moon",
+      "label": "Сейлор Мун"
+    },
+    {
+      "id": "genshin",
+      "label": "Genshin Impact"
+    },
+    {
+      "id": "arcane",
+      "label": "Arcane"
+    },
+    {
+      "id": "harry-potter",
+      "label": "Гарри Поттер"
+    }
+  ],
+  "types": [
+    {
+      "id": "amigurumi",
+      "label": "Игрушка-амигуруми"
+    },
+    {
+      "id": "keychain",
+      "label": "Брелок"
+    },
+    {
+      "id": "scarf",
+      "label": "Шарф"
+    },
+    {
+      "id": "hat",
+      "label": "Шапка"
+    },
+    {
+      "id": "mittens",
+      "label": "Варежки"
+    },
+    {
+      "id": "earrings",
+      "label": "Серьги"
+    },
+    {
+      "id": "bracelet",
+      "label": "Браслет"
+    },
+    {
+      "id": "bag",
+      "label": "Сумка"
+    },
+    {
+      "id": "case",
+      "label": "Чехол и косметичка"
+    },
+    {
+      "id": "coaster",
+      "label": "Костер-подставка"
+    },
+    {
+      "id": "blanket",
+      "label": "Плед"
+    }
+  ],
+  "colors": [
+    {
+      "id": "pink",
+      "label": "Розовый",
+      "hex": "#f4a6c0"
+    },
+    {
+      "id": "red",
+      "label": "Красный",
+      "hex": "#d9475a"
+    },
+    {
+      "id": "lilac",
+      "label": "Сиреневый",
+      "hex": "#b79ae0"
+    },
+    {
+      "id": "blue",
+      "label": "Голубой",
+      "hex": "#6fa8e8"
+    },
+    {
+      "id": "mint",
+      "label": "Мятный",
+      "hex": "#8fd9c0"
+    },
+    {
+      "id": "green",
+      "label": "Зелёный",
+      "hex": "#6fae7a"
+    },
+    {
+      "id": "yellow",
+      "label": "Жёлтый",
+      "hex": "#f5cf5a"
+    },
+    {
+      "id": "beige",
+      "label": "Бежевый",
+      "hex": "#e6cfae"
+    },
+    {
+      "id": "white",
+      "label": "Белый",
+      "hex": "#f7f3ee"
+    },
+    {
+      "id": "black",
+      "label": "Чёрный",
+      "hex": "#3a3340"
+    },
+    {
+      "id": "gray",
+      "label": "Серый",
+      "hex": "#a9a5b0"
+    },
+    {
+      "id": "brown",
+      "label": "Коричневый",
+      "hex": "#9a6a4b"
+    }
+  ],
+  "warmth": [
+    {
+      "id": "warm",
+      "label": "Тёплое",
+      "hint": "осень — зима"
+    },
+    {
+      "id": "demi",
+      "label": "Демисезон",
+      "hint": "весна — осень"
+    },
+    {
+      "id": "light",
+      "label": "Лёгкое",
+      "hint": "лето"
+    }
+  ]
+}

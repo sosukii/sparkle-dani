@@ -1,0 +1,37 @@
+{
+  "id": "product-050",
+  "slug": "koster-zvezda-050",
+  "title": "Костер «звезда»",
+  "description": "Ажурный костер под чашку. Выдерживает горячее, легко стирается. Вдохновлено миром «Сейлор Мун». Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 500,
+  "currency": "RUB",
+  "category": "home",
+  "type": "coaster",
+  "fandom": "sailor-moon",
+  "colors": [
+    "lilac"
+  ],
+  "warmth": null,
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 3,
+    "max": 5
+  },
+  "images": [
+    {
+      "src": "/images/products/product-050-1.jpg",
+      "alt": "Костер «звезда» — костер-подставка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-050-2.jpg",
+      "alt": "Костер «звезда» — костер-подставка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [],
+  "createdAt": "2026-07-16",
+  "isDemo": true
+}

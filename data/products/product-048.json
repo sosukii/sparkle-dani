@@ -1,0 +1,43 @@
+{
+  "id": "product-048",
+  "slug": "koster-roza-048",
+  "title": "Костер «роза»",
+  "description": "Ажурный костер под чашку. Выдерживает горячее, легко стирается. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 450,
+  "currency": "RUB",
+  "category": "home",
+  "type": "coaster",
+  "fandom": null,
+  "colors": [
+    "pink"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 6,
+  "images": [
+    {
+      "src": "/images/products/product-048-1.jpg",
+      "alt": "Костер «роза» — костер-подставка ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-048-2.jpg",
+      "alt": "Костер «роза» — костер-подставка ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа"
+    },
+    {
+      "label": "Диаметр",
+      "value": "11 см"
+    }
+  ],
+  "createdAt": "2026-07-19",
+  "isDemo": true
+}

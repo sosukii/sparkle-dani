@@ -1,0 +1,47 @@
+{
+  "id": "product-019",
+  "slug": "teplyy-sharf-ovsyanka-019",
+  "title": "Тёплый шарф «овсянка»",
+  "description": "Мягкий шарф, который приятно носить каждый день. Связан в одном полотне без швов, края аккуратно обработаны. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 3400,
+  "currency": "RUB",
+  "category": "warm-wear",
+  "type": "scarf",
+  "fandom": null,
+  "colors": [
+    "beige"
+  ],
+  "warmth": "warm",
+  "availability": "in_stock",
+  "stock": 1,
+  "images": [
+    {
+      "src": "/images/products/product-019-1.jpg",
+      "alt": "Тёплый шарф «овсянка» — шарф ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-019-2.jpg",
+      "alt": "Тёплый шарф «овсянка» — шарф ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Шерсть с акрилом"
+    },
+    {
+      "label": "Размер",
+      "value": "180 × 25 см"
+    },
+    {
+      "label": "Уход",
+      "value": "Ручная стирка при 30 °C"
+    }
+  ],
+  "createdAt": "2026-09-01",
+  "isDemo": true
+}

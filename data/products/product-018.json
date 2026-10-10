@@ -1,0 +1,43 @@
+{
+  "id": "product-018",
+  "slug": "brelok-solnechnyy-tsyplenok-018",
+  "title": "Брелок «солнечный цыплёнок»",
+  "description": "Крошечный друг для ключей и рюкзака. Связан крючком, на прочной металлической фурнитуре. Это демонстрационное описание — настоящий текст появится вместе с реальным товаром.",
+  "price": 850,
+  "currency": "RUB",
+  "category": "toys",
+  "type": "keychain",
+  "fandom": null,
+  "colors": [
+    "yellow"
+  ],
+  "warmth": null,
+  "availability": "in_stock",
+  "stock": 8,
+  "images": [
+    {
+      "src": "/images/products/product-018-1.jpg",
+      "alt": "Брелок «солнечный цыплёнок» — брелок ручной работы, демо-иллюстрация (вид 1)",
+      "width": 1200,
+      "height": 1500
+    },
+    {
+      "src": "/images/products/product-018-2.jpg",
+      "alt": "Брелок «солнечный цыплёнок» — брелок ручной работы, демо-иллюстрация (вид 2)",
+      "width": 1200,
+      "height": 1500
+    }
+  ],
+  "attributes": [
+    {
+      "label": "Материал",
+      "value": "Хлопковая пряжа, металлическая фурнитура"
+    },
+    {
+      "label": "Длина",
+      "value": "9 см"
+    }
+  ],
+  "createdAt": "2026-09-02",
+  "isDemo": true
+}
