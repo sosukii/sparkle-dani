@@ -36,7 +36,7 @@ const faq = [
       <h2 id="delivery-steps" class="text-3xl sm:text-4xl">Как сделать заказ</h2>
       <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <li v-for="(s, i) in steps" :key="s.title" class="rounded-card border border-line bg-white p-7">
-          <span class="font-display text-4xl italic text-rose">0{{ i + 1 }}</span>
+          <span class="font-display text-4xl italic text-rose-deep">0{{ i + 1 }}</span>
           <h3 class="mt-3 text-xl">{{ s.title }}</h3>
           <p class="mt-2 text-sm leading-relaxed text-ink-soft">{{ s.text }}</p>
         </li>

@@ -149,6 +149,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
       </aside>
 
       <section id="catalog-results" class="min-w-0 scroll-mt-24" aria-label="Результаты" :aria-busy="pending">
+        <h2 class="sr-only">Изделия</h2>
         <!-- Панель: поиск, сортировка, мобильный фильтр -->
         <div class="flex flex-wrap items-end gap-3">
           <form class="min-w-[12rem] flex-1" role="search" @submit.prevent="submitSearch">

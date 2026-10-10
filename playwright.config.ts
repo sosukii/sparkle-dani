@@ -8,7 +8,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  // Картинки кодируются на лету (AVIF) и нагружают процессор: много воркеров только замедляют сервер и дают случайные тайм-ауты.
+  workers: 2,
+  timeout: 60_000,
   reporter: process.env.CI
     ? [['list'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
@@ -16,6 +18,7 @@ export default defineConfig({
   // Снимки лежат отдельно для каждой платформы: шрифты и сглаживание в macOS и Linux отличаются.
   snapshotPathTemplate: '{testDir}/__screenshots__/{platform}/{testFileName}/{arg}{ext}',
   expect: {
+    timeout: 10_000,
     toHaveScreenshot: {
       // Допуск — только на единичные пиксели сглаживания. Относительный порог (ratio) не используем:
       // на длинной странице он съедает целые строки текста и прячет реальные поломки.

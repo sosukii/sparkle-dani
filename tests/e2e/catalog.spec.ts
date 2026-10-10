@@ -105,7 +105,7 @@ test('пагинация: в «Игрушках» две страницы', asyn
   const nav = page.getByRole('navigation', { name: 'Страницы каталога' })
   await expect(nav.getByRole('link', { name: 'Страница 1' })).toHaveAttribute('aria-current', 'page')
 
-  await nav.getByRole('link', { name: 'Следующая страница' }).click()
+  await nav.getByRole('link', { name: 'Вперёд' }).click()
   await expect(page).toHaveURL(/page=2/)
   await expect(cards(page)).toHaveCount(6)
   await page.reload()

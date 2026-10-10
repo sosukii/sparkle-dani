@@ -69,6 +69,19 @@ test.describe('SEO', () => {
     expect(sitemap).not.toContain('/cart</loc>')
   })
 
+  test('сжатие: HTML отдаётся в br/gzip и корректно разворачивается', async ({ playwright }) => {
+    for (const encoding of ['br', 'gzip']) {
+      const ctx = await playwright.request.newContext({ baseURL: 'http://127.0.0.1:3100', extraHTTPHeaders: { 'accept-encoding': encoding, accept: 'text/html' } })
+      for (const path of ['/', '/catalog', '/product/nope']) {
+        const response = await ctx.get(path, { failOnStatusCode: false })
+        const html = await response.text() // Playwright сам разворачивает br/gzip
+        expect(html, `${encoding} ${path}`).toContain('<html')
+        expect(html, `${encoding} ${path}`).not.toContain('\uFFFD')
+      }
+      await ctx.dispose()
+    }
+  })
+
   test('у каждой страницы один h1', async ({ page }) => {
     for (const path of ['/', '/catalog', '/catalog/toys', '/product/lesnoy-duh-001', '/cart', '/about', '/delivery']) {
       await page.goto(path)
@@ -81,15 +94,15 @@ test.describe('доступность и вёрстка', () => {
   const paths = ['/', '/catalog', '/catalog/jewelry', '/product/zayka-lunnitsa-004', '/cart', '/about', '/delivery']
 
   for (const width of [360, 768, 1280]) {
-    test(`нет горизонтальной прокрутки на ширине ${width}px`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 900 })
-      for (const path of paths) {
+    for (const path of paths) {
+      test(`нет горизонтальной прокрутки: ${path} @${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 })
         await page.goto(path)
         await page.waitForLoadState('networkidle')
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
-        expect(overflow, `${path} @${width}`).toBeLessThanOrEqual(0)
-      }
-    })
+        expect(overflow).toBeLessThanOrEqual(0)
+      })
+    }
   }
 
   test('у всех картинок есть alt, у всех полей — подпись', async ({ page }) => {

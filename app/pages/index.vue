@@ -69,25 +69,28 @@ const steps = [
         </ul>
       </div>
 
-      <div v-if="heroImages.length === 3" class="relative mx-auto grid w-full max-w-xl grid-cols-[1.1fr_1fr] gap-4" aria-hidden="false">
+      <div
+        v-if="heroImages.length === 3"
+        class="relative mx-auto grid aspect-[11/10] w-full max-w-xl grid-cols-[1.1fr_1fr] grid-rows-2 gap-4"
+      >
         <AppIcon name="sparkle" :size="44" class="absolute -left-3 top-8 z-10 text-rose" />
         <AppIcon name="sparkle" :size="26" class="absolute -right-1 bottom-24 z-10 text-lilac" />
-        <div class="row-span-2 overflow-hidden rounded-t-[999px] rounded-b-card bg-cream shadow-soft">
+        <div class="row-span-2 min-h-0 overflow-hidden rounded-t-[999px] rounded-b-card bg-cream shadow-soft">
           <AppImage
             :src="heroImages[0]!.src" :alt="heroImages[0]!.alt" :width="heroImages[0]!.width" :height="heroImages[0]!.height"
-            sizes="(min-width: 1024px) 30vw, 52vw" priority img-class="h-full w-full object-cover"
+            sizes="(min-width: 1024px) 30vw, 52vw" priority img-class="size-full object-cover"
           />
         </div>
-        <div class="overflow-hidden rounded-card bg-cream shadow-soft">
+        <div class="min-h-0 overflow-hidden rounded-card bg-cream shadow-soft">
           <AppImage
             :src="heroImages[1]!.src" :alt="heroImages[1]!.alt" :width="heroImages[1]!.width" :height="heroImages[1]!.height"
-            sizes="(min-width: 1024px) 24vw, 44vw" img-class="aspect-square w-full object-cover"
+            sizes="(min-width: 1024px) 24vw, 44vw" img-class="size-full object-cover"
           />
         </div>
-        <div class="overflow-hidden rounded-card bg-cream shadow-soft">
+        <div class="min-h-0 overflow-hidden rounded-card bg-cream shadow-soft">
           <AppImage
             :src="heroImages[2]!.src" :alt="heroImages[2]!.alt" :width="heroImages[2]!.width" :height="heroImages[2]!.height"
-            sizes="(min-width: 1024px) 24vw, 44vw" img-class="aspect-square w-full object-cover"
+            sizes="(min-width: 1024px) 24vw, 44vw" img-class="size-full object-cover"
           />
         </div>
       </div>
@@ -146,7 +149,7 @@ const steps = [
       <SectionHead id="home-how" eyebrow="Как купить" title="Три простых шага" />
       <ol class="mt-8 grid gap-5 md:grid-cols-3">
         <li v-for="s in steps" :key="s.n" class="rounded-card border border-line bg-white p-7">
-          <span class="font-display text-4xl italic text-rose">{{ s.n }}</span>
+          <span class="font-display text-4xl italic text-rose-deep">{{ s.n }}</span>
           <h3 class="mt-3 text-2xl">{{ s.title }}</h3>
           <p class="mt-2 leading-relaxed text-ink-soft">{{ s.text }}</p>
         </li>
@@ -155,17 +158,19 @@ const steps = [
 
     <!-- О мастере -->
     <section class="container-page py-8 lg:py-14" aria-labelledby="home-about">
-      <div class="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-rose-soft md:grid-cols-2">
+      <div class="grid items-stretch overflow-hidden rounded-[2rem] bg-rose-soft md:grid-cols-2">
         <div class="p-8 sm:p-12">
           <p class="eyebrow">Обо мне</p>
           <h2 id="home-about" class="mt-2 text-3xl sm:text-4xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span></h2>
           <p class="mt-4 leading-relaxed text-ink-soft">Вяжу маленькие радости и очень люблю, когда они находят своего человека. Расскажу, как рождаются мои изделия.</p>
           <NuxtLink to="/about" class="btn btn-primary mt-6 no-underline">Познакомиться <AppIcon name="arrow-right" :size="18" /></NuxtLink>
         </div>
-        <AppImage
-          src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи и вязаный зайчик (демо-иллюстрация)"
-          :width="1200" :height="900" sizes="(min-width: 768px) 45vw, 100vw" img-class="h-full w-full object-cover"
-        />
+        <div class="relative min-h-72 md:min-h-[24rem]">
+          <AppImage
+            src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи и вязаный зайчик (демо-иллюстрация)"
+            :width="1200" :height="900" sizes="(min-width: 768px) 45vw, 100vw" img-class="absolute inset-0 size-full object-cover"
+          />
+        </div>
       </div>
     </section>
   </div>

@@ -15,6 +15,7 @@
   --color-berry: #a3174f;
   --color-berry-dark: #7d1039;
   --color-rose: #f4a6c0;
+  --color-rose-deep: #cf4b7a;
   --color-rose-soft: #fde7ef;
   --color-lilac: #b79ae0;
   --color-lilac-soft: #ece4fa;
@@ -47,6 +48,8 @@
   }
   p { text-wrap: pretty; }
   img { max-width: 100%; height: auto; }
+  /* <picture> не создаёт собственного блока — размеры задаёт вложенная <img>. */
+  picture { display: contents; }
   :focus-visible {
     outline: 3px solid var(--color-berry);
     outline-offset: 3px;

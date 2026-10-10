@@ -10,7 +10,7 @@ const link = (page: number) => ({ query: { ...props.query, ...(page > 1 ? { page
 <template>
   <nav v-if="totalPages > 1" aria-label="Страницы каталога" class="mt-12 flex flex-wrap items-center justify-center gap-2">
     <NuxtLink
-      v-if="page > 1" :to="link(page - 1)" class="chip no-underline" rel="prev" aria-label="Предыдущая страница"
+      v-if="page > 1" :to="link(page - 1)" class="chip no-underline" rel="prev"
     >
       <AppIcon name="arrow-left" :size="16" /> Назад
     </NuxtLink>
@@ -28,7 +28,7 @@ const link = (page: number) => ({ query: { ...props.query, ...(page > 1 ? { page
       </NuxtLink>
     </template>
     <NuxtLink
-      v-if="page < totalPages" :to="link(page + 1)" class="chip no-underline" rel="next" aria-label="Следующая страница"
+      v-if="page < totalPages" :to="link(page + 1)" class="chip no-underline" rel="next"
     >
       Вперёд <AppIcon name="arrow-right" :size="16" />
     </NuxtLink>
