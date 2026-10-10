@@ -1,7 +1,14 @@
 <template>
-  <div>
-    <main id="main">
+  <div class="flex min-h-dvh flex-col">
+    <a href="#main" class="sr-only-focusable fixed left-4 top-4 z-50 rounded-full bg-ink px-5 py-3 text-sm font-bold text-paper">
+      Перейти к содержимому
+    </a>
+    <DemoBanner />
+    <AppHeader />
+    <main id="main" class="flex-1" tabindex="-1">
       <slot />
     </main>
+    <AppFooter />
+    <AppToast />
   </div>
 </template>

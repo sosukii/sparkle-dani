@@ -14,7 +14,7 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test --project=e2e",
     "test:visual": "playwright test --project=visual",
-    "test:visual:update": "playwright test --project=visual --update-snapshots",
+    "test:visual:update": "playwright test --project=visual --update-snapshots=all",
     "test": "npm run lint && npm run typecheck && npm run test:unit && npm run build && npm run test:e2e && npm run test:visual",
     "prepare": "husky"
   },

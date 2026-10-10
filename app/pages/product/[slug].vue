@@ -1,0 +1,126 @@
+<script setup lang="ts">
+import { formatLeadTime, formatPrice } from '#shared/utils/format'
+import { buildProductJsonLd, truncate } from '#shared/utils/seo'
+import { CONTACT_LABEL, TELEGRAM_URL } from '#shared/utils/site'
+import type { Product, Taxonomy } from '#shared/types/product'
+
+interface ProductResponse {
+  product: Product
+  related: Product[]
+  labels: {
+    category: { slug: string, title: string } | null
+    type: string | null
+    fandom: { id: string, label: string } | null
+    colors: Taxonomy['colors']
+    warmth: { id: string, label: string, hint?: string } | null
+  }
+}
+
+const route = useRoute()
+const slug = computed(() => String(route.params.slug))
+const siteUrl = String(useRuntimeConfig().public.siteUrl)
+
+const { data, error } = await useFetch<ProductResponse>(() => `/api/products/${slug.value}`, { key: `product:${slug.value}` })
+if (error.value || !data.value) {
+  throw createError({ statusCode: error.value?.statusCode === 404 || !data.value ? 404 : 500, statusMessage: 'Товар не найден', fatal: true })
+}
+
+const product = computed(() => data.value!.product)
+const labels = computed(() => data.value!.labels)
+
+usePageSeo(() => ({
+  title: product.value.title,
+  description: truncate(product.value.description || `${product.value.title} — изделие ручной работы.`),
+  image: product.value.images[0]!.src,
+  canonicalPath: `/product/${product.value.slug}`,
+}))
+
+const jsonLd = computed(() => buildProductJsonLd(product.value, siteUrl))
+useHead(() => ({
+  script: jsonLd.value ? [{ type: 'application/ld+json', innerHTML: JSON.stringify(jsonLd.value) }] : [],
+}))
+
+// Характеристики собираем только из того, что реально есть в данных.
+const facts = computed(() => {
+  const l = labels.value
+  const rows: { label: string, value: string }[] = []
+  if (l.type) rows.push({ label: 'Тип', value: l.type })
+  if (l.fandom) rows.push({ label: 'Фандом', value: l.fandom.label })
+  if (l.colors.length) rows.push({ label: l.colors.length > 1 ? 'Цвета' : 'Цвет', value: l.colors.map((c) => c.label).join(', ') })
+  if (l.warmth) rows.push({ label: 'Теплота / сезон', value: l.warmth.hint ? `${l.warmth.label} (${l.warmth.hint})` : l.warmth.label })
+  return [...rows, ...product.value.attributes]
+})
+</script>
+
+<template>
+  <div v-if="data" class="container-page py-8 lg:py-12">
+    <nav aria-label="Хлебные крошки" class="mb-6 text-sm text-ink-soft">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><NuxtLink to="/" class="no-underline hover:text-berry">Главная</NuxtLink></li>
+        <li aria-hidden="true">/</li>
+        <li><NuxtLink to="/catalog" class="no-underline hover:text-berry">Каталог</NuxtLink></li>
+        <template v-if="labels.category">
+          <li aria-hidden="true">/</li>
+          <li><NuxtLink :to="`/catalog/${labels.category.slug}`" class="no-underline hover:text-berry">{{ labels.category.title }}</NuxtLink></li>
+        </template>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="font-semibold text-ink">{{ product.title }}</li>
+      </ol>
+    </nav>
+
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <ProductGallery :images="product.images" />
+      </div>
+
+      <div>
+        <ul v-if="labels.fandom || labels.category" class="flex flex-wrap gap-2">
+          <li v-if="labels.fandom">
+            <NuxtLink :to="{ path: '/catalog', query: { fandom: labels.fandom.id } }" class="chip no-underline">
+              <AppIcon name="sparkle" :size="12" class="text-berry" /> {{ labels.fandom.label }}
+            </NuxtLink>
+          </li>
+          <li v-if="labels.category">
+            <NuxtLink :to="`/catalog/${labels.category.slug}`" class="chip no-underline">{{ labels.category.title }}</NuxtLink>
+          </li>
+        </ul>
+
+        <h1 class="mt-4 text-4xl sm:text-5xl" data-testid="product-title">{{ product.title }}</h1>
+        <p class="mt-4 font-display text-4xl font-semibold" data-testid="product-price">{{ formatPrice(product.price) }}</p>
+
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <AvailabilityBadge :availability="product.availability" />
+          <p v-if="product.availability === 'made_to_order' && product.leadTimeDays" class="text-sm font-semibold text-ink-soft" data-testid="lead-time">
+            Срок изготовления: {{ formatLeadTime(product.leadTimeDays) }}
+          </p>
+        </div>
+
+        <p v-if="product.description" class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">{{ product.description }}</p>
+
+        <div class="mt-8">
+          <AddToCart :product="product" />
+          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold no-underline hover:text-berry">
+            <AppIcon name="telegram" :size="18" /> Есть вопрос? {{ CONTACT_LABEL }}
+          </a>
+        </div>
+
+        <section v-if="facts.length" class="mt-10" aria-labelledby="product-facts">
+          <h2 id="product-facts" class="text-2xl">Характеристики</h2>
+          <dl class="mt-4 divide-y divide-line rounded-card border border-line bg-white">
+            <div v-for="row in facts" :key="row.label" class="grid grid-cols-[8.5rem_1fr] gap-4 px-5 py-3 text-sm sm:grid-cols-[11rem_1fr]">
+              <dt class="font-semibold text-ink-soft">{{ row.label }}</dt>
+              <dd class="font-semibold">{{ row.value }}</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+    </div>
+
+    <section v-if="data.related.length" class="mt-20" aria-labelledby="related">
+      <SectionHead id="related" eyebrow="Вам может понравиться" title="Похожие изделия" :to="labels.category ? `/catalog/${labels.category.slug}` : '/catalog'" />
+      <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
+        <ProductCard v-for="p in data.related" :key="p.id" :product="p" />
+      </div>
+    </section>
+  </div>
+</template>
