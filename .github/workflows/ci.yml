@@ -23,8 +23,8 @@ jobs:
         with:
           path: public/_img
           key: images-${{ hashFiles('public/images/**', 'scripts/optimize-images.mjs') }}
-      - name: Prepare optimized images
-        run: npm run images
+      - name: Prepare optimized images and fonts
+        run: npm run assets
       - name: Save optimized images
         if: always() && steps.images-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4

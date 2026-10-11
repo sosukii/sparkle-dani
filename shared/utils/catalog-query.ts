@@ -9,9 +9,16 @@ import type {
 import { SORT_KEYS } from '../types/catalog'
 import type { Product } from '../types/product'
 import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from './site'
+import { analyzeQuery, matchesAllGroups, normalizeText, stemsOfText } from './search'
 
-type FacetGroup = 'fandom' | 'type' | 'color' | 'warmth'
-const FACET_GROUPS: FacetGroup[] = ['fandom', 'type', 'color', 'warmth']
+export { normalizeText }
+
+type FacetGroup = 'fandom' | 'type' | 'color' | 'warmth' | 'availability'
+const FACET_GROUPS: FacetGroup[] = ['fandom', 'type', 'color', 'warmth', 'availability']
+const AVAILABILITY_LABELS = [
+  { id: 'in_stock', label: 'В наличии' },
+  { id: 'made_to_order', label: 'Под заказ' },
+]
 const MAX_LIST_ITEMS = 30
 const MAX_QUERY_LENGTH = 100
 
@@ -65,6 +72,7 @@ export function parseCatalogQuery(
     type: toList(raw.type),
     color: toList(raw.color),
     warmth: toList(raw.warmth),
+    availability: toList(raw.avail).filter((v) => v === 'in_stock' || v === 'made_to_order'),
     minPrice,
     maxPrice,
     sort: (SORT_KEYS as readonly string[]).includes(sortRaw as string) ? (sortRaw as SortKey) : DEFAULT_SORT,
@@ -78,7 +86,7 @@ export function serializeCatalogFilters(filters: CatalogFilters): Record<string,
   const query: Record<string, string> = {}
   if (filters.q) query.q = filters.q
   for (const group of FACET_GROUPS) {
-    if (filters[group].length) query[group] = filters[group].join(',')
+    if (filters[group].length) query[group === 'availability' ? 'avail' : group] = filters[group].join(',')
   }
   if (filters.minPrice !== undefined) query.min = String(filters.minPrice)
   if (filters.maxPrice !== undefined) query.max = String(filters.maxPrice)
@@ -97,30 +105,33 @@ export function hasActiveFilters(filters: CatalogFilters): boolean {
 
 // ───────────── поиск ─────────────
 
-export function normalizeText(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/ё/g, 'е')
-    .replace(/[«»"'“”.,;:!?()]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
+type SearchIndex = WeakMap<Product, string[]>
+const indexes = new WeakMap<object, SearchIndex>()
 
 function labelOf(list: { id: string, label: string }[], id: string | null): string {
   return (id && list.find((item) => item.id === id)?.label) || ''
 }
 
-function haystack(product: Product, ctx: CatalogContext): string {
-  return normalizeText(
-    [
-      product.title,
-      product.description,
-      labelOf(ctx.taxonomy.fandoms, product.fandom),
-      labelOf(ctx.taxonomy.types, product.type),
-      ctx.categories.find((c) => c.id === product.category)?.title ?? '',
-      ...product.colors.map((c) => labelOf(ctx.taxonomy.colors, c)),
-    ].join(' '),
-  )
+/** Основы всех слов товара (название, описание, подписи справочников). Считается один раз на товар. */
+function searchStems(product: Product, ctx: CatalogContext): string[] {
+  let byProduct = indexes.get(ctx.taxonomy)
+  if (!byProduct) indexes.set(ctx.taxonomy, (byProduct = new WeakMap()))
+  let stems = byProduct.get(product)
+  if (!stems) {
+    stems = stemsOfText(
+      [
+        product.title,
+        product.description,
+        labelOf(ctx.taxonomy.fandoms, product.fandom),
+        labelOf(ctx.taxonomy.types, product.type),
+        labelOf(ctx.taxonomy.warmth, product.warmth),
+        ctx.categories.find((c) => c.id === product.category)?.title ?? '',
+        ...product.colors.map((c) => labelOf(ctx.taxonomy.colors, c)),
+      ].join(' '),
+    )
+    byProduct.set(product, stems)
+  }
+  return stems
 }
 
 // ───────────── фильтрация, сортировка, фасеты ─────────────
@@ -137,17 +148,21 @@ export function filterProducts(
   ctx: CatalogContext,
   except?: FacetGroup | 'price',
 ): Product[] {
-  const tokens = normalizeText(filters.q).split(' ').filter(Boolean)
+  const intent = filters.q ? analyzeQuery(filters.q) : undefined
+  // «в наличии», «до 2000» и т. п. из строки поиска работают как обычные условия.
   return products.filter((p) => {
     if (filters.category && p.category !== filters.category) return false
-    if (tokens.length) {
-      const text = haystack(p, ctx)
-      if (!tokens.every((t) => text.includes(t))) return false
+    if (intent) {
+      if (intent.availability && p.availability !== intent.availability) return false
+      if (intent.minPrice !== undefined && p.price < intent.minPrice) return false
+      if (intent.maxPrice !== undefined && p.price > intent.maxPrice) return false
+      if (intent.groups.length && !matchesAllGroups(searchStems(p, ctx), intent.groups)) return false
     }
     if (except !== 'fandom' && !matchesGroup(filters.fandom, [p.fandom])) return false
     if (except !== 'type' && !matchesGroup(filters.type, [p.type])) return false
     if (except !== 'color' && !matchesGroup(filters.color, p.colors)) return false
     if (except !== 'warmth' && !matchesGroup(filters.warmth, [p.warmth])) return false
+    if (except !== 'availability' && !matchesGroup(filters.availability, [p.availability])) return false
     if (except !== 'price') {
       if (filters.minPrice !== undefined && p.price < filters.minPrice) return false
       if (filters.maxPrice !== undefined && p.price > filters.maxPrice) return false
@@ -176,6 +191,7 @@ function buildFacets(scope: Product[], filters: CatalogFilters, ctx: CatalogCont
     type: ctx.taxonomy.types,
     color: ctx.taxonomy.colors,
     warmth: ctx.taxonomy.warmth,
+    availability: AVAILABILITY_LABELS,
   }
   const valuesOf = (p: Product, group: FacetGroup): (string | null)[] =>
     group === 'color' ? p.colors : [p[group]]
@@ -208,10 +224,12 @@ export function queryCatalog(products: Product[], filters: CatalogFilters, ctx: 
   // «Область» для фасетов: категория + поиск, но без остальных фильтров.
   const scope = filterProducts(
     products,
-    { ...filters, fandom: [], type: [], color: [], warmth: [], minPrice: undefined, maxPrice: undefined },
+    { ...filters, fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined },
     ctx,
   )
-  const matched = sortProducts(filterProducts(products, filters, ctx), filters.sort)
+  // «дешёвые» / «дорогие» в строке поиска меняют сортировку, если пользователь не выбрал её сам.
+  const intentSort = filters.q && filters.sort === DEFAULT_SORT ? analyzeQuery(filters.q).sort : undefined
+  const matched = sortProducts(filterProducts(products, filters, ctx), intentSort ?? filters.sort)
   const totalPages = Math.max(1, Math.ceil(matched.length / filters.pageSize))
   const page = Math.min(filters.page, totalPages)
   const start = (page - 1) * filters.pageSize

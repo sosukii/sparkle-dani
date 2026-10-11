@@ -10,6 +10,8 @@ export interface CatalogData {
 export interface CategorySummary extends Category {
   count: number
   cover: Product['images'][number] | null
+  /** Товар, чья фотография стала обложкой: на главной обложки кликабельны и ведут на его страницу. */
+  coverProduct: { slug: string, title: string } | null
 }
 
 export interface ProductLabels {

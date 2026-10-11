@@ -4,7 +4,12 @@ import type { CatalogData, CategorySummary, ProductPageData } from '../types/cat
 export function summarizeCategories(catalog: CatalogData): CategorySummary[] {
   return catalog.categories.map((category) => {
     const items = catalog.products.filter((p) => p.category === category.id)
-    return { ...category, count: items.length, cover: items[0]?.images[0] ?? null }
+    return {
+      ...category,
+      count: items.length,
+      cover: items[0]?.images[0] ?? null,
+      coverProduct: items[0] ? { slug: items[0].slug, title: items[0].title } : null,
+    }
   })
 }
 

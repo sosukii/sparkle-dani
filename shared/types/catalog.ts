@@ -10,6 +10,8 @@ export interface CatalogFilters {
   type: string[]
   color: string[]
   warmth: string[]
+  /** Наличие: `in_stock` / `made_to_order`. */
+  availability: string[]
   minPrice?: number
   maxPrice?: number
   sort: SortKey
@@ -30,6 +32,7 @@ export interface Facets {
   type: FacetOption[]
   color: FacetOption[]
   warmth: FacetOption[]
+  availability: FacetOption[]
   /** Границы цен в текущем наборе (категория + поиск) — для подсказок в полях. */
   price: { min: number, max: number } | null
 }

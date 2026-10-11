@@ -15,7 +15,10 @@ const latest = latestReq.data
 const failed = computed(() => categoriesReq.error.value || latestReq.error.value)
 const retry = () => Promise.all([categoriesReq.refresh(), latestReq.refresh()])
 
-const heroImages = computed(() => (categories.value ?? []).map((c) => c.cover).filter((c) => !!c).slice(0, 3))
+// Три изделия из разных категорий для коллажа; каждое кликабельно и ведёт на страницу товара.
+const heroItems = computed(() =>
+  (categories.value ?? []).filter((c) => c.cover && c.coverProduct).slice(0, 3).map((c) => ({ image: c.cover!, product: c.coverProduct! })),
+)
 const fandoms = computed(() => latest.value?.facets.fandom ?? [])
 
 usePageSeo({
@@ -34,7 +37,7 @@ useHead({
       url: siteUrl,
       potentialAction: {
         '@type': 'SearchAction',
-        target: `${siteUrl}/catalog?q={search_term_string}`,
+        target: `${siteUrl}/search?q={search_term_string}`,
         'query-input': 'required name=search_term_string',
       },
     }),
@@ -74,29 +77,25 @@ const steps = [
       </div>
 
       <div
-        v-if="heroImages.length === 3"
+        v-if="heroItems.length === 3"
         class="relative mx-auto grid aspect-[11/10] w-full max-w-xl grid-cols-[1.1fr_1fr] grid-rows-2 gap-4"
       >
-        <AppIcon name="sparkle" :size="44" class="absolute -left-3 top-8 z-10 text-rose" />
-        <AppIcon name="sparkle" :size="26" class="absolute -right-1 bottom-24 z-10 text-lilac" />
-        <div class="row-span-2 min-h-0 overflow-hidden rounded-t-[999px] rounded-b-card bg-cream shadow-soft">
+        <AppIcon name="sparkle" :size="44" class="pointer-events-none absolute -left-3 top-8 z-10 text-rose" />
+        <AppIcon name="sparkle" :size="26" class="pointer-events-none absolute -right-1 bottom-24 z-10 text-lilac" />
+        <NuxtLink
+          v-for="(item, i) in heroItems" :key="item.product.slug"
+          :to="`/product/${item.product.slug}`"
+          :aria-label="`Открыть: ${item.product.title}`"
+          class="group min-h-0 overflow-hidden bg-cream shadow-soft no-underline"
+          :class="i === 0 ? 'row-span-2 rounded-t-[999px] rounded-b-card' : 'rounded-card'"
+          :data-testid="`hero-item-${i}`"
+        >
           <AppImage
-            :src="heroImages[0]!.src" :alt="heroImages[0]!.alt" :width="heroImages[0]!.width" :height="heroImages[0]!.height"
-            sizes="(min-width: 1024px) 30vw, 52vw" priority img-class="size-full object-cover"
+            :src="item.image.src" :alt="item.image.alt" :width="item.image.width" :height="item.image.height"
+            :sizes="i === 0 ? '(min-width: 1024px) 30vw, 52vw' : '(min-width: 1024px) 24vw, 44vw'" :priority="i === 0"
+            img-class="size-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
           />
-        </div>
-        <div class="min-h-0 overflow-hidden rounded-card bg-cream shadow-soft">
-          <AppImage
-            :src="heroImages[1]!.src" :alt="heroImages[1]!.alt" :width="heroImages[1]!.width" :height="heroImages[1]!.height"
-            sizes="(min-width: 1024px) 24vw, 44vw" img-class="size-full object-cover"
-          />
-        </div>
-        <div class="min-h-0 overflow-hidden rounded-card bg-cream shadow-soft">
-          <AppImage
-            :src="heroImages[2]!.src" :alt="heroImages[2]!.alt" :width="heroImages[2]!.width" :height="heroImages[2]!.height"
-            sizes="(min-width: 1024px) 24vw, 44vw" img-class="size-full object-cover"
-          />
-        </div>
+        </NuxtLink>
       </div>
     </section>
 
@@ -105,7 +104,8 @@ const steps = [
     </div>
 
     <template v-else>
-      <!-- Категории -->
+      <!-- Категории: отдельная кремовая полоса на всю ширину -->
+      <div class="border-y border-line bg-cream/70">
       <section class="container-page py-14 lg:py-20" aria-labelledby="home-categories">
         <SectionHead id="home-categories" eyebrow="Категории" title="Выберите настроение" to="/catalog" link-label="Весь каталог" />
         <ul class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-5">
@@ -123,9 +123,10 @@ const steps = [
           </li>
         </ul>
       </section>
+      </div>
 
-      <!-- Новинки -->
-      <section class="container-page py-8 lg:py-14" aria-labelledby="home-new">
+      <!-- Новинки: на светлом фоне страницы, с крупным заголовком -->
+      <section class="container-page py-14 lg:py-20" aria-labelledby="home-new">
         <SectionHead id="home-new" eyebrow="Новинки" title="Только что связано" to="/catalog" />
         <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
           <ProductCard v-for="p in latest?.items" :key="p.id" :product="p" />
@@ -147,6 +148,18 @@ const steps = [
         </div>
       </section>
     </template>
+
+    <!-- Свой заказ -->
+    <section class="container-page py-4 lg:py-8" aria-labelledby="home-custom">
+      <div class="grid items-center gap-6 rounded-[2rem] bg-ink px-6 py-10 text-paper sm:px-12 md:grid-cols-[1fr_auto]">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-rose">Индивидуальный заказ</p>
+          <h2 id="home-custom" class="mt-3 text-3xl sm:text-4xl">Нужно что-то <span class="font-display italic text-rose">только ваше</span>?</h2>
+          <p class="mt-3 max-w-xl text-paper/80">{{ OWNER_NAME }} может сделать почти что угодно по вашей идее. Мы расскажем, как это устроено, — это просто.</p>
+        </div>
+        <NuxtLink to="/custom" class="btn bg-paper text-ink no-underline hover:bg-rose">Как заказать своё <AppIcon name="arrow-right" :size="18" /></NuxtLink>
+      </div>
+    </section>
 
     <!-- Как это работает -->
     <section class="container-page py-14 lg:py-20" aria-labelledby="home-how">

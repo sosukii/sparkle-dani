@@ -2,20 +2,22 @@
 import type { CatalogFilters, FacetOption, Facets } from '#shared/types/catalog'
 import { formatPrice } from '#shared/utils/format'
 
-type GroupKey = 'fandom' | 'type' | 'color' | 'warmth'
+type GroupKey = 'availability' | 'fandom' | 'type' | 'color' | 'warmth'
 type Patch = Partial<Pick<CatalogFilters, GroupKey | 'minPrice' | 'maxPrice'>>
 
 const props = defineProps<{ facets: Facets, filters: CatalogFilters, idPrefix: string }>()
 const emit = defineEmits<{ update: [patch: Patch] }>()
 
 const groups: { key: GroupKey, label: string }[] = [
+  { key: 'availability', label: 'Наличие' },
   { key: 'fandom', label: 'Фандом' },
   { key: 'type', label: 'Тип изделия' },
   { key: 'color', label: 'Цвет' },
   { key: 'warmth', label: 'Теплота / сезон' },
 ]
 
-const visibleGroups = computed(() => groups.filter((g) => props.facets[g.key].length > 0))
+// «Наличие» имеет смысл, только если в выборке есть оба варианта (или один уже выбран).
+const visibleGroups = computed(() => groups.filter((g) => (g.key === 'availability' ? props.facets.availability.filter((o) => o.count > 0 || props.filters.availability.includes(o.id)).length > 1 || props.filters.availability.length > 0 : props.facets[g.key].length > 0)))
 
 function toggle(key: GroupKey, id: string, checked: boolean) {
   const current = props.filters[key]

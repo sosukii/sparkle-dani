@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { CONTACT_LABEL, OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
 import { parseCatalogQuery, queryCatalog } from '#shared/utils/catalog-query'
+import { buildBreadcrumbJsonLd } from '#shared/utils/seo'
 
 const { data } = await useAsyncData('about-facets', async () => {
   const catalog = await loadCatalog()
   return queryCatalog(catalog.products, parseCatalogQuery({ pageSize: 1 }), catalog)
 })
 const fandoms = computed(() => data.value?.facets.fandom ?? [])
+
+const siteUrl = useSiteUrl()
+useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'Обо мне', path: '/about' }], siteUrl))
 
 usePageSeo({
   title: 'Обо мне',
@@ -106,9 +110,10 @@ const values = [
     <section class="container-page pt-12 lg:pt-16">
       <div class="rounded-[2rem] bg-ink px-6 py-14 text-center text-paper sm:px-12">
         <h2 class="text-3xl sm:text-5xl">Хотите что-то <span class="font-display italic text-rose">особенное</span>?</h2>
-        <p class="mx-auto mt-4 max-w-xl text-paper/80">Выберите изделие из каталога или напишите мне: обсудим вашу идею и придумаем, как её связать.</p>
+        <p class="mx-auto mt-4 max-w-xl text-paper/80">Выберите изделие из каталога или закажите своё: расскажите идею, а я придумаю, как её связать.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <NuxtLink to="/catalog" class="btn bg-paper text-ink no-underline hover:bg-rose">В каталог</NuxtLink>
+          <NuxtLink to="/custom" class="btn bg-rose text-ink no-underline hover:bg-paper">Заказать своё</NuxtLink>
           <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn border-2 border-paper/70 text-paper no-underline hover:bg-paper hover:text-ink">
             <AppIcon name="telegram" :size="18" /> {{ CONTACT_LABEL }}
           </a>

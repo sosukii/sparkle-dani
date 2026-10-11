@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatLeadTime, formatPrice } from '#shared/utils/format'
-import { buildProductJsonLd, truncate } from '#shared/utils/seo'
+import { buildBreadcrumbJsonLd, buildProductJsonLd, truncate } from '#shared/utils/seo'
 import { CONTACT_LABEL, TELEGRAM_URL } from '#shared/utils/site'
 import { buildProductPage } from '#shared/utils/catalog-views'
 
@@ -26,6 +26,13 @@ usePageSeo(() => ({
   image: product.value.images[0]!.src,
   canonicalPath: `/product/${product.value.slug}`,
 }))
+
+useJsonLd(() => buildBreadcrumbJsonLd([
+  { name: 'Главная', path: '/' },
+  { name: 'Каталог', path: '/catalog' },
+  ...(labels.value.category ? [{ name: labels.value.category.title, path: `/catalog/${labels.value.category.slug}` }] : []),
+  { name: product.value.title, path: `/product/${product.value.slug}` },
+], siteUrl))
 
 const jsonLd = computed(() => buildProductJsonLd(product.value, siteUrl))
 useHead(() => ({

@@ -9,6 +9,7 @@ const search = ref('')
 
 const links = [
   { to: '/catalog', label: 'Каталог' },
+  { to: '/custom', label: 'Свой заказ' },
   { to: '/about', label: 'Обо мне' },
   { to: '/delivery', label: 'Покупка и доставка' },
 ]
@@ -23,7 +24,9 @@ watch(() => route.query.q, (q) => { search.value = typeof q === 'string' ? q : '
 
 function submitSearch() {
   const q = search.value.trim()
-  navigateTo({ path: '/catalog', query: q ? { q } : {} })
+  // Убираем фокус: закрывается клавиатура, страница не остаётся приближенной на телефоне.
+  ;(document.activeElement as HTMLElement | null)?.blur()
+  navigateTo({ path: '/search', query: q ? { q } : {} })
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -59,7 +62,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
         </NuxtLink>
       </nav>
 
-      <form class="ml-auto hidden w-48 shrink lg:block xl:w-72" role="search" @submit.prevent="submitSearch">
+      <form class="ml-auto hidden w-40 shrink lg:block xl:w-72" role="search" @submit.prevent="submitSearch">
         <label for="site-search" class="sr-only">Поиск по сайту</label>
         <div class="relative">
           <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />

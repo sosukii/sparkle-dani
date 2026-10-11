@@ -8,6 +8,7 @@ defineProps<{ availability: Availability, leadTime?: { min: number, max: number 
 
 <template>
   <span
+    data-testid="availability-badge"
     class="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold leading-4"
     :class="availability === 'in_stock' ? 'bg-mint-soft text-[#14543f]' : 'bg-lilac-soft text-[#4b2e86]'"
   >

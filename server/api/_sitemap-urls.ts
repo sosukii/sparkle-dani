@@ -9,6 +9,7 @@ export default defineEventHandler(async () => {
     { loc: '/catalog' },
     { loc: '/about' },
     { loc: '/delivery' },
+    { loc: '/custom' },
     ...categories.map((c) => ({ loc: `/catalog/${c.slug}` })),
     ...products.map((p) => ({ loc: `/product/${p.slug}`, lastmod: p.createdAt })),
   ]

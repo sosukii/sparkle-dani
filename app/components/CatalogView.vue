@@ -8,22 +8,17 @@ import {
   serializeCatalogFilters,
 } from '#shared/utils/catalog-query'
 import { pluralRu, formatPrice } from '#shared/utils/format'
+import { buildBreadcrumbJsonLd } from '#shared/utils/seo'
 
 const props = defineProps<{ category?: string }>()
 
-const route = useRoute()
 const router = useRouter()
 
 const { data: categories } = await useCategories()
 const currentCategory = computed(() => categories.value?.find((c) => c.slug === props.category))
 
-// Статический HTML (GitHub Pages) собирается без query-параметров, а ссылка может прийти с ними (?page=2, ?fandom=…).
-// Чтобы гидратация совпала с HTML, первый рендер на статике считаем без query, и только после неё применяем настоящие.
-const nuxtApp = useNuxtApp()
-const queryApplied = ref(!useRuntimeConfig().public.isStatic || import.meta.server || !nuxtApp.isHydrating)
-onNuxtReady(() => { queryApplied.value = true })
-
-const filters = computed(() => parseCatalogQuery(queryApplied.value ? route.query : {}, { category: currentCategory.value?.id }))
+const appliedQuery = useAppliedQuery()
+const filters = computed(() => parseCatalogQuery(appliedQuery.value, { category: currentCategory.value?.id }))
 const queryKey = computed(() => `catalog:${JSON.stringify({ ...serializeCatalogFilters(filters.value), category: filters.value.category })}`)
 
 // Фильтры считаются теми же функциями, что и на сервере: при SSR в HTML попадает готовый срез,
@@ -38,7 +33,7 @@ const { data, error, pending, refresh } = await useAsyncData<CatalogResult>(
 )
 
 // ── обновление URL ──
-type Patch = Partial<Pick<CatalogFilters, 'q' | 'fandom' | 'type' | 'color' | 'warmth' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
+type Patch = Partial<Pick<CatalogFilters, 'q' | 'fandom' | 'type' | 'color' | 'warmth' | 'availability' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
 function update(patch: Patch, mode: 'replace' | 'push' = 'replace') {
   const next = { ...filters.value, ...patch, page: patch.page ?? 1 }
   const query = serializeCatalogFilters(next)
@@ -49,8 +44,8 @@ const setPage = async () => {
   document.getElementById('catalog-results')?.scrollIntoView({ block: 'start' })
 }
 
-const clearFilters = () => update({ fandom: [], type: [], color: [], warmth: [], minPrice: undefined, maxPrice: undefined })
-const clearAll = () => update({ q: '', fandom: [], type: [], color: [], warmth: [], minPrice: undefined, maxPrice: undefined, sort: DEFAULT_SORT })
+const clearFilters = () => update({ fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined })
+const clearAll = () => update({ q: '', fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined, sort: DEFAULT_SORT })
 
 // ── поиск ──
 const searchText = ref(filters.value.q)
@@ -72,7 +67,7 @@ const activeChips = computed(() => {
   const facets = data.value?.facets
   const chips: { key: string, label: string, remove: () => void }[] = []
   if (!facets) return chips
-  for (const group of ['fandom', 'type', 'color', 'warmth'] as const) {
+  for (const group of ['availability', 'fandom', 'type', 'color', 'warmth'] as const) {
     for (const id of f[group]) {
       const label = facets[group].find((o) => o.id === id)?.label ?? id
       chips.push({ key: `${group}:${id}`, label, remove: () => update({ [group]: f[group].filter((x) => x !== id) }) })
@@ -97,6 +92,12 @@ function onSheetClick(event: MouseEvent) {
 }
 
 // ── SEO ──
+const siteUrl = useSiteUrl()
+useJsonLd(() => buildBreadcrumbJsonLd([
+  { name: 'Главная', path: '/' },
+  { name: 'Каталог', path: '/catalog' },
+  ...(currentCategory.value ? [{ name: currentCategory.value.title, path: `/catalog/${currentCategory.value.slug}` }] : []),
+], siteUrl))
 const title = computed(() => currentCategory.value?.title ?? 'Каталог')
 const isFilteredView = computed(() => !!filters.value.q || hasActiveFilters(filters.value) || filters.value.sort !== DEFAULT_SORT)
 usePageSeo(() => ({
@@ -161,9 +162,9 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
       <section id="catalog-results" class="min-w-0 scroll-mt-24" aria-label="Результаты" :aria-busy="pending">
         <h2 class="sr-only">Изделия</h2>
         <!-- Панель: поиск, сортировка, мобильный фильтр -->
-        <div class="flex flex-wrap items-end gap-3">
+        <div class="flex flex-wrap items-center gap-3">
           <form class="min-w-[12rem] flex-1" role="search" @submit.prevent="submitSearch">
-            <label for="catalog-search" class="mb-1 block text-xs font-semibold text-ink-soft">Поиск по каталогу</label>
+            <label for="catalog-search" class="sr-only">Поиск по каталогу</label>
             <div class="relative">
               <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />
               <input
@@ -173,7 +174,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
             </div>
           </form>
           <div>
-            <label for="catalog-sort" class="mb-1 block text-xs font-semibold text-ink-soft">Сортировка</label>
+            <label for="catalog-sort" class="sr-only">Сортировка</label>
             <select
               id="catalog-sort" class="field select-field w-auto" :value="filters.sort" data-testid="catalog-sort"
               @change="update({ sort: ($event.target as HTMLSelectElement).value as CatalogFilters['sort'] })"
@@ -188,16 +189,19 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
         </div>
 
         <!-- Счётчик и активные фильтры -->
-        <div class="mt-5 flex flex-wrap items-center gap-2" aria-live="polite">
-          <p class="mr-2 text-sm font-semibold text-ink-soft" data-testid="result-count">
+        <div class="mt-4 flex items-center gap-3" aria-live="polite">
+          <p class="shrink-0 text-sm font-semibold text-ink-soft" data-testid="result-count">
             {{ data.total }} {{ pluralRu(data.total, ['изделие', 'изделия', 'изделий']) }}
           </p>
-          <button
-            v-for="chip in activeChips" :key="chip.key" type="button" class="chip" :aria-label="`Убрать фильтр: ${chip.label}`" @click="chip.remove()"
-          >
-            {{ chip.label }} <AppIcon name="close" :size="14" />
-          </button>
-          <button v-if="activeCount || filters.q" type="button" class="min-h-9 px-2 text-sm font-bold text-berry underline underline-offset-4" data-testid="clear-filters" @click="clearAll()">
+          <!-- Выбранные фильтры — одна прокручиваемая строка; «Сбросить всё» вынесено из неё и всегда на виду -->
+          <div v-if="activeChips.length" class="chip-scroller min-w-0 flex-1" data-testid="active-filters">
+            <button
+              v-for="chip in activeChips" :key="chip.key" type="button" class="chip shrink-0 whitespace-nowrap" :aria-label="`Убрать фильтр: ${chip.label}`" @click="chip.remove()"
+            >
+              {{ chip.label }} <AppIcon name="close" :size="14" />
+            </button>
+          </div>
+          <button v-if="activeCount || filters.q" type="button" class="ml-auto min-h-9 shrink-0 px-1 text-sm font-bold text-berry underline underline-offset-4" data-testid="clear-filters" @click="clearAll()">
             Сбросить всё
           </button>
         </div>

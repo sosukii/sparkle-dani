@@ -34,3 +34,31 @@ export function buildProductJsonLd(product: Product, siteUrl: string): Record<st
     },
   }
 }
+
+/** Хлебные крошки Schema.org. `path` — путь от корня сайта; последний элемент — текущая страница. */
+export function buildBreadcrumbJsonLd(items: { name: string, path: string }[], siteUrl: string): Record<string, unknown> {
+  const base = siteUrl.replace(/\/$/, '')
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${base}${item.path === '/' ? '' : item.path}`,
+    })),
+  }
+}
+
+/** FAQPage: только для вопросов, которые реально показаны на странице. */
+export function buildFaqJsonLd(items: { q: string, a: string }[]): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }
+}

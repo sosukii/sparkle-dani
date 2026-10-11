@@ -18,6 +18,7 @@ describe('summarizeCategories', () => {
     const result = summarizeCategories(catalog)
     expect(result.map((c) => [c.slug, c.count])).toEqual([['toys', 3], ['warm-wear', 1]])
     expect(result[0]!.cover).toEqual(catalog.products[0]!.images[0])
+    expect(result[0]!.coverProduct).toEqual({ slug: 'a-1', title: catalog.products[0]!.title })
   })
 
   it('категория без товаров получает cover = null', () => {

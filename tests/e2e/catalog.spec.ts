@@ -89,11 +89,11 @@ test('поиск: находит, показывает пустое состоя
   await expect(count(page)).toHaveText('54 изделия')
 })
 
-test('поиск из шапки открывает каталог с запросом', async ({ page }) => {
+test('поиск из шапки открывает страницу поиска по сайту', async ({ page }) => {
   await page.goto('/about')
   await page.locator('#site-search').fill('шарф')
   await page.locator('#site-search').press('Enter')
-  await expect(page).toHaveURL(/\/catalog\?q=%D1%88%D0%B0%D1%80%D1%84/)
+  await expect(page).toHaveURL(/\/search\/?\?q=%D1%88%D0%B0%D1%80%D1%84/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('шарф')
   expect(await cards(page).count()).toBeGreaterThan(0)
 })
@@ -190,7 +190,7 @@ for (const [name, viewport] of [['десктоп', { width: 1280, height: 900 }]
       for (const card of nodes) {
         const box = card.getBoundingClientRect()
         const price = card.querySelector('p.font-bold')!.getBoundingClientRect()
-        const badge = card.querySelector('span.rounded-full')!.getBoundingClientRect()
+        const badge = card.querySelector('[data-testid=availability-badge]')!.getBoundingClientRect()
         const key = Math.round(box.top)
         byRow.set(key, [...(byRow.get(key) ?? []), { h: box.height, price: price.top - box.top, badge: badge.top - box.top }])
       }

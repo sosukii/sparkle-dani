@@ -47,8 +47,10 @@ test.describe('SEO', () => {
     await expect(page).toHaveTitle('Лесной дух — Sparkle Dani')
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/product\/lesnoy-duh-001$/)
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /product-001-1\.jpg$/)
-    // Для демо-товаров структурированные данные не отдаём
-    await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0)
+    // Для демо-товаров разметку Product не отдаём, а хлебные крошки (они отражают реальную навигацию) — да
+    const ld = await page.locator('script[type="application/ld+json"]').allInnerTexts()
+    expect(ld.some((t) => t.includes('"@type":"Product"'))).toBe(false)
+    expect(ld.some((t) => t.includes('"@type":"BreadcrumbList"'))).toBe(true)
   })
 
   test('фильтры, поиск и корзина не индексируются', async ({ page }) => {
@@ -67,9 +69,10 @@ test.describe('SEO', () => {
     expect(robots).toMatch(/Sitemap: .+sitemap\.xml/)
 
     const sitemap = await (await request.get('/sitemap.xml')).text()
-    for (const path of ['/catalog', '/about', '/delivery', '/catalog/toys', '/product/lesnoy-duh-001'])
+    for (const path of ['/catalog', '/about', '/delivery', '/custom', '/catalog/toys', '/product/lesnoy-duh-001'])
       expect(sitemap, path).toContain(`${path}</loc>`)
     expect(sitemap).not.toContain('/cart</loc>')
+    expect(sitemap).not.toContain('/search</loc>')
   })
 
   test('сжатие: HTML отдаётся в br/gzip и корректно разворачивается @server', async ({ playwright }) => {
@@ -86,7 +89,7 @@ test.describe('SEO', () => {
   })
 
   test('у каждой страницы один h1', async ({ page }) => {
-    for (const path of ['/', '/catalog', '/catalog/toys', '/product/lesnoy-duh-001', '/cart', '/about', '/delivery']) {
+    for (const path of ['/', '/catalog', '/catalog/toys', '/product/lesnoy-duh-001', '/cart', '/about', '/delivery', '/custom', '/search?q=серьги']) {
       await page.goto(path)
       await expect(page.getByRole('heading', { level: 1 }), path).toHaveCount(1)
     }
@@ -94,7 +97,7 @@ test.describe('SEO', () => {
 })
 
 test.describe('доступность и вёрстка', () => {
-  const paths = ['/', '/catalog', '/catalog/jewelry', '/product/zayka-lunnitsa-004', '/cart', '/about', '/delivery']
+  const paths = ['/', '/catalog', '/catalog/jewelry', '/product/zayka-lunnitsa-004', '/cart', '/about', '/delivery', '/custom', '/search?q=шарф']
 
   for (const width of [360, 768, 1280]) {
     for (const path of paths) {

@@ -1,24 +1,32 @@
 <script setup lang="ts">
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from '#shared/utils/seo'
 import { CONTACT_LABEL, OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
+
+const siteUrl = useSiteUrl()
 
 usePageSeo({
   title: 'Покупка и доставка',
-  description: `Как заказать изделие ручной работы: корзина, связь с ${OWNER_NAME} в Telegram, наличие и сроки изготовления.`,
+  description: `Как заказать изделие ручной работы: корзина, связь с ${OWNER_NAME} в Telegram, доставка СДЭК по России или лично в руки в Москве.`,
 })
 
 const steps = [
   { title: 'Выберите изделие', text: 'Откройте каталог и воспользуйтесь фильтрами — по фандому, цвету, цене и теплоте.' },
   { title: 'Добавьте в корзину', text: 'Можно собрать несколько изделий. Корзина сохраняется в вашем браузере.' },
   { title: `Нажмите «Связаться с ${OWNER_NAME}»`, text: 'Вы увидите состав заказа и сумму. Скопируйте текст заказа и отправьте его в Telegram.' },
-  { title: 'Договоритесь о деталях', text: 'Оплата и доставка согласуются лично — онлайн-оплаты на сайте нет.' },
+  { title: 'Договоритесь о деталях', text: 'Оплату и способ получения — СДЭК или лично в Москве — согласуете в переписке. Онлайн-оплаты на сайте нет.' },
 ]
 
 const faq = [
+  { q: 'Как получить заказ?', a: `Двумя способами: доставка СДЭК по России или лично в руки в Москве. Выбор вы обсуждаете с ${OWNER_NAME} в Telegram.` },
+  { q: 'Где находится магазин и в каком вы городе?', a: `Это интернет-магазин. ${OWNER_NAME} находится в Москве: отправляет заказы СДЭКом по России, а в Москве можно встретиться и забрать лично.` },
   { q: 'Нужно ли регистрироваться?', a: 'Нет. Достаточно собрать корзину и написать мастеру в Telegram.' },
   { q: 'Что значит «в наличии» и «под заказ»?', a: 'Изделия «в наличии» уже связаны. Изделия «под заказ» мастер сделает после согласования — примерный срок изготовления указан на карточке товара.' },
   { q: 'Почему сайт не принимает оплату?', a: 'Мы работаем напрямую: детали оплаты и доставки обсуждаются в личной переписке, чтобы вы заранее понимали, что и когда получите.' },
-  { q: 'Что делать, если нужного нет в каталоге?', a: `Напишите ${OWNER_NAME} в Telegram — возможно, изделие можно сделать на заказ.` },
+  { q: 'Что делать, если нужного нет в каталоге?', a: `Закажите своё: ${OWNER_NAME} может сделать почти что угодно по вашей идее. Подробности — на странице «Свой заказ».` },
 ]
+
+useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'Покупка и доставка', path: '/delivery' }], siteUrl))
+useJsonLd(() => buildFaqJsonLd(faq))
 </script>
 
 <template>
@@ -58,10 +66,18 @@ const faq = [
 
     <section class="container-page py-8 lg:py-12" aria-labelledby="delivery-pay">
       <div class="rounded-[2rem] bg-cream px-6 py-10 sm:px-12">
-        <h2 id="delivery-pay" class="text-3xl sm:text-4xl">Оплата и доставка</h2>
-        <p class="mt-4 max-w-3xl leading-relaxed text-ink-soft">
-          Способы, стоимость и сроки доставки, а также оплата согласуются при оформлении заказа в Telegram: так вы заранее знаете, что и когда получите.
-        </p>
+        <h2 id="delivery-pay" class="text-3xl sm:text-4xl">Как получить заказ</h2>
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="rounded-2xl bg-white p-6" data-testid="delivery-cdek">
+            <h3 class="font-display text-2xl">СДЭК по России</h3>
+            <p class="mt-2 leading-relaxed text-ink-soft">{{ OWNER_NAME }} отправит заказ СДЭКом. Стоимость и срок доставки зависят от города — вы узнаете их заранее.</p>
+          </div>
+          <div class="rounded-2xl bg-white p-6" data-testid="delivery-moscow">
+            <h3 class="font-display text-2xl">Лично в руки в Москве</h3>
+            <p class="mt-2 leading-relaxed text-ink-soft">Если вы в Москве, можно встретиться и забрать заказ лично. Место и время договариваетесь в Telegram.</p>
+          </div>
+        </div>
+        <p class="mt-5 max-w-3xl leading-relaxed text-ink-soft">Оплата и все детали согласуются в Telegram: так вы заранее знаете, что и когда получите.</p>
       </div>
     </section>
 

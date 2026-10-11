@@ -84,6 +84,31 @@ for (const [device, viewport] of Object.entries(viewports)) {
       await shot(page, `delivery-${device}`)
     })
 
+    test('свой заказ', async ({ page }) => {
+      await page.goto('/custom')
+      await shot(page, `custom-${device}`)
+    })
+
+    test('поиск: разделы и изделия', async ({ page }) => {
+      await page.goto('/search?q=доставка')
+      await shot(page, `search-section-${device}`)
+    })
+
+    test('поиск: синонимы (сережки → серьги)', async ({ page }) => {
+      await page.goto('/search?q=сережки')
+      await shot(page, `search-products-${device}`)
+    })
+
+    test('поиск: ничего не нашлось', async ({ page }) => {
+      await page.goto('/search?q=абракадабра')
+      await shot(page, `search-empty-${device}`)
+    })
+
+    test('каталог: много выбранных фильтров в одну строку', async ({ page }) => {
+      await page.goto('/catalog?fandom=ghibli,sailor-moon,genshin&color=pink,green,blue&type=amigurumi,keychain&avail=in_stock&min=500&max=3000')
+      await shot(page, `catalog-many-filters-${device}`, false)
+    })
+
     test('страница 404', async ({ page }) => {
       await page.goto('/net-takoy-stranicy')
       await shot(page, `not-found-${device}`)

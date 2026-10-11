@@ -15,3 +15,4 @@ playwright-report
 
 public/_img
 .output-static
+app/assets/fonts

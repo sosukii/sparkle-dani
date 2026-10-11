@@ -13,7 +13,7 @@ function staticRoutes(): string[] {
     .map((f) => `/product/${JSON.parse(readFileSync(`${dir}/${f}`, 'utf8')).slug}`)
   const categories = JSON.parse(readFileSync(fileURLToPath(new URL('./data/categories.json', import.meta.url)), 'utf8'))
     .map((c: { slug: string }) => `/catalog/${c.slug}`)
-  return ['/api/catalog.json', '/cart', ...categories, ...products]
+  return ['/api/catalog.json', '/cart', '/search', '/custom', ...categories, ...products]
 }
 
 export default defineNuxtConfig({
@@ -23,6 +23,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   vite: { plugins: [tailwindcss()] },
   typescript: { strict: true, typeCheck: false },
+  // Данные страницы лежат прямо в HTML, а не в отдельном _payload.json: на один запрос на критическом пути меньше.
+  experimental: { payloadExtraction: false },
   site: {
     // Только origin (без /sparkle-dani): sitemap/robots сами добавляют baseURL. Берётся из NUXT_PUBLIC_SITE_URL.
     url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
@@ -44,7 +46,7 @@ export default defineNuxtConfig({
     },
   },
   robots: {
-    disallow: ['/cart'],
+    disallow: ['/cart', '/search'],
     // robots.txt обязан лежать в корне домена; при размещении в подпапке (GitHub Pages) его создать нельзя.
     robotsTxt: BASE === '/',
   },

@@ -33,6 +33,7 @@ const year = new Date().getFullYear()
       <nav aria-label="Информация">
         <h2 class="font-sans text-xs font-bold uppercase tracking-[0.18em] text-ink-soft">Магазин</h2>
         <ul class="mt-4 space-y-2.5 text-sm">
+          <li><NuxtLink to="/custom" class="no-underline hover:text-berry">Свой заказ</NuxtLink></li>
           <li><NuxtLink to="/about" class="no-underline hover:text-berry">Обо мне</NuxtLink></li>
           <li><NuxtLink to="/delivery" class="no-underline hover:text-berry">Покупка и доставка</NuxtLink></li>
           <li><NuxtLink to="/cart" class="no-underline hover:text-berry">Корзина</NuxtLink></li>
