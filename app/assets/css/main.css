@@ -10,7 +10,7 @@
 @font-face {
   font-family: 'Manrope Variable'; font-style: normal; font-weight: 200 800; font-display: swap;
   src: url('../fonts/manrope-latin.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
 }
 @font-face {
   font-family: 'Playfair Display Variable'; font-style: normal; font-weight: 400 900; font-display: swap;
@@ -20,7 +20,7 @@
 @font-face {
   font-family: 'Playfair Display Variable'; font-style: normal; font-weight: 400 900; font-display: swap;
   src: url('../fonts/playfair-latin.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
 }
 @font-face {
   font-family: 'Playfair Display Variable'; font-style: italic; font-weight: 400 900; font-display: swap;
@@ -30,12 +30,40 @@
 @font-face {
   font-family: 'Playfair Display Variable'; font-style: italic; font-weight: 400 900; font-display: swap;
   src: url('../fonts/playfair-latin-italic.woff2') format('woff2');
-  unicode-range: U+0020-007E, U+00A0, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
+}
+
+/* Запасные шрифты, подогнанные под веб-шрифты (scripts/measure-fallback-metrics.mjs):
+   пока шрифт грузится, текст занимает столько же места, и при подмене страница не «прыгает» (CLS). */
+@font-face {
+  font-family: 'Playfair Fallback'; font-style: normal; font-weight: 400 599;
+  src: local('Times New Roman'), local('TimesNewRomanPSMT'), local('Liberation Serif'), local('Tinos');
+  size-adjust: 106.38%; ascent-override: 101.52%; descent-override: 23.5%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Playfair Fallback'; font-style: normal; font-weight: 600 900;
+  src: local('Times New Roman Bold'), local('TimesNewRomanPS-BoldMT'), local('Liberation Serif Bold'), local('Tinos Bold');
+  size-adjust: 106.38%; ascent-override: 101.52%; descent-override: 23.5%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Playfair Fallback'; font-style: italic; font-weight: 400 900;
+  src: local('Times New Roman Italic'), local('TimesNewRomanPS-ItalicMT'), local('Liberation Serif Italic'), local('Tinos Italic');
+  size-adjust: 109.28%; ascent-override: 98.83%; descent-override: 22.88%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Manrope Fallback'; font-style: normal; font-weight: 200 599;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 100.61%; ascent-override: 106.36%; descent-override: 29.82%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Manrope Fallback'; font-style: normal; font-weight: 600 800;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('Arimo Bold');
+  size-adjust: 98.58%; ascent-override: 108.54%; descent-override: 30.43%; line-gap-override: 0%;
 }
 
 @theme {
-  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Playfair Display Variable', ui-serif, Georgia, serif;
+  --font-sans: 'Manrope Variable', 'Manrope Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Playfair Display Variable', 'Playfair Fallback', ui-serif, Georgia, serif;
 
   --color-paper: #fbf6f1;
   --color-cream: #f4eadf;
