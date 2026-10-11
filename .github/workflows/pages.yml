@@ -31,8 +31,17 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - name: Cache optimized images
-        uses: actions/cache@v4
+      - name: Restore optimized images
+        id: images-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: public/_img
+          key: images-${{ hashFiles('public/images/**', 'scripts/optimize-images.mjs') }}
+      - name: Prepare optimized images
+        run: npm run images
+      - name: Save optimized images
+        if: always() && steps.images-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: public/_img
           key: images-${{ hashFiles('public/images/**', 'scripts/optimize-images.mjs') }}
