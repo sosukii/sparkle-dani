@@ -2,27 +2,19 @@
 import { formatLeadTime, formatPrice } from '#shared/utils/format'
 import { buildProductJsonLd, truncate } from '#shared/utils/seo'
 import { CONTACT_LABEL, TELEGRAM_URL } from '#shared/utils/site'
-import type { Product, Taxonomy } from '#shared/types/product'
-
-interface ProductResponse {
-  product: Product
-  related: Product[]
-  labels: {
-    category: { slug: string, title: string } | null
-    type: string | null
-    fandom: { id: string, label: string } | null
-    colors: Taxonomy['colors']
-    warmth: { id: string, label: string, hint?: string } | null
-  }
-}
+import { buildProductPage } from '#shared/utils/catalog-views'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
-const siteUrl = String(useRuntimeConfig().public.siteUrl)
+const siteUrl = useSiteUrl()
 
-const { data, error } = await useFetch<ProductResponse>(() => `/api/products/${slug.value}`, { key: `product:${slug.value}` })
-if (error.value || !data.value) {
-  throw createError({ statusCode: error.value?.statusCode === 404 || !data.value ? 404 : 500, statusMessage: 'Товар не найден', fatal: true })
+const { data } = await useAsyncData(
+  () => `product:${slug.value}`,
+  async () => buildProductPage(await loadCatalog(), slug.value),
+  { watch: [slug] },
+)
+if (!data.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Товар не найден', fatal: true })
 }
 
 const product = computed(() => data.value!.product)

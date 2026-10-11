@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { CONTACT_LABEL, OWNER_NAME, SITE_NAME, TELEGRAM_URL } from '#shared/utils/site'
 import { pluralRu } from '#shared/utils/format'
-import type { CatalogResult } from '#shared/types/catalog'
+import { parseCatalogQuery, queryCatalog } from '#shared/utils/catalog-query'
 
 const [categoriesReq, latestReq] = await Promise.all([
-  useFetch('/api/categories', { key: 'categories' }),
-  useFetch<CatalogResult>('/api/products', { key: 'home-latest', query: { pageSize: 8 } }),
+  useCategories(),
+  useAsyncData('home-latest', async () => {
+    const catalog = await loadCatalog()
+    return queryCatalog(catalog.products, parseCatalogQuery({ pageSize: 8 }), catalog)
+  }),
 ])
 const categories = categoriesReq.data
 const latest = latestReq.data
@@ -20,6 +23,7 @@ usePageSeo({
   description: `${SITE_NAME} — интернет-магазин изделий ручной работы: вязаные игрушки, тёплые вещи, украшения и вещи для дома. Мастер — ${OWNER_NAME}.`,
   canonicalPath: '/',
 })
+const siteUrl = useSiteUrl()
 useHead({
   script: [{
     type: 'application/ld+json',
@@ -27,10 +31,10 @@ useHead({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: SITE_NAME,
-      url: useRuntimeConfig().public.siteUrl,
+      url: siteUrl,
       potentialAction: {
         '@type': 'SearchAction',
-        target: `${useRuntimeConfig().public.siteUrl}/catalog?q={search_term_string}`,
+        target: `${siteUrl}/catalog?q={search_term_string}`,
         'query-input': 'required name=search_term_string',
       },
     }),
@@ -50,7 +54,7 @@ const steps = [
     <section class="container-page grid items-center gap-10 py-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20">
       <div>
         <p class="eyebrow">Handmade · ручная работа</p>
-        <h1 class="mt-5 text-[2.75rem] sm:text-6xl lg:text-7xl">
+        <h1 class="mt-5 text-[2.75rem] sm:text-6xl lg:text-[3.6rem] xl:text-7xl">
           Вязаные друзья и <span class="em-accent">тёплые мелочи</span> для вашего мира
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
@@ -167,7 +171,7 @@ const steps = [
         </div>
         <div class="relative min-h-72 md:min-h-[24rem]">
           <AppImage
-            src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи и вязаный зайчик (демо-иллюстрация)"
+            src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи и вязаный зайчик "
             :width="1200" :height="900" sizes="(min-width: 768px) 45vw, 100vw" img-class="absolute inset-0 size-full object-cover"
           />
         </div>

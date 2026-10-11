@@ -12,10 +12,9 @@ interface PageSeo {
 
 /** Единая точка настройки title/description/OG/canonical, чтобы страницы не расходились. */
 export function usePageSeo(seo: PageSeo | (() => PageSeo)) {
-  const config = useRuntimeConfig()
   const route = useRoute()
   const resolve = typeof seo === 'function' ? seo : () => seo
-  const siteUrl = String(config.public.siteUrl).replace(/\/$/, '')
+  const siteUrl = useSiteUrl()
   const abs = (path: string) => (path.startsWith('http') ? path : `${siteUrl}${path}`)
 
   useSeoMeta({

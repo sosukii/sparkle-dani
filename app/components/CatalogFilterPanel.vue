@@ -27,6 +27,13 @@ const isSelected = (key: GroupKey, option: FacetOption) => props.filters[key].in
 const isDisabled = (key: GroupKey, option: FacetOption) => option.count === 0 && !isSelected(key, option)
 
 // ── цена ──
+const bounds = computed(() => {
+  const price = props.facets.price
+  if (!price) return null
+  const range = price.max - price.min
+  const step = range > 5000 ? 50 : range > 1000 ? 10 : 1
+  return { min: Math.floor(price.min / step) * step, max: Math.ceil(price.max / step) * step, step }
+})
 // У <input type="number"> Vue отдаёт число (или пустую строку), поэтому храним оба варианта.
 const minText = ref<string | number>(props.filters.minPrice?.toString() ?? '')
 const maxText = ref<string | number>(props.filters.maxPrice?.toString() ?? '')
@@ -59,12 +66,37 @@ function commitPrice() {
   }
 }
 onBeforeUnmount(() => clearTimeout(priceTimer))
+
+// Положение бегунков всегда считается из полей «от/до» — так они синхронизированы в обе стороны.
+const lowValue = computed(() => {
+  const b = bounds.value!
+  return Math.min(Math.max(parsePrice(minText.value) ?? b.min, b.min), b.max)
+})
+const highValue = computed(() => {
+  const b = bounds.value!
+  return Math.min(Math.max(parsePrice(maxText.value) ?? b.max, b.min), b.max)
+})
+// Край диапазона = «без ограничения», поэтому поле очищается, а не заполняется крайним числом.
+function onLow(value: number) {
+  const v = Math.min(value, highValue.value)
+  minText.value = v <= bounds.value!.min ? '' : v
+}
+function onHigh(value: number) {
+  const v = Math.max(value, lowValue.value)
+  maxText.value = v >= bounds.value!.max ? '' : v
+}
 </script>
 
 <template>
   <div class="space-y-7">
     <fieldset v-if="facets.price" class="min-w-0">
       <legend class="mb-3 font-display text-lg">Цена, ₽</legend>
+      <PriceRange
+        v-if="bounds && bounds.max > bounds.min"
+        class="mb-4"
+        :min="bounds.min" :max="bounds.max" :step="bounds.step" :low="lowValue" :high="highValue"
+        @update:low="onLow" @update:high="onHigh" @commit="commitPrice"
+      />
       <div class="flex items-end gap-2">
         <div class="flex-1">
           <label :for="`${idPrefix}-min`" class="mb-1 block text-xs font-semibold text-ink-soft">От</label>

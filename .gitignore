@@ -12,3 +12,6 @@ test-results
 playwright-report
 .vscode
 .idea
+
+public/_img
+.output-static

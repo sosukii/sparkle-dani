@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { CONTACT_LABEL, OWNER_NAME, SITE_NAME, TELEGRAM_URL } from '#shared/utils/site'
 
-const { data: categories } = await useFetch('/api/categories', { key: 'categories' })
+const { data: categories } = await useCategories()
 const year = new Date().getFullYear()
 </script>
 

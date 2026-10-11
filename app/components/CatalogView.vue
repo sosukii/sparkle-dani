@@ -4,6 +4,7 @@ import {
   DEFAULT_SORT,
   hasActiveFilters,
   parseCatalogQuery,
+  queryCatalog,
   serializeCatalogFilters,
 } from '#shared/utils/catalog-query'
 import { pluralRu, formatPrice } from '#shared/utils/format'
@@ -13,19 +14,28 @@ const props = defineProps<{ category?: string }>()
 const route = useRoute()
 const router = useRouter()
 
-const { data: categories } = await useFetch('/api/categories', { key: 'categories' })
+const { data: categories } = await useCategories()
 const currentCategory = computed(() => categories.value?.find((c) => c.slug === props.category))
 
-const filters = computed(() => parseCatalogQuery(route.query, { category: currentCategory.value?.id }))
-const apiQuery = computed(() => ({
-  ...serializeCatalogFilters(filters.value),
-  ...(filters.value.category ? { category: filters.value.category } : {}),
-}))
+// Статический HTML (GitHub Pages) собирается без query-параметров, а ссылка может прийти с ними (?page=2, ?fandom=…).
+// Чтобы гидратация совпала с HTML, первый рендер на статике считаем без query, и только после неё применяем настоящие.
+const nuxtApp = useNuxtApp()
+const queryApplied = ref(!useRuntimeConfig().public.isStatic || import.meta.server || !nuxtApp.isHydrating)
+onNuxtReady(() => { queryApplied.value = true })
 
-const { data, error, pending, refresh } = await useFetch<CatalogResult>('/api/products', {
-  query: apiQuery,
-  key: computed(() => `catalog:${JSON.stringify(apiQuery.value)}`),
-})
+const filters = computed(() => parseCatalogQuery(queryApplied.value ? route.query : {}, { category: currentCategory.value?.id }))
+const queryKey = computed(() => `catalog:${JSON.stringify({ ...serializeCatalogFilters(filters.value), category: filters.value.category })}`)
+
+// Фильтры считаются теми же функциями, что и на сервере: при SSR в HTML попадает готовый срез,
+// а дальше пересчёт идёт в браузере по загруженному каталогу (работает и без сервера).
+const { data, error, pending, refresh } = await useAsyncData<CatalogResult>(
+  queryKey,
+  async () => {
+    const catalog = await loadCatalog()
+    return queryCatalog(catalog.products, filters.value, catalog)
+  },
+  { watch: [queryKey] },
+)
 
 // ── обновление URL ──
 type Patch = Partial<Pick<CatalogFilters, 'q' | 'fandom' | 'type' | 'color' | 'warmth' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
@@ -143,7 +153,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
     <div v-else-if="data" class="mt-8 grid gap-8 lg:grid-cols-[17rem_1fr] lg:gap-12">
       <!-- Фильтры: десктоп -->
       <aside class="hidden lg:block" aria-label="Фильтры">
-        <div class="sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto pb-6 pr-2">
+        <div class="thin-scroll sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto pb-6 pr-5">
           <CatalogFilterPanel :facets="data.facets" :filters="filters" id-prefix="d" @update="update($event)" />
         </div>
       </aside>
@@ -165,7 +175,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
           <div>
             <label for="catalog-sort" class="mb-1 block text-xs font-semibold text-ink-soft">Сортировка</label>
             <select
-              id="catalog-sort" class="field w-auto pr-8" :value="filters.sort" data-testid="catalog-sort"
+              id="catalog-sort" class="field select-field w-auto" :value="filters.sort" data-testid="catalog-sort"
               @change="update({ sort: ($event.target as HTMLSelectElement).value as CatalogFilters['sort'] })"
             >
               <option v-for="o in sortOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
@@ -193,7 +203,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
         </div>
 
         <!-- Сетка -->
-        <div v-if="data.items.length" class="mt-6 transition-opacity" :class="pending ? 'opacity-50' : ''">
+        <div v-if="data.items.length" class="mt-6 transition-opacity duration-150" :class="pending ? 'opacity-50' : ''">
           <div class="grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-5 md:grid-cols-3">
             <ProductCard v-for="(p, i) in data.items" :key="p.id" :product="p" :priority="i < 2" />
           </div>
@@ -217,7 +227,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
     <!-- Фильтры: мобильная панель -->
     <dialog
       ref="sheet"
-      class="m-0 mt-auto max-h-[88dvh] w-full max-w-none overflow-hidden rounded-t-3xl bg-paper p-0 text-ink backdrop:bg-ink/50 lg:hidden"
+      class="sheet m-0 mt-auto max-h-[88dvh] w-full max-w-none overflow-hidden rounded-t-3xl bg-paper p-0 text-ink lg:hidden"
       aria-labelledby="sheet-title"
       @click="onSheetClick"
     >
@@ -228,7 +238,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
             <AppIcon name="close" :size="22" />
           </button>
         </div>
-        <div class="overflow-y-auto px-5 py-5">
+        <div class="thin-scroll overflow-y-auto px-5 py-5">
           <CatalogFilterPanel v-if="data" :facets="data.facets" :filters="filters" id-prefix="m" @update="update($event)" />
         </div>
         <div class="flex gap-3 border-t border-line px-5 py-4">

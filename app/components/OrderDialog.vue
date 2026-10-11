@@ -7,7 +7,7 @@ const dialog = ref<HTMLDialogElement>()
 const area = ref<HTMLTextAreaElement>()
 const copied = ref(false)
 const copyFailed = ref(false)
-const siteUrl = String(useRuntimeConfig().public.siteUrl).replace(/\/$/, '')
+const siteUrl = useSiteUrl()
 
 const text = computed(() => buildOrderText(props.lines, siteUrl))
 
@@ -37,7 +37,7 @@ defineExpose({ open })
 <template>
   <dialog
     ref="dialog"
-    class="m-auto w-[min(92vw,38rem)] rounded-[1.75rem] bg-paper p-0 text-ink shadow-soft backdrop:bg-ink/50"
+    class="modal m-auto w-[min(92vw,38rem)] rounded-[1.75rem] bg-paper p-0 text-ink shadow-soft"
     aria-labelledby="order-title"
     @click="(e) => e.target === dialog && close()"
   >

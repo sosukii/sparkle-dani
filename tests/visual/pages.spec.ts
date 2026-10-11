@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { addToCart, settle } from '../helpers'
+import { addToCart, dialogSettled, settle } from '../helpers'
 
 const viewports = {
   desktop: { width: 1280, height: 800 },
@@ -70,6 +70,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
       await page.goto('/cart')
       await page.getByTestId('contact-button').click()
       await expect(page.getByTestId('order-text')).toBeVisible()
+      await dialogSettled(page)
       await shot(page, `order-dialog-${device}`, false)
     })
 
@@ -98,6 +99,7 @@ test.describe('мобильная панель фильтров', () => {
     await settle(page)
     await page.getByTestId('open-filters').click()
     await expect(page.getByRole('dialog', { name: 'Фильтры' })).toBeVisible()
+    await dialogSettled(page)
     await expect(page).toHaveScreenshot('filters-sheet-mobile.png')
   })
 })

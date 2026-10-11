@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { CONTACT_LABEL, OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
-import type { CatalogResult } from '#shared/types/catalog'
+import { parseCatalogQuery, queryCatalog } from '#shared/utils/catalog-query'
 
-const { data } = await useFetch<CatalogResult>('/api/products', { key: 'about-facets', query: { pageSize: 1 } })
+const { data } = await useAsyncData('about-facets', async () => {
+  const catalog = await loadCatalog()
+  return queryCatalog(catalog.products, parseCatalogQuery({ pageSize: 1 }), catalog)
+})
 const fandoms = computed(() => data.value?.facets.fandom ?? [])
 
 usePageSeo({
@@ -36,7 +39,6 @@ const values = [
   <div>
     <section class="container-page grid items-center gap-10 py-10 lg:grid-cols-2 lg:py-20">
       <div>
-        <MockNote class="mb-6" />
         <p class="eyebrow">Обо мне</p>
         <h1 class="mt-4 text-5xl sm:text-6xl lg:text-7xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span>!</h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
@@ -49,7 +51,7 @@ const values = [
       <div class="relative">
         <AppIcon name="sparkle" :size="40" class="absolute -left-3 -top-4 z-10 text-rose" />
         <AppImage
-          src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи, крючок и вязаный зайчик (демо-иллюстрация)"
+          src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи, крючок и вязаный зайчик"
           :width="1200" :height="900" sizes="(min-width: 1024px) 45vw, 100vw" priority
           img-class="w-full rounded-[2rem] object-cover shadow-soft"
         />

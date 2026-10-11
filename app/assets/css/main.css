@@ -102,7 +102,32 @@
   }
 
   .field {
-    @apply min-h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink placeholder:text-ink-soft/70 focus:border-ink;
+    @apply min-h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink transition-colors duration-150 placeholder:text-ink-soft/70 hover:border-ink/40;
+  }
+  /* Один чёткий контур вместо «рамка + обводка»: видимый, но не тяжёлый. */
+  .field:focus-visible {
+    outline: 2px solid var(--color-berry);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+  /* Свой шеврон у select: родной обрезается у края и выглядит по-разному в браузерах. */
+  .select-field {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b1b2e'%3E%3Cpath d='M6.4 8.6 12 14.2l5.6-5.6L19 10l-7 7-7-7 1.4-1.4Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 1.1rem;
+  }
+  /* Числовые поля без стрелочек-«спиннеров»: ввод идёт с клавиатуры или ползунком. */
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
   }
 
   .prose-soft p { @apply mb-4 leading-relaxed text-ink-soft; }
@@ -110,4 +135,127 @@
 
 .sr-only-focusable:not(:focus):not(:focus-within) {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ───────── Плавность: быстро (150–250 мс), без лишнего ───────── */
+@layer components {
+  a, button, summary { transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease; }
+  button:not(:disabled):active, a.btn:active { transform: scale(0.97); }
+
+  /* Диалоги и шторка: появление и закрытие (display/overlay анимируются через allow-discrete) */
+  dialog.modal, dialog.sheet {
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), overlay 0.22s allow-discrete, display 0.22s allow-discrete;
+  }
+  dialog.modal { transform: translateY(12px) scale(0.98); }
+  dialog.sheet { transform: translateY(2.5rem); }
+  dialog.modal[open], dialog.sheet[open] { opacity: 1; transform: none; }
+  @starting-style {
+    dialog.modal[open] { opacity: 0; transform: translateY(12px) scale(0.98); }
+    dialog.sheet[open] { opacity: 0; transform: translateY(2.5rem); }
+  }
+  dialog.modal::backdrop, dialog.sheet::backdrop {
+    background: rgb(43 27 46 / 0);
+    transition: background-color 0.22s ease, overlay 0.22s allow-discrete, display 0.22s allow-discrete;
+  }
+  dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(43 27 46 / 0.5); }
+  @starting-style {
+    dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(43 27 46 / 0); }
+  }
+
+  /* Сворачивание панелей (мобильное меню и поиск) без JS-измерения высоты */
+  .collapse-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.2s ease, visibility 0s linear 0.2s;
+  }
+  .collapse-panel[data-open='true'] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.2s ease, visibility 0s;
+  }
+  .collapse-panel > div { overflow: hidden; min-height: 0; }
+
+  /* Разворачивание ответов в FAQ */
+  :root { interpolate-size: allow-keywords; }
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.2s ease, content-visibility 0.2s allow-discrete;
+  }
+  details[open]::details-content { block-size: auto; }
+
+  /* Строки корзины и смена фото в галерее */
+  .line-leave-active { transition: opacity 0.15s ease, transform 0.15s ease; }
+  .line-leave-to { opacity: 0; transform: translateX(0.75rem); }
+  .fade-enter-active, .fade-leave-active { transition: opacity 0.15s ease; }
+  .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+  /* Тонкая полоса прокрутки в панели фильтров */
+  .thin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line) transparent;
+    scrollbar-gutter: stable;
+  }
+
+  /* Ползунок диапазона цены */
+  .price-range { position: relative; height: 1.75rem; --thumb: 1.5rem; }
+  .price-range__track {
+    position: absolute;
+    left: calc(var(--thumb) / 2);
+    right: calc(var(--thumb) / 2);
+    top: 50%;
+    height: 0.3rem;
+    margin-top: -0.15rem;
+    border-radius: 999px;
+    background: var(--color-line);
+  }
+  .price-range__fill {
+    position: absolute;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-berry);
+    left: calc(var(--lo) * 100%);
+    width: calc((var(--hi) - var(--lo)) * 100%);
+  }
+  .price-range input[type='range'] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    pointer-events: none;
+  }
+  .price-range input[type='range']::-webkit-slider-runnable-track { background: transparent; height: 100%; }
+  .price-range input[type='range']::-moz-range-track { background: transparent; height: 100%; }
+  .price-range input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: auto;
+    width: var(--thumb);
+    height: var(--thumb);
+    margin-top: 0.125rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--color-berry);
+    box-shadow: var(--shadow-soft);
+    cursor: grab;
+    transition: transform 0.15s ease;
+  }
+  .price-range input[type='range']::-moz-range-thumb {
+    pointer-events: auto;
+    width: calc(var(--thumb) - 4px);
+    height: calc(var(--thumb) - 4px);
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--color-berry);
+    box-shadow: var(--shadow-soft);
+    cursor: grab;
+  }
+  .price-range input[type='range']:active::-webkit-slider-thumb { transform: scale(1.12); cursor: grabbing; }
+  .price-range input[type='range']:focus-visible { outline: none; }
+  .price-range input[type='range']:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-berry); outline-offset: 2px; }
+  .price-range input[type='range']:focus-visible::-moz-range-thumb { outline: 3px solid var(--color-berry); outline-offset: 2px; }
 }

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { formatLeadTime, formatPrice } from '#shared/utils/format'
+import { formatPrice } from '#shared/utils/format'
 import type { Product } from '#shared/types/product'
 
 defineProps<{ product: Product, priority?: boolean }>()
 </script>
 
 <template>
-  <article class="group relative flex flex-col" data-testid="product-card">
+  <!-- Карточки в ряду одной высоты: название всегда занимает 2 строки, цена под ним, статус прижат к низу. -->
+  <article class="group relative flex h-full flex-col" data-testid="product-card">
     <div class="relative overflow-hidden rounded-card bg-cream shadow-soft">
       <AppImage
         :src="product.images[0]!.src"
@@ -15,11 +16,11 @@ defineProps<{ product: Product, priority?: boolean }>()
         :height="product.images[0]!.height"
         sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 46vw"
         :priority="priority"
-        img-class="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
+        img-class="aspect-[4/5] w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
       />
     </div>
-    <div class="mt-3 flex flex-1 flex-col gap-1.5 px-1">
-      <h3 class="font-display text-lg leading-tight">
+    <div class="mt-3 flex flex-1 flex-col px-1">
+      <h3 class="line-clamp-2 min-h-[2.5em] hyphens-auto break-words font-display text-lg leading-tight">
         <NuxtLink
           :to="`/product/${product.slug}`"
           class="no-underline after:absolute after:inset-0 after:content-[''] hover:text-berry"
@@ -27,12 +28,9 @@ defineProps<{ product: Product, priority?: boolean }>()
           {{ product.title }}
         </NuxtLink>
       </h3>
-      <p class="text-base font-bold">{{ formatPrice(product.price) }}</p>
-      <p class="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <AvailabilityBadge :availability="product.availability" />
-        <span v-if="product.availability === 'made_to_order' && product.leadTimeDays" class="text-xs font-semibold text-ink-soft">
-          {{ formatLeadTime(product.leadTimeDays) }}
-        </span>
+      <p class="mt-1.5 text-base font-bold">{{ formatPrice(product.price) }}</p>
+      <p class="mt-auto min-w-0 pt-2.5">
+        <AvailabilityBadge :availability="product.availability" :lead-time="product.leadTimeDays" />
       </p>
     </div>
   </article>

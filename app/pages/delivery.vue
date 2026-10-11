@@ -24,7 +24,6 @@ const faq = [
 <template>
   <div>
     <section class="container-page py-10 lg:py-20">
-      <MockNote class="mb-6" />
       <p class="eyebrow">Информация</p>
       <h1 class="mt-4 max-w-3xl text-5xl sm:text-6xl lg:text-7xl">Покупка и <span class="em-accent">доставка</span></h1>
       <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">
@@ -61,9 +60,8 @@ const faq = [
       <div class="rounded-[2rem] bg-cream px-6 py-10 sm:px-12">
         <h2 id="delivery-pay" class="text-3xl sm:text-4xl">Оплата и доставка</h2>
         <p class="mt-4 max-w-3xl leading-relaxed text-ink-soft">
-          Способы, стоимость и сроки доставки, а также оплата согласуются при оформлении заказа в Telegram. Этот раздел будет дополнен подробностями — {{ OWNER_NAME }} добавит их сама.
+          Способы, стоимость и сроки доставки, а также оплата согласуются при оформлении заказа в Telegram: так вы заранее знаете, что и когда получите.
         </p>
-        <MockNote class="mt-5">Здесь появятся реальные условия доставки и оплаты</MockNote>
       </div>
     </section>
 

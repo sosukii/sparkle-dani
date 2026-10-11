@@ -2,7 +2,7 @@
 const route = useRoute()
 const slug = computed(() => String(route.params.category))
 
-const { data: categories } = await useFetch('/api/categories', { key: 'categories' })
+const { data: categories } = await useCategories()
 if (!categories.value?.some((c) => c.slug === slug.value)) {
   throw createError({ statusCode: 404, statusMessage: 'Категория не найдена', fatal: true })
 }

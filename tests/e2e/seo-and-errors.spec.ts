@@ -20,11 +20,14 @@ test.describe('страницы ошибок', () => {
     await expect(page.getByTestId('error-page')).toBeVisible()
   })
 
-  test('API отвечает осмысленно на мусорные запросы', async ({ request }) => {
-    expect((await request.get('/api/products?min=abc&page=-5&category=xxx')).status()).toBe(404)
-    expect((await request.get('/api/products?min=abc&page=-5')).status()).toBe(200)
-    expect((await request.get('/api/products/nope')).status()).toBe(404)
-    expect(await (await request.get('/api/products/by-ids?ids=')).json()).toEqual([])
+  test('каталог отдаётся одним статичным JSON, старых API-ручек больше нет', async ({ request }) => {
+    const response = await request.get('/api/catalog.json')
+    expect(response.status()).toBe(200)
+    const catalog = await response.json()
+    expect(catalog.products).toHaveLength(54)
+    expect(catalog.categories).toHaveLength(5)
+    expect(catalog.taxonomy.fandoms.length).toBeGreaterThan(0)
+    expect((await request.get('/api/products')).status()).toBe(404)
   })
 })
 
@@ -69,7 +72,7 @@ test.describe('SEO', () => {
     expect(sitemap).not.toContain('/cart</loc>')
   })
 
-  test('сжатие: HTML отдаётся в br/gzip и корректно разворачивается', async ({ playwright }) => {
+  test('сжатие: HTML отдаётся в br/gzip и корректно разворачивается @server', async ({ playwright }) => {
     for (const encoding of ['br', 'gzip']) {
       const ctx = await playwright.request.newContext({ baseURL: 'http://127.0.0.1:3100', extraHTTPHeaders: { 'accept-encoding': encoding, accept: 'text/html' } })
       for (const path of ['/', '/catalog', '/product/nope']) {

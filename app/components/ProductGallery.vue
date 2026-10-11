@@ -24,12 +24,14 @@ const current = computed(() => props.images[index.value] ?? props.images[0]!)
         </button>
       </li>
     </ul>
-    <div class="order-1 overflow-hidden rounded-[1.75rem] bg-cream shadow-soft sm:order-2">
-      <AppImage
-        :key="current.src"
-        :src="current.src" :alt="current.alt" :width="current.width" :height="current.height"
-        sizes="(min-width: 1024px) 42vw, 100vw" priority img-class="aspect-[4/5] w-full object-cover" data-testid="gallery-main"
-      />
+    <div class="order-1 grid overflow-hidden rounded-[1.75rem] bg-cream shadow-soft sm:order-2">
+      <Transition name="fade">
+        <AppImage
+          :key="current.src"
+          :src="current.src" :alt="current.alt" :width="current.width" :height="current.height"
+          sizes="(min-width: 1024px) 42vw, 100vw" priority img-class="aspect-[4/5] w-full object-cover [grid-area:1/1]" data-testid="gallery-main"
+        />
+      </Transition>
     </div>
   </div>
 </template>

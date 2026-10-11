@@ -44,7 +44,7 @@ function clearAll() {
         <p v-if="hasUnavailable" class="mb-4 rounded-2xl bg-butter px-5 py-3 text-sm font-semibold text-[#6b4e00]" role="status">
           Некоторых изделий больше нет в каталоге — они не учитываются в сумме. Удалите их из корзины.
         </p>
-        <ul class="divide-y divide-line rounded-card border border-line bg-white">
+        <TransitionGroup tag="ul" name="line" class="divide-y divide-line rounded-card border border-line bg-white">
           <li
             v-for="line in cart.lines" :key="line.productId"
             class="grid grid-cols-[5.5rem_1fr] gap-4 p-4 sm:grid-cols-[7rem_1fr_auto] sm:p-5"
@@ -80,7 +80,7 @@ function clearAll() {
               {{ formatPrice(line.price * line.qty) }}
             </p>
           </li>
-        </ul>
+        </TransitionGroup>
 
         <div class="mt-4">
           <button v-if="!confirmClear" type="button" class="min-h-11 text-sm font-semibold text-ink-soft underline underline-offset-4 hover:text-berry" data-testid="clear-cart" @click="confirmClear = true">

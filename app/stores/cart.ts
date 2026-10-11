@@ -117,10 +117,9 @@ export const useCartStore = defineStore('cart', () => {
   /** Подтягивает актуальные цены и остатки из каталога. */
   async function refresh() {
     if (!lines.value.length) return
-    const ids = lines.value.map((l) => l.productId).join(',')
     try {
-      const fresh = await $fetch<Product[]>('/api/products/by-ids', { query: { ids } })
-      lines.value = reconcileLines(lines.value, fresh)
+      const catalog = await loadCatalog()
+      lines.value = reconcileLines(lines.value, catalog.products)
     }
     catch {
       // Нет сети — показываем сохранённые данные.

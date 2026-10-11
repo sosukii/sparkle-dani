@@ -7,8 +7,6 @@ export const TELEGRAM_USERNAME = 'sosukii'
 export const TELEGRAM_URL = `https://t.me/${TELEGRAM_USERNAME}`
 export const CONTACT_LABEL = `Связаться с ${OWNER_NAME}`
 
-/** Пока в каталоге демонстрационные товары, сайт честно об этом говорит. Выключить — false. */
-export const DEMO_MODE = true
 
 export const CURRENCY = 'RUB'
 export const DEFAULT_PAGE_SIZE = 12

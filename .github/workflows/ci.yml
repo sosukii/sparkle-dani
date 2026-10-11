@@ -17,6 +17,11 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Cache optimized images
+        uses: actions/cache@v4
+        with:
+          path: public/_img
+          key: images-${{ hashFiles('public/images/**', 'scripts/optimize-images.mjs') }}
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
       - run: npm run lint
@@ -25,6 +30,8 @@ jobs:
       - run: npm run build
       - run: npm run test:e2e
       - run: npm run test:visual
+      - name: Static build (GitHub Pages) smoke tests
+        run: npm run test:static
       - name: Upload Playwright report and failed screenshots
         if: failure()
         uses: actions/upload-artifact@v4

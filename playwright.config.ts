@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 const PORT = 3100
 const baseURL = `http://127.0.0.1:${PORT}`
+// E2E_TARGET=static — те же тесты против статической сборки (как на GitHub Pages), без Node-сервера.
+const isStatic = process.env.E2E_TARGET === 'static'
 
 export default defineConfig({
   testDir: './tests',
@@ -51,8 +53,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // Тесты идут против production-сборки: сначала `npm run build`.
-    command: 'node .output/server/index.mjs',
+    // Тесты идут против production-сборки: сначала `npm run build` (или `npm run generate` для статики).
+    command: isStatic ? 'node scripts/serve-static.mjs' : 'node .output/server/index.mjs',
     url: baseURL,
     env: { PORT: String(PORT), HOST: '127.0.0.1', NUXT_PUBLIC_SITE_URL: baseURL },
     // Всегда поднимаем свежий сервер: старый процесс на порту мог бы отдавать устаревшую сборку.
