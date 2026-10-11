@@ -95,7 +95,7 @@ test('поиск из шапки открывает страницу поиск�
   await page.locator('#site-search').press('Enter')
   await expect(page).toHaveURL(/\/search\/?\?q=%D1%88%D0%B0%D1%80%D1%84/)
   await expect(page.getByRole('heading', { level: 1 })).toContainText('шарф')
-  expect(await cards(page).count()).toBeGreaterThan(0)
+  await expect(cards(page).first()).toBeVisible() // на статике результаты появляются после гидратации
 })
 
 test('пагинация: в «Игрушках» две страницы', async ({ page }) => {

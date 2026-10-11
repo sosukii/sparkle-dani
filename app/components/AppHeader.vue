@@ -19,7 +19,8 @@ watch(() => route.fullPath, () => {
   searchOpen.value = false
 })
 // Значение из адреса подставляем после монтирования: статический HTML собран без query.
-onMounted(() => { search.value = typeof route.query.q === 'string' ? route.query.q : '' })
+// Не затираем текст, который покупатель уже начал набирать: подставляем только непустое значение из адреса.
+onMounted(() => { if (typeof route.query.q === 'string') search.value = route.query.q })
 watch(() => route.query.q, (q) => { search.value = typeof q === 'string' ? q : '' })
 
 function submitSearch() {
