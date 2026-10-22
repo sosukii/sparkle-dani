@@ -44,13 +44,10 @@ test.describe('поиск по сайту: разделы', () => {
   const cases: [string, string][] = [
     ['доставка', 'delivery'],
     ['как получить', 'delivery'],
-    ['где магазин', 'delivery'],
-    ['какой город', 'delivery'],
-    ['где на карте', 'delivery'],
-    ['местоположение', 'delivery'],
+    ['оплата', 'delivery'],
+    ['возврат', 'delivery'],
     ['цены', 'catalog'],
     ['индивидуальный заказ', 'custom'],
-    ['премиум', 'custom'],
     ['написать', 'contact'],
   ]
   for (const [query, id] of cases) {
@@ -61,10 +58,10 @@ test.describe('поиск по сайту: разделы', () => {
   }
 
   test('карточка раздела отвечает сразу и ведёт на страницу', async ({ page }) => {
-    await search(page, 'какой город')
+    await search(page, 'как получить')
     const card = page.getByTestId('search-page-delivery')
-    await expect(card).toContainText('СДЭК')
-    await expect(card).toContainText('Москве')
+    await expect(card).toContainText('Telegram')
+    await expect(card).toContainText('до заказа')
     await card.click()
     await expect(page).toHaveURL(/\/delivery$/)
   })

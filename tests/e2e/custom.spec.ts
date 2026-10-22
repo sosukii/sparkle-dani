@@ -12,9 +12,9 @@ test('страница «Свой заказ»: суть понятна за с�
   await expect(page.getByRole('heading', { name: 'Бюджет' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Материал', exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Размеры и мерки' })).toBeVisible()
-  // Материалы: только качественные или премиум
-  await expect(page.getByText('качественные').first()).toBeVisible()
-  await expect(page.getByText('Из дешёвых ниток и тканей').first()).toBeVisible()
+  // Полезные ссылки: размеры, материалы, каталог; неподтверждённых обещаний о материалах нет
+  await expect(page.getByTestId('custom-links')).toContainText('Размеры и мерки')
+  await expect(page.locator('main')).not.toContainText('премиум')
   // Объём текста разумный: страница читается быстро
   const words = (await page.locator('main').innerText()).split(/\s+/).length
   expect(words).toBeLessThan(650)
@@ -52,12 +52,15 @@ test('ссылки на «Свой заказ» есть в шапке, подв
   await page.goto('/')
   await expect(page.getByRole('banner').getByRole('link', { name: 'Свой заказ' })).toBeVisible()
   await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Свой заказ' })).toBeVisible()
-  await page.getByRole('link', { name: /Как заказать своё/ }).click()
+  await page.getByTestId('home-help-custom').click()
   await expect(page).toHaveURL(/\/custom$/)
 })
 
-test('на странице доставки есть факты про СДЭК и Москву', async ({ page }) => {
+test('на странице доставки нет неподтверждённых обещаний: условия согласуются до заказа', async ({ page }) => {
   await page.goto('/delivery')
-  await expect(page.getByTestId('delivery-cdek')).toContainText('СДЭК')
-  await expect(page.getByTestId('delivery-moscow')).toContainText('Москве')
+  await expect(page.getByTestId('delivery-delivery')).toContainText('согласуются')
+  await expect(page.getByTestId('delivery-payment')).toContainText('На сайте оплата не принимается')
+  await expect(page.getByTestId('delivery-returns')).toContainText('до заказа')
+  const text = await page.locator('main').innerText()
+  for (const claim of ['СДЭК', 'Москв', 'бесплатн', 'примерк', 'пожизнен']) expect(text, claim).not.toContain(claim)
 })

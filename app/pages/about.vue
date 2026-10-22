@@ -1,106 +1,58 @@
 <script setup lang="ts">
-import { CONTACT_LABEL, OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
+import { CONTACT_LABEL, OWNER_NAME, SITE_NAME, TELEGRAM_URL } from '#shared/utils/site'
 import { buildBreadcrumbJsonLd } from '#shared/utils/seo'
+import { pluralRu } from '#shared/utils/format'
 
 const siteUrl = useSiteUrl()
-useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'Обо мне', path: '/about' }], siteUrl))
-
+useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'О бренде', path: '/about' }], siteUrl))
 usePageSeo({
-  title: 'Обо мне',
-  description: `Знакомьтесь: ${OWNER_NAME} — мастер, который вяжет игрушки, тёплые вещи и украшения. Как рождаются изделия и что для меня важно.`,
-  image: '/images/about/workspace.jpg',
+  title: 'О бренде',
+  description: `${SITE_NAME} — магазин авторского вязаного трикотажа ручной работы. Что здесь продаётся и как устроена покупка.`,
+  canonicalPath: '/about',
 })
+const { data: categories } = await useCategories()
 
-const makes = [
-  { icon: 'heart', title: 'Игрушки-амигуруми', text: 'Мягкие друзья с вышитыми глазками и собственным характером. Одни охраняют уют на полке, другие отправляются с вами в рюкзаке на край света.', tint: 'bg-raised' },
-  { icon: 'sparkle', title: 'Тёплые вещи', text: 'Шарфы, шапки и варежки, в которых хочется гулять до первой звезды, даже когда за окном совсем не лето.', tint: 'bg-raised' },
-  { icon: 'bag', title: 'Мелочи для себя', text: 'Бисерные серьги и браслеты, сумочки, косметички и костеры. Маленькие детали, с которыми день получается ярче.', tint: 'bg-raised' },
-] as const
-
-const process = [
-  { n: 1, title: 'Идея', text: 'Всё начинается с настроения: герой любимой истории, цвет, который не отпускает, или просто «хочу вот такое». Набрасываю эскиз и подбираю палитру.' },
-  { n: 2, title: 'Пряжа', text: 'Выбираю материалы, которые приятно держать в руках: мягкие, надёжные и с красивым, глубоким цветом.' },
-  { n: 3, title: 'Вязание', text: 'Петля за петлёй, ряд за рядом. Самая неторопливая и самая любимая часть пути.' },
-  { n: 4, title: 'Финальные штрихи', text: 'Вышиваю мордочки, пришиваю помпоны, всё внимательно проверяю и аккуратно упаковываю: изделие можно сразу дарить.' },
-]
-
-const values = [
-  { title: 'Только вручную', text: 'Без конвейера: у каждого изделия чуть-чуть свой характер, и это не недочёт, а изюминка.' },
-  { title: 'Честные описания', text: 'Размеры, материалы и сроки — как есть, чтобы ожидания совпадали с реальностью.' },
-  { title: 'Живое общение', text: 'Все детали мы обсуждаем лично в Telegram — спрашивайте о чём угодно.' },
-  { title: 'Уют и радость', text: 'Хочу, чтобы от каждого изделия на душе становилось чуть теплее.' },
+const principles = [
+  { title: 'Всё описано до покупки', text: 'У изделия указаны состав, размеры, измерения и уход. Чего пока не известно, названо неизвестным, и это можно уточнить.' },
+  { title: 'Без давления', text: 'Нет таймеров, «последних штук» и скидок на один день. Вы выбираете в своём темпе.' },
+  { title: 'Покупка через Telegram', text: `Сайт готовит сообщение, а договариваетесь вы с ${OWNER_NAME} лично. Оплаты на сайте нет.` },
 ]
 </script>
 
 <template>
   <div>
-    <section class="container-page grid items-center gap-10 py-10 lg:grid-cols-2 lg:py-20">
-      <div>
-        <p class="eyebrow">Обо мне</p>
-        <h1 class="mt-4 text-5xl sm:text-6xl lg:text-7xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span>!</h1>
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">
-          Я вяжу крючком маленькие радости: игрушек с характером, шарфы, в которые хочется закутаться, и мелочи, от которых обычный день становится чуточку сказочнее. Многое — по мотивам историй, которые люблю сама. Если вы узнаёте в этом себя, заходите: вам здесь рады.
-        </p>
-        <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8 no-underline">
+    <section class="container-page py-10 lg:py-20">
+      <p class="eyebrow">О бренде</p>
+      <h1 class="mt-4 max-w-3xl text-5xl sm:text-6xl lg:text-7xl">{{ SITE_NAME }}: авторский <span class="em-accent">вязаный трикотаж</span></h1>
+      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-fg-muted">
+        Изделия делаются вручную: мастер — {{ OWNER_NAME }}. Здесь можно спокойно рассмотреть вещь, понять, подходит ли она вам по размеру и материалу, и написать, если нужны подробности.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <NuxtLink to="/catalog" class="btn btn-primary px-7 no-underline">Смотреть каталог <AppIcon name="arrow-right" :size="18" /></NuxtLink>
+        <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-ghost no-underline">
           <AppIcon name="telegram" :size="18" /> {{ CONTACT_LABEL }}
         </a>
       </div>
-      <div class="relative">
-        <AppIcon name="sparkle" :size="40" class="absolute -left-3 -top-4 z-10 text-gold" />
-        <AppImage
-          src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи, крючок и вязаный зайчик"
-          :width="1200" :height="900" sizes="(min-width: 1024px) 45vw, 100vw" priority
-          img-class="w-full rounded-[2rem] object-cover shadow-soft"
-        />
-      </div>
     </section>
 
-    <section class="container-page py-12 lg:py-16" aria-labelledby="about-makes">
-      <SectionHead id="about-makes" eyebrow="Что я делаю" title="Что выходит из-под моего крючка" />
-      <ul class="mt-8 grid gap-5 md:grid-cols-3">
-        <li v-for="m in makes" :key="m.title" class="rounded-card p-8" :class="m.tint">
-          <AppIcon :name="m.icon" :size="28" class="text-link" />
-          <h3 class="mt-4 text-2xl">{{ m.title }}</h3>
-          <p class="mt-2 leading-relaxed text-fg-muted">{{ m.text }}</p>
+    <section v-if="categories?.length" class="container-page py-8 lg:py-12" aria-labelledby="about-range">
+      <h2 id="about-range" class="text-3xl sm:text-4xl">Что в каталоге</h2>
+      <ul class="mt-6 flex flex-wrap gap-3" data-testid="about-categories">
+        <li v-for="c in categories" :key="c.id">
+          <NuxtLink :to="`/catalog/${c.slug}`" class="chip no-underline">{{ c.title }} · {{ c.count }} {{ pluralRu(c.count, ['изделие', 'изделия', 'изделий']) }}</NuxtLink>
         </li>
       </ul>
     </section>
 
-    <section class="container-page py-12 lg:py-16" aria-labelledby="about-process">
-      <SectionHead id="about-process" eyebrow="Как всё устроено" title="Путь одного изделия" />
-      <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <li v-for="s in process" :key="s.n" class="rounded-card border border-line bg-surface p-7">
-          <span class="grid size-10 place-items-center rounded-full bg-accent font-display text-lg text-fg">{{ s.n }}</span>
-          <h3 class="mt-4 text-xl">{{ s.title }}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-fg-muted">{{ s.text }}</p>
+    <section class="container-page py-8 lg:py-12" aria-labelledby="about-principles">
+      <h2 id="about-principles" class="text-3xl sm:text-4xl">Как здесь всё устроено</h2>
+      <ul class="mt-8 grid gap-5 md:grid-cols-3">
+        <li v-for="p in principles" :key="p.title" class="rounded-card border border-line bg-surface p-7">
+          <h3 class="font-display text-2xl">{{ p.title }}</h3>
+          <p class="mt-2 leading-relaxed text-fg-muted">{{ p.text }}</p>
         </li>
-      </ol>
-    </section>
-
-    <section class="container-page py-12 lg:py-16" aria-labelledby="about-values">
-      <div class="rounded-[2rem] bg-raised px-6 py-12 sm:px-12">
-        <SectionHead id="about-values" eyebrow="Что для меня важно" title="Мои принципы" />
-        <dl class="mt-8 grid gap-x-10 gap-y-7 sm:grid-cols-2">
-          <div v-for="v in values" :key="v.title" class="border-t border-line-strong pt-5">
-            <dt class="font-display text-xl">{{ v.title }}</dt>
-            <dd class="mt-1.5 leading-relaxed text-fg-muted">{{ v.text }}</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="container-page pt-12 lg:pt-16">
-      <div class="rounded-card bg-raised px-6 py-14 text-center text-fg sm:px-12">
-        <h2 class="text-3xl sm:text-5xl">Хотите что-то <span class="font-display italic text-gold">особенное</span>?</h2>
-        <p class="mx-auto mt-4 max-w-xl text-fg">Выберите изделие из каталога или закажите своё: расскажите идею, а я придумаю, как её связать.</p>
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <NuxtLink to="/catalog" class="btn btn-primary no-underline">В каталог</NuxtLink>
-          <NuxtLink to="/custom" class="btn btn-soft no-underline">Заказать своё</NuxtLink>
-          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-ghost no-underline">
-            <AppIcon name="telegram" :size="18" /> {{ CONTACT_LABEL }}
-          </a>
-        </div>
-      </div>
+      </ul>
+      <p class="mt-8 text-sm"><NuxtLink to="/delivery" class="font-semibold text-link underline underline-offset-4">Как проходит покупка</NuxtLink></p>
     </section>
   </div>
 </template>

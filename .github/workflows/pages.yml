@@ -66,23 +66,36 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
-  # Сообщение в Telegram со ссылкой на новый деплой. Работает, только если в настройках репозитория заданы секреты
-  # TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID (см. README); без них шаг тихо пропускается. Токен нигде не печатается.
+  # Сообщение в Telegram после успешного выката. Текст про то, что выкачено, лежит в .github/notify-note.txt
+  # (его обновляют вместе с каждым этапом). Работает, только если заданы секреты TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID;
+  # без них шаг тихо пропускается. Токен нигде не печатается.
   notify:
     needs: deploy
     runs-on: ubuntu-24.04
-    permissions: {}
+    permissions:
+      contents: read
     env:
       TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
-      PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+      # Параметр v обходит кэш превью ссылок в Telegram: иначе он показывает карточку из первого сообщения.
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }}?v=${{ github.event.workflow_run.head_sha || github.sha }}
       CHANGE: ${{ github.event.workflow_run.display_title || 'ручной запуск' }}
     steps:
+      - uses: actions/checkout@v4
+        if: env.TG_TOKEN != '' && env.TG_CHAT != ''
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          sparse-checkout: .github/notify-note.txt
+          sparse-checkout-cone-mode: false
       - name: Отправить ссылку в Telegram
         if: env.TG_TOKEN != '' && env.TG_CHAT != ''
         run: |
+          NOTE="$(cat .github/notify-note.txt 2>/dev/null || true)"
           curl -sS --fail-with-body -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TG_CHAT}" \
-            --data-urlencode "text=NOCTURNE: деплой обновлён ✅
+            --data-urlencode "text=накатили жару на прод хехехе 🔥
+
+          ${NOTE}
+
           ${CHANGE}
           ${PAGE_URL}" > /dev/null
