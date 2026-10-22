@@ -1,34 +1,62 @@
 {
   "id": "product-014",
-  "slug": "klassicheskiy-rozovyy-mishka-014",
-  "title": "Классический розовый мишка",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка.",
-  "price": 2700,
+  "slug": "snud-molochnyy",
+  "title": "Снуд «Молочный»",
+  "description": "Снуд в два оборота. Демонстрационное изделие.",
+  "price": 5200,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": null,
+  "category": "accessories",
+  "type": "snood",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "pink"
+    "cream"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 70
+    },
+    {
+      "material": "acrylic",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "dry-flat"
+  ],
   "availability": "in_stock",
   "stock": 3,
   "images": [
     {
       "src": "/images/products/product-014-1.jpg",
-      "alt": "Классический розовый мишка — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Снуд «Молочный»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-014-2.jpg",
-      "alt": "Классический розовый мишка — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Снуд «Молочный»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [],
-  "createdAt": "2026-09-08",
+  "attributes": [
+    {
+      "label": "Обхват",
+      "value": "60 см"
+    }
+  ],
+  "createdAt": "2026-09-22",
   "isDemo": true
 }

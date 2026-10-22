@@ -1,47 +1,89 @@
 {
   "id": "product-001",
-  "slug": "lesnoy-duh-001",
-  "title": "Лесной дух",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Studio Ghibli».",
-  "price": 3200,
+  "slug": "sviter-krupnoy-vyazki-kakao",
+  "title": "Свитер крупной вязки «Какао»",
+  "description": "Свитер плотной крупной вязки свободного кроя. Демонстрационное изделие.",
+  "price": 28500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "ghibli",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": "oversize",
+  "fitNote": "Свободный крой: линия плеч опущена, рукав длиннее обычного.",
   "colors": [
-    "beige"
+    "cocoa"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 80
+    },
+    {
+      "material": "acrylic",
+      "percent": 20
+    }
+  ],
+  "sizes": [
+    "s",
+    "m",
+    "l"
+  ],
+  "measurements": [
+    {
+      "size": "s",
+      "values": {
+        "chest": 57,
+        "length": 62,
+        "sleeve": 62
+      }
+    },
+    {
+      "size": "m",
+      "values": {
+        "chest": 60,
+        "length": 64,
+        "sleeve": 63
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 63,
+        "length": 66,
+        "sleeve": 64
+      }
+    }
+  ],
+  "model": {
+    "heightCm": 172,
+    "wearsSize": "s"
+  },
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
   "availability": "in_stock",
-  "stock": 1,
+  "stock": 2,
   "images": [
     {
       "src": "/images/products/product-001-1.jpg",
-      "alt": "Лесной дух — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Свитер крупной вязки «Какао»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-001-2.jpg",
-      "alt": "Лесной дух — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Свитер крупной вязки «Какао»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "18 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-28",
+  "attributes": [],
+  "createdAt": "2026-10-05",
   "isDemo": true
 }

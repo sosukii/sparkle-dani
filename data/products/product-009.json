@@ -1,47 +1,94 @@
 {
   "id": "product-009",
-  "slug": "ognennyy-slaymik-009",
-  "title": "Огненный слаймик",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Genshin Impact».",
-  "price": 1900,
+  "slug": "kardigan-s-zapahom-karamel",
+  "title": "Кардиган с запахом «Карамель»",
+  "description": "Кардиган с запахом и поясом. Демонстрационное изделие.",
+  "price": 27800,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "genshin",
+  "category": "cardigans",
+  "type": "cardigan",
+  "fit": "regular",
+  "fitNote": null,
   "colors": [
-    "red"
+    "caramel",
+    "olive"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 70
+    },
+    {
+      "material": "acrylic",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "xs",
+    "s",
+    "m",
+    "l"
+  ],
+  "measurements": [
+    {
+      "size": "xs",
+      "values": {
+        "chest": 47,
+        "length": 60,
+        "sleeve": 60
+      }
+    },
+    {
+      "size": "s",
+      "values": {
+        "chest": 50,
+        "length": 62,
+        "sleeve": 62
+      }
+    },
+    {
+      "size": "m",
+      "values": {
+        "chest": 53,
+        "length": 64,
+        "sleeve": 63
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 56,
+        "length": 66,
+        "sleeve": 64
+      }
+    }
+  ],
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "dry-flat"
+  ],
   "availability": "in_stock",
   "stock": 2,
   "images": [
     {
       "src": "/images/products/product-009-1.jpg",
-      "alt": "Огненный слаймик — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Кардиган с запахом «Карамель»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-009-2.jpg",
-      "alt": "Огненный слаймик — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Кардиган с запахом «Карамель»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "24 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-16",
+  "attributes": [],
+  "createdAt": "2026-09-18",
   "isDemo": true
 }

@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { CONTACT_LABEL, OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
-import { parseCatalogQuery, queryCatalog } from '#shared/utils/catalog-query'
 import { buildBreadcrumbJsonLd } from '#shared/utils/seo'
-
-const { data } = await useAsyncData('about-facets', async () => {
-  const catalog = await loadCatalog()
-  return queryCatalog(catalog.products, parseCatalogQuery({ pageSize: 1 }), catalog)
-})
-const fandoms = computed(() => data.value?.facets.fandom ?? [])
 
 const siteUrl = useSiteUrl()
 useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'Обо мне', path: '/about' }], siteUrl))
@@ -94,17 +87,6 @@ const values = [
           </div>
         </dl>
       </div>
-    </section>
-
-    <section v-if="fandoms.length" class="container-page py-12 lg:py-16" aria-labelledby="about-fandoms">
-      <SectionHead id="about-fandoms" eyebrow="Вдохновение" title="Миры, в которые я влюблена" />
-      <ul class="mt-6 flex flex-wrap gap-3">
-        <li v-for="f in fandoms" :key="f.id">
-          <NuxtLink :to="{ path: '/catalog', query: { fandom: f.id } }" class="chip no-underline">
-            <AppIcon name="sparkle" :size="12" class="text-link" /> {{ f.label }}
-          </NuxtLink>
-        </li>
-      </ul>
     </section>
 
     <section class="container-page pt-12 lg:pt-16">

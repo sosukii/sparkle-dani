@@ -1,50 +1,63 @@
 {
   "id": "product-010",
-  "slug": "pushistyy-kot-izobretatel-010",
-  "title": "Пушистый кот-изобретатель",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Arcane».",
-  "price": 3300,
+  "slug": "kardigan-kakao",
+  "title": "Кардиган «Какао»",
+  "description": "Мягкий кардиган крупной вязки. Демонстрационное изделие.",
+  "price": 33500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "arcane",
+  "category": "cardigans",
+  "type": "cardigan",
+  "fit": "oversize",
+  "fitNote": "Широкий крой, подходит на несколько размеров.",
   "colors": [
-    "lilac"
+    "cocoa"
   ],
-  "warmth": null,
-  "availability": "made_to_order",
-  "leadTimeDays": {
-    "min": 10,
-    "max": 14
-  },
+  "composition": [
+    {
+      "material": "mohair",
+      "percent": 30
+    },
+    {
+      "material": "polyamide",
+      "percent": 20
+    },
+    {
+      "material": "wool",
+      "percent": 50
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "in_stock",
+  "stock": 1,
   "images": [
     {
       "src": "/images/products/product-010-1.jpg",
-      "alt": "Пушистый кот-изобретатель — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Кардиган «Какао»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-010-2.jpg",
-      "alt": "Пушистый кот-изобретатель — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Кардиган «Какао»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "26 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-14",
+  "attributes": [],
+  "createdAt": "2026-09-10",
   "isDemo": true
 }

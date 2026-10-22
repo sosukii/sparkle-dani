@@ -1,7 +1,7 @@
 import { expect, test } from '../fixtures'
 
 // Страницы без ошибок и предупреждений в консоли: битый шрифт, неудачный запрос или ошибка гидратации сразу видны.
-const pages = ['/', '/catalog', '/catalog/jewelry', '/product/zayka-lunnitsa-004', '/cart', '/about', '/delivery', '/custom', '/search?q=серьги']
+const pages = ['/', '/catalog', '/catalog/hats', '/product/lisenok-amigurumi', '/cart', '/about', '/delivery', '/custom', '/search?q=свитер']
 
 for (const path of pages) {
   test(`консоль и сеть без ошибок: ${path}`, async ({ page }) => {
@@ -25,7 +25,7 @@ for (const path of pages) {
 }
 
 test('все шрифты страницы действительно загрузились (кроме ₽ — его рисует системный шрифт)', async ({ page }) => {
-  await page.goto('/product/zayka-lunnitsa-004')
+  await page.goto('/product/lisenok-amigurumi')
   await page.waitForLoadState('networkidle')
   const faces = await page.evaluate(async () => {
     await document.fonts.ready

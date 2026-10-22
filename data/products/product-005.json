@@ -1,34 +1,66 @@
 {
   "id": "product-005",
-  "slug": "rozovaya-malyshka-hranitelnitsa-005",
-  "title": "Розовая малышка-хранительница",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Сейлор Мун».",
-  "price": 3100,
+  "slug": "sviter-oversayz-vinnyy",
+  "title": "Свитер оверсайз «Винный»",
+  "description": "Объёмный свитер с мягким ворсом. Демонстрационное изделие.",
+  "price": 32000,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "sailor-moon",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": "oversize",
+  "fitNote": "Объёмный силуэт, подходит на несколько размеров.",
   "colors": [
-    "pink"
+    "wine"
   ],
-  "warmth": null,
-  "availability": "in_stock",
-  "stock": 1,
+  "composition": [
+    {
+      "material": "mohair",
+      "percent": 30
+    },
+    {
+      "material": "wool",
+      "percent": 40
+    },
+    {
+      "material": "acrylic",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 21,
+    "max": 28
+  },
   "images": [
     {
       "src": "/images/products/product-005-1.jpg",
-      "alt": "Розовая малышка-хранительница — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Свитер оверсайз «Винный»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-005-2.jpg",
-      "alt": "Розовая малышка-хранительница — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Свитер оверсайз «Винный»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
   "attributes": [],
-  "createdAt": "2026-09-22",
+  "createdAt": "2026-09-20",
   "isDemo": true
 }

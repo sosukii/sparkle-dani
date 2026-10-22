@@ -5,44 +5,42 @@ import { parseCatalogQuery, queryCatalog } from '#shared/utils/catalog-query'
 import { ctx, product } from './fixtures'
 
 const shop = [
-  product({ id: 'e1', title: 'Серьги «полумесяц»', category: 'toys', price: 1200, availability: 'in_stock', colors: ['pink'] }),
-  product({ id: 'e2', title: 'Серьги «листики»', price: 2600, availability: 'made_to_order', colors: ['green'] }),
-  product({ id: 'h1', title: 'Шапка с помпоном', price: 2200, availability: 'in_stock', colors: ['pink'], warmth: 'warm' }),
-  product({ id: 'w1', title: 'Варежки «клюква»', price: 1800, availability: 'in_stock' }),
+  product({ id: 's1', title: 'Свитер «Какао»', price: 12000, availability: 'in_stock', colors: ['cocoa'] }),
+  product({ id: 's2', title: 'Свитер с косами', price: 21900, availability: 'made_to_order', colors: ['olive'] }),
+  product({ id: 'h1', title: 'Шапка с помпоном', price: 3500, availability: 'in_stock', colors: ['cocoa'], category: 'accessories', type: 'scarf' }),
+  product({ id: 'w1', title: 'Варежки «клюква»', price: 3600, availability: 'in_stock', category: 'accessories', type: 'scarf' }),
 ]
 const found = (q: string, extra: Record<string, unknown> = {}) =>
   queryCatalog(shop, parseCatalogQuery({ q, ...extra }), ctx).items.map((p) => p.id).sort()
 
 describe('основы слов и синонимы', () => {
   it('приводит формы одного слова к одной основе', () => {
-    expect(stem('серьги')).toBe(stem('серьга'))
-    expect(stem('розовая')).toBe(stem('розовый'))
+    expect(stem('свитера')).toBe(stem('свитер'))
     expect(stem('варежки')).toBe(stem('варежка'))
-    expect(stem('игрушки')).toBe(stem('игрушка'))
+    expect(stem('шапки')).toBe(stem('шапка'))
   })
 
-  it('«сережки» и «серьги» — одно и то же', () => {
-    expect(expandStem('сережки')).toContain(stem('серьги'))
-    expect(found('сережки')).toEqual(['e1', 'e2'])
-    expect(found('серёжки')).toEqual(['e1', 'e2'])
-    expect(found('серьги')).toEqual(['e1', 'e2'])
+  it('«джемпер» и «свитер» — одно и то же', () => {
+    expect(expandStem('джемпер')).toContain(stem('свитер'))
+    expect(found('джемпер')).toEqual(['s1', 's2'])
+    expect(found('свитера')).toEqual(['s1', 's2'])
   })
 
   it('понимает уменьшительные и формы слова', () => {
     expect(found('шапочка')).toEqual(['h1'])
     expect(found('рукавицы')).toEqual(['w1'])
-    expect(found('розовые')).toEqual(['e1', 'h1'])
-    expect(found('зимнее')).toEqual(['h1']) // «Тёплое» в справочнике теплоты
+    expect(found('шоколадный')).toEqual(['h1', 's1']) // синоним цвета «какао»
   })
 
   it('находит по началу слова (набор на лету)', () => {
-    expect(found('серьг')).toEqual(['e1', 'e2'])
+    expect(found('свитер')).toEqual(['s1', 's2'])
+    expect(found('свит')).toEqual(['s1', 's2'])
     expect(found('шап')).toEqual([]) // слишком коротко для префикса (< 4 букв), чтобы не находить лишнего
   })
 
   it('все слова запроса должны совпасть', () => {
-    expect(found('розовые серьги')).toEqual(['e1'])
-    expect(found('розовые варежки')).toEqual([])
+    expect(found('какао свитер')).toEqual(['s1'])
+    expect(found('какао варежки')).toEqual([])
   })
 })
 
@@ -50,27 +48,34 @@ describe('намерения в строке поиска', () => {
   it('«в наличии» — фильтр по наличию, а не слова для поиска', () => {
     expect(analyzeQuery('в наличии').availability).toBe('in_stock')
     expect(analyzeQuery('в наличии').groups).toEqual([])
-    expect(found('в наличии')).toEqual(['e1', 'h1', 'w1'])
-    expect(found('серьги в наличии')).toEqual(['e1'])
+    expect(found('в наличии')).toEqual(['h1', 's1', 'w1'])
+    expect(found('свитер в наличии')).toEqual(['s1'])
     expect(found('есть в наличии шапка')).toEqual(['h1'])
   })
 
   it('«под заказ» и «на заказ»', () => {
-    expect(found('под заказ')).toEqual(['e2'])
-    expect(found('на заказ')).toEqual(['e2'])
+    expect(found('под заказ')).toEqual(['s2'])
+    expect(found('на заказ')).toEqual(['s2'])
   })
 
-  it('цена в запросе: «до 2000», «от 2 тыс», «до 2000 ₽»', () => {
-    expect(analyzeQuery('до 2000').maxPrice).toBe(2000)
-    expect(analyzeQuery('от 2 тыс').minPrice).toBe(2000)
-    expect(found('до 2000')).toEqual(['e1', 'w1'])
-    expect(found('до 2000 ₽ серьги')).toEqual(['e1'])
-    expect(found('от 2 тыс')).toEqual(['e2', 'h1'])
+  it('цена в запросе: «до 5000», «от 10 тыс», «до 5000 ₽»', () => {
+    expect(analyzeQuery('до 5000').maxPrice).toBe(5000)
+    expect(analyzeQuery('от 10 тыс').minPrice).toBe(10000)
+    expect(found('до 5000')).toEqual(['h1', 'w1'])
+    expect(found('до 5000 ₽ шапка')).toEqual(['h1'])
+    expect(found('от 10 тыс')).toEqual(['s1', 's2'])
+  })
+
+  it('товар без цены не попадает под условие по цене', () => {
+    const unknown = [product({ id: 'u', title: 'Свитер без цены', price: null })]
+    const r = queryCatalog(unknown, parseCatalogQuery({ q: 'свитер до 5000' }), ctx)
+    expect(r.items).toEqual([])
+    expect(queryCatalog(unknown, parseCatalogQuery({ q: 'свитер' }), ctx).items).toHaveLength(1)
   })
 
   it('«дешёвые» меняют сортировку, если пользователь не выбрал свою', () => {
-    const ids = queryCatalog(shop, parseCatalogQuery({ q: 'недорогие' }), ctx).items.map((p) => p.price)
-    expect(ids).toEqual([...ids].sort((a, b) => a - b))
+    const prices = queryCatalog(shop, parseCatalogQuery({ q: 'недорогие' }), ctx).items.map((p) => p.price as number)
+    expect(prices).toEqual([...prices].sort((a, b) => a - b))
   })
 
   it('не падает на мусоре', () => {
@@ -99,8 +104,8 @@ describe('поиск по разделам сайта', () => {
   })
 
   it('обычные названия товаров не тащат за собой лишние разделы', () => {
-    expect(ids('серьги')).toEqual([])
-    expect(ids('розовый шарф')).toEqual([])
+    expect(ids('свитер')).toEqual([])
+    expect(ids('оливковый шарф')).toEqual([])
   })
 
   it('пустой запрос — пустой ответ', () => {

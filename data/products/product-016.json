@@ -1,43 +1,60 @@
 {
   "id": "product-016",
-  "slug": "brelok-zvezdnyy-zaychik-016",
-  "title": "Брелок «звёздный зайчик»",
-  "description": "Крошечный друг для ключей и рюкзака. Связан крючком, на прочной металлической фурнитуре. Вдохновлено миром «Сейлор Мун».",
-  "price": 950,
+  "slug": "varezhki-kakao",
+  "title": "Варежки «Какао»",
+  "description": "Варежки с двойной вязкой. Демонстрационное изделие.",
+  "price": 3900,
   "currency": "RUB",
-  "category": "toys",
-  "type": "keychain",
-  "fandom": "sailor-moon",
+  "category": "accessories",
+  "type": "mittens",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "pink"
+    "cocoa"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 80
+    },
+    {
+      "material": "polyamide",
+      "percent": 20
+    }
+  ],
+  "sizes": [
+    "s",
+    "m",
+    "l"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat"
+  ],
   "availability": "in_stock",
   "stock": 5,
   "images": [
     {
       "src": "/images/products/product-016-1.jpg",
-      "alt": "Брелок «звёздный зайчик» — брелок ручной работы (вид 1)",
+      "alt": "Варежки «Какао»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-016-2.jpg",
-      "alt": "Брелок «звёздный зайчик» — брелок ручной работы (вид 2)",
+      "alt": "Варежки «Какао»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, металлическая фурнитура"
-    },
-    {
-      "label": "Длина",
-      "value": "9 см"
-    }
-  ],
-  "createdAt": "2026-09-05",
+  "attributes": [],
+  "createdAt": "2026-10-03",
   "isDemo": true
 }

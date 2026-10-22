@@ -1,50 +1,89 @@
 {
   "id": "product-007",
-  "slug": "kosmicheskaya-sputnitsa-007",
-  "title": "Космическая спутница",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Genshin Impact».",
-  "price": 3900,
+  "slug": "kardigan-na-pugovitsah-seryy",
+  "title": "Кардиган на пуговицах «Серый»",
+  "description": "Кардиган средней плотности на пуговицах. Демонстрационное изделие.",
+  "price": 24500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "genshin",
+  "category": "cardigans",
+  "type": "cardigan",
+  "fit": "regular",
+  "fitNote": "Классический крой на пуговицах.",
   "colors": [
-    "yellow"
+    "gray"
   ],
-  "warmth": null,
-  "availability": "made_to_order",
-  "leadTimeDays": {
-    "min": 14,
-    "max": 21
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 60
+    },
+    {
+      "material": "alpaca",
+      "percent": 40
+    }
+  ],
+  "sizes": [
+    "s",
+    "m",
+    "l"
+  ],
+  "measurements": [
+    {
+      "size": "s",
+      "values": {
+        "chest": 51,
+        "length": 64,
+        "sleeve": 62
+      }
+    },
+    {
+      "size": "m",
+      "values": {
+        "chest": 54,
+        "length": 66,
+        "sleeve": 63
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 57,
+        "length": 68,
+        "sleeve": 64
+      }
+    }
+  ],
+  "model": {
+    "heightCm": 170,
+    "wearsSize": "m"
   },
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "in_stock",
+  "stock": 1,
   "images": [
     {
       "src": "/images/products/product-007-1.jpg",
-      "alt": "Космическая спутница — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Кардиган на пуговицах «Серый»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-007-2.jpg",
-      "alt": "Космическая спутница — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Кардиган на пуговицах «Серый»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "20 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-19",
+  "attributes": [],
+  "createdAt": "2026-10-04",
   "isDemo": true
 }

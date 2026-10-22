@@ -5,8 +5,8 @@ const cardOf = (page: import('@playwright/test').Page, title: string) => cards(p
 const count = (page: import('@playwright/test').Page) => page.getByTestId('cart-count')
 
 test('прямо из каталога: добавить, увеличить, уменьшить и убрать из корзины', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  const card = cardOf(page, 'Зайка-лунница') // под заказ, лимита нет
+  await page.goto('/catalog/amigurumi')
+  const card = cardOf(page, 'Лисёнок амигуруми') // под заказ, лимита нет
 
   await card.getByTestId('card-add').click()
   await expect(card.getByTestId('card-stepper')).toBeVisible()
@@ -32,43 +32,43 @@ test('прямо из каталога: добавить, увеличить, у
 })
 
 test('нажатия на кнопки карточки не открывают страницу товара', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  const card = cardOf(page, 'Зайка-лунница')
+  await page.goto('/catalog/amigurumi')
+  const card = cardOf(page, 'Лисёнок амигуруми')
   await card.getByTestId('card-add').click()
   await card.getByTestId('card-plus').click()
-  await expect(page).toHaveURL(/\/catalog\/toys\/?$/)
+  await expect(page).toHaveURL(/\/catalog\/amigurumi\/?$/)
   // а клик по картинке/названию — открывает
   await card.locator('h3 a').click()
-  await expect(page).toHaveURL(/\/product\/zayka-lunnitsa-004/)
+  await expect(page).toHaveURL(/\/product\/lisenok-amigurumi/)
 })
 
 test('лимит остатка: «+» блокируется, когда всё в корзине', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  const card = cardOf(page, 'Лесной дух') // в наличии: 1 шт.
+  await page.goto('/catalog/amigurumi')
+  const card = cardOf(page, 'Мишка амигуруми') // в наличии: 1 шт.
   await card.getByTestId('card-add').click()
   await expect(card.getByTestId('card-plus')).toBeDisabled()
   await expect(card.getByTestId('card-plus')).toHaveAttribute('title', 'Это всё, что есть в наличии')
 })
 
 test('состояние карточки совпадает со страницей товара и корзиной', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  const card = cardOf(page, 'Зайка-лунница')
+  await page.goto('/catalog/amigurumi')
+  const card = cardOf(page, 'Лисёнок амигуруми')
   await card.getByTestId('card-add').click()
   await card.getByTestId('card-plus').click()
 
-  await page.goto('/product/zayka-lunnitsa-004')
+  await page.goto('/product/lisenok-amigurumi')
   await expect(page.getByTestId('in-cart-note')).toContainText('В корзине: 2')
 
   await page.goto('/cart')
   await expect(page.getByTestId('qty-input')).toHaveValue('2')
 
-  await page.goto('/catalog/toys')
-  await expect(cardOf(page, 'Зайка-лунница').getByTestId('card-qty')).toHaveText('2')
+  await page.goto('/catalog/amigurumi')
+  await expect(cardOf(page, 'Лисёнок амигуруми').getByTestId('card-qty')).toHaveText('2')
 })
 
 test('карточки остаются выровненными с кнопками и степпером в ряду', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  await cardOf(page, 'Зайка-лунница').getByTestId('card-add').click() // одна карточка в ряду со степпером
+  await page.goto('/catalog/amigurumi')
+  await cardOf(page, 'Лисёнок амигуруми').getByTestId('card-add').click() // одна карточка в ряду со степпером
   const tops = await cards(page).evaluateAll((nodes) => {
     const rows = new Map<number, number[]>()
     for (const card of nodes) {
@@ -83,8 +83,8 @@ test('карточки остаются выровненными с кнопка
 
 test('кнопки карточек работают и на телефоне (и без пересечения с соседями)', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/catalog/toys')
-  const card = cardOf(page, 'Зайка-лунница')
+  await page.goto('/catalog/amigurumi')
+  const card = cardOf(page, 'Лисёнок амигуруми')
   await card.getByTestId('card-add').click()
   await card.getByTestId('card-plus').click()
   await expect(card.getByTestId('card-qty')).toHaveText('2')

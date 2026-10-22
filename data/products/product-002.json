@@ -1,50 +1,107 @@
 {
   "id": "product-002",
-  "slug": "mohnatyy-lesnoy-drug-002",
-  "title": "Мохнатый лесной друг",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Studio Ghibli».",
-  "price": 3600,
+  "slug": "sviter-s-kosami-karamel",
+  "title": "Свитер с косами «Карамель»",
+  "description": "Свитер с рельефным узором из кос. Демонстрационное изделие.",
+  "price": 21900,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "ghibli",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": "regular",
+  "fitNote": "Прилегающий силуэт по груди и плечам.",
   "colors": [
-    "green"
+    "caramel"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "merino",
+      "percent": 70
+    },
+    {
+      "material": "polyamide",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "xs",
+    "s",
+    "m",
+    "l",
+    "xl"
+  ],
+  "measurements": [
+    {
+      "size": "xs",
+      "values": {
+        "chest": 46,
+        "length": 58,
+        "sleeve": 58
+      }
+    },
+    {
+      "size": "s",
+      "values": {
+        "chest": 49,
+        "length": 60,
+        "sleeve": 60
+      }
+    },
+    {
+      "size": "m",
+      "values": {
+        "chest": 52,
+        "length": 62,
+        "sleeve": 61
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 55,
+        "length": 64,
+        "sleeve": 62
+      }
+    },
+    {
+      "size": "xl",
+      "values": {
+        "chest": 58,
+        "length": 66,
+        "sleeve": 63
+      }
+    }
+  ],
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
   "availability": "made_to_order",
   "leadTimeDays": {
-    "min": 10,
-    "max": 14
+    "min": 14,
+    "max": 21
   },
   "images": [
     {
       "src": "/images/products/product-002-1.jpg",
-      "alt": "Мохнатый лесной друг — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Свитер с косами «Карамель»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-002-2.jpg",
-      "alt": "Мохнатый лесной друг — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Свитер с косами «Карамель»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "20 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-26",
+  "attributes": [],
+  "createdAt": "2026-10-02",
   "isDemo": true
 }

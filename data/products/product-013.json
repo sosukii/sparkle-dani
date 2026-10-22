@@ -1,47 +1,50 @@
 {
   "id": "product-013",
-  "slug": "myshonok-pervokursnik-013",
-  "title": "Мышонок-первокурсник",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Гарри Поттер».",
-  "price": 2400,
+  "slug": "sharf-palantin-seryy",
+  "title": "Шарф-палантин «Серый»",
+  "description": "Широкий палантин; состав уточняется. Демонстрационное изделие.",
+  "price": 9500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "harry-potter",
+  "category": "accessories",
+  "type": "scarf",
+  "fit": null,
+  "fitNote": null,
   "colors": [
     "gray"
   ],
-  "warmth": null,
+  "composition": null,
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": null,
   "availability": "in_stock",
-  "stock": 5,
+  "stock": 1,
   "images": [
     {
       "src": "/images/products/product-013-1.jpg",
-      "alt": "Мышонок-первокурсник — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Шарф-палантин «Серый»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-013-2.jpg",
-      "alt": "Мышонок-первокурсник — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Шарф-палантин «Серый»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
   "attributes": [
     {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "22 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
+      "label": "Длина",
+      "value": "200 см"
     }
   ],
-  "createdAt": "2026-09-10",
+  "createdAt": "2026-09-27",
   "isDemo": true
 }

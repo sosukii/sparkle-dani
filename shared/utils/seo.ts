@@ -25,13 +25,18 @@ export function buildProductJsonLd(product: Product, siteUrl: string): Record<st
     sku: product.id,
     brand: { '@type': 'Brand', name: SITE_NAME },
     manufacturer: { '@type': 'Person', name: OWNER_NAME },
-    offers: {
-      '@type': 'Offer',
-      url: `${base}/product/${product.slug}`,
-      price: product.price,
-      priceCurrency: product.currency,
-      availability: product.availability === 'in_stock' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
-    },
+    // Без цены или наличия предложение не описываем: выдумывать значения для поисковиков нельзя.
+    ...(product.price !== null && product.availability
+      ? {
+          offers: {
+            '@type': 'Offer',
+            url: `${base}/product/${product.slug}`,
+            price: product.price,
+            priceCurrency: product.currency,
+            availability: product.availability === 'in_stock' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+          },
+        }
+      : {}),
   }
 }
 

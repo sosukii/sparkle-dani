@@ -5,61 +5,60 @@ const count = (page: import('@playwright/test').Page) => page.getByTestId('resul
 
 test('все фильтры применяются одновременно и не сбрасывают друг друга', async ({ page }) => {
   await page.goto('/catalog')
-  await expect(count(page)).toHaveText('54 изделия')
+  await expect(count(page)).toHaveText('24 изделия')
   const sidebar = page.getByRole('complementary', { name: 'Фильтры' })
 
-  await sidebar.getByTestId('filter-fandom-sailor-moon').check()
-  await expect(count(page)).toHaveText(/^\d+ изделий$|^\d+ изделия$|^\d+ изделие$/)
-  const sailorOnly = await count(page).innerText()
+  await sidebar.getByTestId('filter-fit-oversize').check()
+  await expect(count(page)).toHaveText('5 изделий')
 
-  await sidebar.getByTestId('filter-color-pink').check()
-  await expect(count(page)).toHaveText('6 изделий')
-  await expect(page).toHaveURL(/fandom=sailor-moon/)
-  await expect(page).toHaveURL(/color=pink/)
-
-  // Цена: до 2000 ₽
-  await sidebar.getByTestId('price-max').fill('2000')
-  await sidebar.getByTestId('price-max').press('Enter')
+  await sidebar.getByTestId('filter-size-one-size').check()
   await expect(count(page)).toHaveText('3 изделия')
-  await expect(page).toHaveURL(/max=2000/)
+  await expect(page).toHaveURL(/fit=oversize/)
+  await expect(page).toHaveURL(/size=one-size/)
+
+  // Цена: до 33 000 ₽ (кардиган за 33 500 ₽ не проходит)
+  await sidebar.getByTestId('price-max').fill('33000')
+  await sidebar.getByTestId('price-max').press('Enter')
+  await expect(count(page)).toHaveText('2 изделия')
+  await expect(page).toHaveURL(/max=33000/)
 
   // Сортировка не сбрасывает фильтры
   await page.getByTestId('catalog-sort').selectOption('price-desc')
   await expect(page).toHaveURL(/sort=price-desc/)
-  await expect(page).toHaveURL(/fandom=sailor-moon/)
-  await expect(count(page)).toHaveText('3 изделия')
+  await expect(page).toHaveURL(/fit=oversize/)
+  await expect(count(page)).toHaveText('2 изделия')
   // Счётчик при смене сортировки не меняется, поэтому ждём именно итоговый порядок, а не читаем сразу.
   await expect
     .poll(async () => (await cards(page).getByText(/₽/).allInnerTexts()).map((t) => Number(t.replace(/\D/g, ''))))
-    .toEqual([1100, 950, 950])
+    .toEqual([32000, 4200])
 
   // Поиск работает вместе с фильтрами
-  await page.getByTestId('catalog-search').fill('браслет')
+  await page.getByTestId('catalog-search').fill('шапка')
   await expect(count(page)).toHaveText('1 изделие')
 
   // Один клик сбрасывает всё
   await page.getByTestId('clear-filters').click()
-  await expect(count(page)).toHaveText('54 изделия')
+  await expect(count(page)).toHaveText('24 изделия')
   await expect(page).toHaveURL(/\/catalog$/)
-  expect(sailorOnly).toBeTruthy()
 })
 
 test('фильтры можно включить с клавиатуры', async ({ page }) => {
   await page.goto('/catalog')
-  const box = page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-fandom-ghibli')
+  const box = page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-fit-oversize')
   await box.focus()
   await page.keyboard.press('Space')
   await expect(box).toBeChecked()
-  await expect(page).toHaveURL(/fandom=ghibli/)
-  await expect(count(page)).toHaveText(/изделия|изделий|изделие/)
+  await expect(page).toHaveURL(/fit=oversize/)
+  await expect(count(page)).toHaveText('5 изделий')
 })
 
 test('состояние каталога хранится в URL и переживает перезагрузку', async ({ page }) => {
-  await page.goto('/catalog?fandom=ghibli&color=green&sort=price-asc')
+  await page.goto('/catalog?fit=oversize&color=cocoa&sort=price-asc')
   const before = await count(page).innerText()
+  expect(before).toBe('2 изделия')
   await page.reload()
   await expect(count(page)).toHaveText(before)
-  await expect(page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-fandom-ghibli')).toBeChecked()
+  await expect(page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-fit-oversize')).toBeChecked()
   await expect(page.getByTestId('catalog-sort')).toHaveValue('price-asc')
 })
 
@@ -74,19 +73,19 @@ test('перепутанный диапазон цены не ломает ка�
   // Мусор в параметрах тоже безопасен
   const response = await page.goto('/catalog?min=abc&max=-1&page=zzz&sort=hack')
   expect(response?.status()).toBe(200)
-  await expect(count(page)).toHaveText('54 изделия')
+  await expect(count(page)).toHaveText('24 изделия')
 })
 
 test('поиск: находит, показывает пустое состояние и позволяет сбросить', async ({ page }) => {
   await page.goto('/catalog')
-  await page.getByTestId('catalog-search').fill('лунница')
+  await page.getByTestId('catalog-search').fill('лисёнок')
   await expect(count(page)).toHaveText('1 изделие')
-  await expect(cards(page).first()).toContainText('Зайка-лунница')
+  await expect(cards(page).first()).toContainText('Лисёнок амигуруми')
 
   await page.getByTestId('catalog-search').fill('абракадабра')
   await expect(page.getByTestId('empty-state')).toContainText('Ничего не нашлось')
   await page.getByTestId('empty-state').getByRole('button', { name: 'Сбросить фильтры' }).click()
-  await expect(count(page)).toHaveText('54 изделия')
+  await expect(count(page)).toHaveText('24 изделия')
 })
 
 test('поиск из шапки открывает страницу поиска по сайту', async ({ page }) => {
@@ -98,49 +97,50 @@ test('поиск из шапки открывает страницу поиск�
   await expect(cards(page).first()).toBeVisible() // на статике результаты появляются после гидратации
 })
 
-test('пагинация: в «Игрушках» две страницы', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  await expect(count(page)).toHaveText('18 изделий')
+test('пагинация: в каталоге две страницы по 12 изделий', async ({ page }) => {
+  await page.goto('/catalog')
+  await expect(count(page)).toHaveText('24 изделия')
   await expect(cards(page)).toHaveCount(12)
   const nav = page.getByRole('navigation', { name: 'Страницы каталога' })
   await expect(nav.getByRole('link', { name: 'Страница 1' })).toHaveAttribute('aria-current', 'page')
 
   await nav.getByRole('link', { name: 'Вперёд' }).click()
   await expect(page).toHaveURL(/page=2/)
-  await expect(cards(page)).toHaveCount(6)
+  await expect(cards(page)).toHaveCount(12)
   await page.reload()
-  await expect(cards(page)).toHaveCount(6)
+  await expect(cards(page)).toHaveCount(12)
   await expect(nav.getByRole('link', { name: 'Страница 2' })).toHaveAttribute('aria-current', 'page')
 
   // Страница за пределами диапазона не ломается
-  await page.goto('/catalog/toys?page=99')
-  await expect(cards(page)).toHaveCount(6)
+  await page.goto('/catalog?page=99')
+  await expect(cards(page)).toHaveCount(12)
 })
 
-test('в каждой категории фильтры работают, а лишних групп нет', async ({ page }) => {
-  await page.goto('/catalog/toys')
+test('в каждой категории показываются только те группы фильтров, для которых есть данные', async ({ page }) => {
+  await page.goto('/catalog/amigurumi')
   const side = page.getByRole('complementary', { name: 'Фильтры' })
-  await expect(side.getByText('Фандом', { exact: true })).toBeVisible()
-  await expect(side.getByText('Теплота / сезон')).toHaveCount(0) // у игрушек теплота не задана
+  await expect(side.getByText('Материал', { exact: true })).toBeVisible()
+  await expect(side.getByText('Посадка', { exact: true })).toHaveCount(0) // у игрушек посадка не применима
 
-  await page.goto('/catalog/warm-wear')
-  await expect(side.getByText('Теплота / сезон')).toBeVisible()
-  await side.getByTestId('filter-warmth-warm').check()
-  await expect(count(page)).toHaveText(/^\d+ изделий$/)
-  await side.getByTestId('filter-type-scarf').check()
-  await expect(page).toHaveURL(/type=scarf/)
-  await expect(page).toHaveURL(/warmth=warm/)
+  await page.goto('/catalog/sweaters')
+  await expect(side.getByText('Посадка', { exact: true })).toBeVisible()
+  await side.getByTestId('filter-fit-oversize').check()
+  await expect(count(page)).toHaveText('2 изделия')
+  await side.getByTestId('filter-size-s').check()
+  await expect(count(page)).toHaveText('1 изделие')
+  await expect(page).toHaveURL(/fit=oversize/)
+  await expect(page).toHaveURL(/size=s/)
 })
 
 test('недоступные опции блокируются, а выбранные можно снять чипсом', async ({ page }) => {
-  // Розовых изделий из Studio Ghibli нет — такая опция блокируется, чтобы не вести в тупик
-  await page.goto('/catalog?color=pink')
+  // Оверсайза в оливковом цвете нет — такая опция блокируется, чтобы не вести в тупик
+  await page.goto('/catalog?color=olive')
   const side = page.getByRole('complementary', { name: 'Фильтры' })
-  await expect(side.getByTestId('filter-fandom-ghibli')).toBeDisabled()
-  await expect(side.getByTestId('filter-fandom-sailor-moon')).toBeEnabled()
-  await page.getByRole('button', { name: 'Убрать фильтр: Розовый' }).click()
-  await expect(count(page)).toHaveText('54 изделия')
-  await expect(side.getByTestId('filter-fandom-ghibli')).toBeEnabled()
+  await expect(side.getByTestId('filter-fit-oversize')).toBeDisabled()
+  await expect(side.getByTestId('filter-fit-regular')).toBeEnabled()
+  await page.getByRole('button', { name: 'Убрать фильтр: Оливковый' }).click()
+  await expect(count(page)).toHaveText('24 изделия')
+  await expect(side.getByTestId('filter-fit-oversize')).toBeEnabled()
 })
 
 test('ползунок цены и поля «от/до» синхронизированы в обе стороны', async ({ page }) => {
@@ -150,27 +150,28 @@ test('ползунок цены и поля «от/до» синхронизир
   const sliderMax = side.getByTestId('price-slider-max')
   const inputMin = side.getByTestId('price-min')
   const inputMax = side.getByTestId('price-max')
-  await expect(sliderMin).toHaveValue('450')
-  await expect(sliderMax).toHaveValue('7900')
+  await expect(sliderMin).toHaveValue('3200')
+  await expect(sliderMax).toHaveValue('36000')
 
   // Ползунок → поле: «до» сдвигаем на шаг влево с клавиатуры
   await sliderMax.focus()
   await page.keyboard.press('ArrowLeft')
-  await expect(inputMax).toHaveValue('7850')
-  await expect(page).toHaveURL(/max=7850/)
-  await expect(count(page)).toHaveText('53 изделия')
+  await expect(inputMax).toHaveValue('35950')
+  await expect(page).toHaveURL(/max=35950/)
+  // товар без цены при фильтре по цене не показывается: цена не известна
+  await expect(count(page)).toHaveText('22 изделия')
 
   // Поле → ползунок
-  await inputMin.fill('1000')
+  await inputMin.fill('10000')
   await inputMin.press('Enter')
-  await expect(sliderMin).toHaveValue('1000')
-  await expect(page).toHaveURL(/min=1000/)
+  await expect(sliderMin).toHaveValue('10000')
+  await expect(page).toHaveURL(/min=10000/)
 
   // Ползунки не пересекаются: «от» нельзя увести правее «до»
   await sliderMin.focus()
   await page.keyboard.press('End')
-  await expect(inputMin).toHaveValue('7850')
-  await expect(sliderMin).toHaveValue('7850')
+  await expect(inputMin).toHaveValue('35950')
+  await expect(sliderMin).toHaveValue('35950')
   await expect(count(page)).toHaveText(/^0 изделий$|^\d+ изделие$|^\d+ изделия$|^\d+ изделий$/)
 
   // Край диапазона = «без ограничения»: поле очищается
@@ -208,9 +209,9 @@ for (const [name, viewport] of [['десктоп', { width: 1280, height: 900 }]
 }
 
 test('плашка «под заказ» не ломает карточку и показывает срок', async ({ page }) => {
-  await page.goto('/catalog/toys')
-  const card = cards(page).filter({ hasText: 'Мохнатый лесной друг' })
-  await expect(card).toContainText('Под заказ · 10–14 дней')
+  await page.goto('/catalog/amigurumi')
+  const card = cards(page).filter({ hasText: 'Лисёнок амигуруми' })
+  await expect(card).toContainText('Под заказ · 7–12 дней')
 })
 
 test.describe('мобильная версия', () => {
@@ -222,10 +223,10 @@ test.describe('мобильная версия', () => {
     await page.getByTestId('open-filters').click()
     const sheet = page.getByRole('dialog', { name: 'Фильтры' })
     await expect(sheet).toBeVisible()
-    await sheet.getByTestId('filter-fandom-genshin').check()
+    await sheet.getByTestId('filter-fit-oversize').check()
     await sheet.getByRole('button', { name: /^Показать/ }).click()
     await expect(sheet).toBeHidden()
-    await expect(page).toHaveURL(/fandom=genshin/)
+    await expect(page).toHaveURL(/fit=oversize/)
     await expect(page.getByTestId('open-filters')).toContainText('1')
   })
 

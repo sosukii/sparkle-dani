@@ -1,47 +1,58 @@
 {
   "id": "product-019",
-  "slug": "teplyy-sharf-ovsyanka-019",
-  "title": "Тёплый шарф «овсянка»",
-  "description": "Мягкий шарф, который приятно носить каждый день. Связан в одном полотне без швов, края аккуратно обработаны.",
-  "price": 3400,
+  "slug": "shapka-s-otvorotom-seraya",
+  "title": "Шапка с отворотом «Серая»",
+  "description": "Шапка с широким отворотом. Демонстрационное изделие.",
+  "price": 4200,
   "currency": "RUB",
-  "category": "warm-wear",
-  "type": "scarf",
-  "fandom": null,
+  "category": "hats",
+  "type": "beanie",
+  "fit": "oversize",
+  "fitNote": "Свободная посадка с глубоким отворотом.",
   "colors": [
-    "beige"
+    "gray"
   ],
-  "warmth": "warm",
-  "availability": "in_stock",
-  "stock": 1,
+  "composition": [
+    {
+      "material": "merino",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 5,
+    "max": 7
+  },
   "images": [
     {
       "src": "/images/products/product-019-1.jpg",
-      "alt": "Тёплый шарф «овсянка» — шарф ручной работы (вид 1)",
+      "alt": "Шапка с отворотом «Серая»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-019-2.jpg",
-      "alt": "Тёплый шарф «овсянка» — шарф ручной работы (вид 2)",
+      "alt": "Шапка с отворотом «Серая»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Шерсть с акрилом"
-    },
-    {
-      "label": "Размер",
-      "value": "180 × 25 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-01",
+  "attributes": [],
+  "createdAt": "2026-09-29",
   "isDemo": true
 }

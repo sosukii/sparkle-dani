@@ -50,7 +50,7 @@ test.describe('каталог: подписи и выбранные фильтр
 
   test('выбранные фильтры — одна прокручиваемая строка, «Сбросить всё» вне её', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/catalog?fandom=ghibli,sailor-moon,genshin&color=pink,green,blue,lilac&type=amigurumi,keychain&avail=in_stock&min=500&max=3000')
+    await page.goto('/catalog?type=sweater,cardigan,scarf&color=cocoa,olive,wine,gray&fit=oversize,regular&size=s,m&avail=in_stock&min=3000&max=30000')
     const scroller = page.getByTestId('active-filters')
     await expect(scroller).toBeVisible()
     const info = await scroller.evaluate((el) => {
@@ -73,7 +73,7 @@ test.describe('каталог: подписи и выбранные фильтр
 
   test('на десктопе фильтры тоже в одну строку', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
-    await page.goto('/catalog?fandom=ghibli,sailor-moon,genshin,arcane&color=pink,green,blue,lilac,red&avail=in_stock')
+    await page.goto('/catalog?type=sweater,cardigan,scarf&color=cocoa,olive,wine,gray&fit=oversize,regular&avail=in_stock')
     const rows = await page.getByTestId('active-filters').evaluate((el) => new Set([...el.querySelectorAll('button')].map((b) => Math.round(b.getBoundingClientRect().top))).size)
     expect(rows).toBe(1)
   })

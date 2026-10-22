@@ -2,7 +2,7 @@
 import type { CatalogFilters, FacetOption, Facets } from '#shared/types/catalog'
 import { formatPrice } from '#shared/utils/format'
 
-type GroupKey = 'availability' | 'fandom' | 'type' | 'color' | 'warmth'
+type GroupKey = 'availability' | 'type' | 'color' | 'fit' | 'size' | 'material'
 type Patch = Partial<Pick<CatalogFilters, GroupKey | 'minPrice' | 'maxPrice'>>
 
 const props = defineProps<{ facets: Facets, filters: CatalogFilters, idPrefix: string }>()
@@ -10,10 +10,11 @@ const emit = defineEmits<{ update: [patch: Patch] }>()
 
 const groups: { key: GroupKey, label: string }[] = [
   { key: 'availability', label: 'Наличие' },
-  { key: 'fandom', label: 'Фандом' },
   { key: 'type', label: 'Тип изделия' },
+  { key: 'size', label: 'Размер' },
+  { key: 'fit', label: 'Посадка' },
   { key: 'color', label: 'Цвет' },
-  { key: 'warmth', label: 'Теплота / сезон' },
+  { key: 'material', label: 'Материал' },
 ]
 
 // «Наличие» имеет смысл, только если в выборке есть оба варианта (или один уже выбран).

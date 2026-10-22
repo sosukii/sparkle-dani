@@ -1,43 +1,63 @@
 {
   "id": "product-015",
-  "slug": "brelok-lesnoy-malysh-015",
-  "title": "Брелок «лесной малыш»",
-  "description": "Крошечный друг для ключей и рюкзака. Связан крючком, на прочной металлической фурнитуре. Вдохновлено миром «Studio Ghibli».",
-  "price": 900,
+  "slug": "snud-grafit",
+  "title": "Снуд «Графит»",
+  "description": "Снуд плотной вязки. Демонстрационное изделие.",
+  "price": 5900,
   "currency": "RUB",
-  "category": "toys",
-  "type": "keychain",
-  "fandom": "ghibli",
+  "category": "accessories",
+  "type": "snood",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "mint"
+    "charcoal"
   ],
-  "warmth": null,
-  "availability": "in_stock",
-  "stock": 6,
+  "composition": [
+    {
+      "material": "merino",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 5,
+    "max": 7
+  },
   "images": [
     {
       "src": "/images/products/product-015-1.jpg",
-      "alt": "Брелок «лесной малыш» — брелок ручной работы (вид 1)",
+      "alt": "Снуд «Графит»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-015-2.jpg",
-      "alt": "Брелок «лесной малыш» — брелок ручной работы (вид 2)",
+      "alt": "Снуд «Графит»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
   "attributes": [
     {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, металлическая фурнитура"
-    },
-    {
-      "label": "Длина",
-      "value": "9 см"
+      "label": "Обхват",
+      "value": "65 см"
     }
   ],
-  "createdAt": "2026-09-07",
+  "createdAt": "2026-09-12",
   "isDemo": true
 }

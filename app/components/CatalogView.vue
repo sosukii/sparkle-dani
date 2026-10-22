@@ -33,7 +33,7 @@ const { data, error, pending, refresh } = await useAsyncData<CatalogResult>(
 )
 
 // ── обновление URL ──
-type Patch = Partial<Pick<CatalogFilters, 'q' | 'fandom' | 'type' | 'color' | 'warmth' | 'availability' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
+type Patch = Partial<Pick<CatalogFilters, 'q' | 'type' | 'color' | 'fit' | 'size' | 'material' | 'availability' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
 function update(patch: Patch, mode: 'replace' | 'push' = 'replace') {
   const next = { ...filters.value, ...patch, page: patch.page ?? 1 }
   const query = serializeCatalogFilters(next)
@@ -44,8 +44,8 @@ const setPage = async () => {
   document.getElementById('catalog-results')?.scrollIntoView({ block: 'start' })
 }
 
-const clearFilters = () => update({ fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined })
-const clearAll = () => update({ q: '', fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined, sort: DEFAULT_SORT })
+const clearFilters = () => update({ type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined })
+const clearAll = () => update({ q: '', type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined, sort: DEFAULT_SORT })
 
 // ── поиск ──
 const searchText = ref(filters.value.q)
@@ -67,7 +67,7 @@ const activeChips = computed(() => {
   const facets = data.value?.facets
   const chips: { key: string, label: string, remove: () => void }[] = []
   if (!facets) return chips
-  for (const group of ['availability', 'fandom', 'type', 'color', 'warmth'] as const) {
+  for (const group of ['availability', 'type', 'size', 'fit', 'color', 'material'] as const) {
     for (const id of f[group]) {
       const label = facets[group].find((o) => o.id === id)?.label ?? id
       chips.push({ key: `${group}:${id}`, label, remove: () => update({ [group]: f[group].filter((x) => x !== id) }) })
@@ -104,7 +104,7 @@ usePageSeo(() => ({
   title: filters.value.q ? `Поиск: ${filters.value.q}` : (filters.value.page > 1 ? `${title.value}, страница ${filters.value.page}` : title.value),
   description: currentCategory.value?.description
     ? `${currentCategory.value.description} Изделия ручной работы в магазине NOCTURNE.`
-    : 'Каталог изделий ручной работы: вязаные игрушки, шарфы и шапки, украшения, сумки и вещи для дома. Фильтры по фандому, цвету и цене.',
+    : 'Каталог авторского вязаного трикотажа ручной работы: свитеры, кардиганы, шарфы и шапки. Фильтры по типу, размеру, посадке, материалу, цвету и цене.',
   canonicalPath: props.category ? `/catalog/${props.category}` : '/catalog',
   noindex: isFilteredView.value,
 }))
@@ -169,7 +169,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
               <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
               <input
                 id="catalog-search" v-model="searchText" type="search" enterkeyhint="search" autocomplete="off"
-                placeholder="Название, фандом, цвет…" class="field pl-10" data-testid="catalog-search" @input="onSearchInput"
+                placeholder="Название, цвет, материал…" class="field pl-10" data-testid="catalog-search" @input="onSearchInput"
               >
             </div>
           </form>

@@ -2,7 +2,7 @@ import { expect, test } from '../fixtures'
 
 // На реальной сети шрифты приезжают позже первой отрисовки. Если запасной шрифт не подогнан под веб-шрифт,
 // заголовки перестраиваются и страница «прыгает» (CLS). Здесь шрифты искусственно задерживаются, чтобы это было видно.
-const pages = ['/', '/catalog', '/product/zayka-lunnitsa-004', '/custom', '/about']
+const pages = ['/', '/catalog', '/product/lisenok-amigurumi', '/custom', '/about']
 
 // Тест зависит от тайминга загрузки: один повтор спасает от случайных скачков на загруженной машине.
 test.describe.configure({ retries: 1 })

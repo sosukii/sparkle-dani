@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addLine,
+  isOrderable,
   buildOrderText,
   cartTotals,
   maxQty,
@@ -9,11 +10,23 @@ import {
   setLineQty,
   toCartLine,
 } from '#shared/utils/cart'
-import { product } from './fixtures'
+import { orderable, product } from './fixtures'
 
-const plush = toCartLine(product({ id: 'p1', title: 'Мишка', price: 1000, stock: 2 }))
-const order = toCartLine(product({ id: 'p2', title: 'Плед', price: 500, availability: 'made_to_order' }))
-const free = toCartLine(product({ id: 'p3', title: 'Шарф', price: 700 })) // остаток не задан
+const plush = toCartLine(orderable({ id: 'p1', title: 'Мишка', price: 1000, stock: 2 }))
+const order = toCartLine(orderable({ id: 'p2', title: 'Плед', price: 500, availability: 'made_to_order' }))
+const free = toCartLine(orderable({ id: 'p3', title: 'Шарф', price: 700 })) // остаток не задан
+
+describe('товар без цены', () => {
+  it('не считается заказываемым и не попадает в корзину', () => {
+    expect(isOrderable(product({ id: 'x', price: null }))).toBe(false)
+    expect(isOrderable(product({ id: 'x', price: 0 }))).toBe(true) // 0 ₽ это цена, а null — «цена не известна»
+  })
+
+  it('товар, у которого цену убрали, помечается недоступным в корзине', () => {
+    const fresh = [product({ id: 'p1', title: 'Мишка', price: null })]
+    expect(reconcileLines([plush], fresh)[0]!.unavailable).toBe(true)
+  })
+})
 
 describe('корзина', () => {
   it('добавляет новую позицию и увеличивает количество существующей', () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { maxQty, toCartLine } from '#shared/utils/cart'
+import { isOrderable, maxQty, toCartLine } from '#shared/utils/cart'
 import { formatPrice } from '#shared/utils/format'
 import type { Product } from '#shared/types/product'
 
@@ -8,8 +8,9 @@ const props = defineProps<{ product: Product, priority?: boolean }>()
 const cart = useCartStore()
 // Корзина читается из localStorage уже после гидратации, поэтому до неё всегда показываем кнопку «В корзину».
 const qty = computed(() => (cart.hydrated ? cart.quantityOf(props.product.id) : 0))
-const limit = computed(() => maxQty(toCartLine(props.product)))
-const soldOut = computed(() => limit.value === 0)
+const orderable = computed(() => isOrderable(props.product))
+const limit = computed(() => (isOrderable(props.product) ? maxQty(toCartLine(props.product)) : 0))
+const soldOut = computed(() => orderable.value && limit.value === 0)
 
 const add = () => cart.add(props.product, 1)
 const increase = () => cart.setQty(props.product.id, qty.value + 1)
@@ -40,14 +41,20 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
           {{ product.title }}
         </NuxtLink>
       </h3>
-      <p class="mt-1.5 text-base font-bold">{{ formatPrice(product.price) }}</p>
+      <p class="mt-1.5 text-base font-bold" :class="product.price === null ? 'text-fg-muted' : ''">{{ product.price === null ? 'Цена уточняется' : formatPrice(product.price) }}</p>
       <p class="min-w-0 pt-2.5">
         <AvailabilityBadge :availability="product.availability" :lead-time="product.leadTimeDays" />
       </p>
 
       <!-- Действия поверх «растянутой» ссылки карточки (z-10), чтобы нажатия не уходили на страницу товара -->
       <div class="relative z-10 mt-auto pt-3" data-testid="card-actions">
-        <p v-if="soldOut" class="grid h-10 place-items-center rounded-full bg-raised text-sm font-semibold text-fg-muted">Нет в наличии</p>
+        <NuxtLink
+          v-if="!orderable" :to="`/product/${product.slug}`" class="btn btn-soft h-10 min-h-10 w-full px-4 no-underline"
+          data-testid="card-details"
+        >
+          Подробнее
+        </NuxtLink>
+        <p v-else-if="soldOut" class="grid h-10 place-items-center rounded-full bg-raised text-sm font-semibold text-fg-muted">Нет в наличии</p>
         <button
           v-else-if="qty === 0"
           type="button" class="btn btn-soft h-10 min-h-10 w-full px-4"

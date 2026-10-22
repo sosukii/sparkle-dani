@@ -5,6 +5,7 @@ import {
   reconcileLines,
   removeLine,
   setLineQty,
+  isOrderable,
   toCartLine,
   type CartLine,
 } from '#shared/utils/cart'
@@ -35,7 +36,7 @@ function sanitize(input: unknown): CartLine[] {
       || typeof l.qty !== 'number'
       || !l.image
       || typeof l.image.src !== 'string'
-      || (l.availability !== 'in_stock' && l.availability !== 'made_to_order')
+      || (l.availability !== null && l.availability !== 'in_stock' && l.availability !== 'made_to_order')
     ) continue
     const qty = Math.min(Math.max(Math.floor(l.qty), 1), MAX_QTY_PER_LINE)
     lines.push({ ...(l as CartLine), qty })
@@ -90,6 +91,7 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   function add(product: Product, qty = 1) {
+    if (!isOrderable(product)) return { lines: lines.value, added: 0, limited: false }
     const result = addLine(lines.value, toCartLine(product), qty)
     lines.value = result.lines
     if (result.added === 0) say('Больше нет в наличии: всё доступное уже в корзине', 'info')

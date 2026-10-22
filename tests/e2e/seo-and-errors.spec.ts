@@ -24,9 +24,11 @@ test.describe('страницы ошибок', () => {
     const response = await request.get('/api/catalog.json')
     expect(response.status()).toBe(200)
     const catalog = await response.json()
-    expect(catalog.products).toHaveLength(54)
+    expect(catalog.products).toHaveLength(24)
     expect(catalog.categories).toHaveLength(5)
-    expect(catalog.taxonomy.fandoms.length).toBeGreaterThan(0)
+    expect(catalog.taxonomy.fits.length).toBeGreaterThan(0)
+    expect(catalog.materials.length).toBeGreaterThan(0)
+    expect(catalog.care.length).toBeGreaterThan(0)
     expect((await request.get('/api/products')).status()).toBe(404)
   })
 })
@@ -43,10 +45,10 @@ test.describe('SEO', () => {
   })
 
   test('товар: уникальные метаданные', async ({ page }) => {
-    await page.goto('/product/lesnoy-duh-001')
-    await expect(page).toHaveTitle('Лесной дух — NOCTURNE')
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/product\/lesnoy-duh-001$/)
-    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /product-001-1\.jpg$/)
+    await page.goto('/product/mishka-amigurumi')
+    await expect(page).toHaveTitle('Мишка амигуруми — NOCTURNE')
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/product\/mishka-amigurumi$/)
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /product-022-1\.jpg$/)
     // Для демо-товаров разметку Product не отдаём, а хлебные крошки (они отражают реальную навигацию) — да
     const ld = await page.locator('script[type="application/ld+json"]').allInnerTexts()
     expect(ld.some((t) => t.includes('"@type":"Product"'))).toBe(false)
@@ -54,7 +56,7 @@ test.describe('SEO', () => {
   })
 
   test('фильтры, поиск и корзина не индексируются', async ({ page }) => {
-    await page.goto('/catalog?fandom=ghibli')
+    await page.goto('/catalog?fit=oversize')
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/catalog$/)
     await page.goto('/cart')
@@ -69,7 +71,7 @@ test.describe('SEO', () => {
     expect(robots).toMatch(/Sitemap: .+sitemap\.xml/)
 
     const sitemap = await (await request.get('/sitemap.xml')).text()
-    for (const path of ['/catalog', '/about', '/delivery', '/custom', '/catalog/toys', '/product/lesnoy-duh-001'])
+    for (const path of ['/catalog', '/about', '/delivery', '/custom', '/catalog/amigurumi', '/product/mishka-amigurumi'])
       expect(sitemap, path).toContain(`${path}</loc>`)
     expect(sitemap).not.toContain('/cart</loc>')
     expect(sitemap).not.toContain('/search</loc>')
@@ -89,7 +91,7 @@ test.describe('SEO', () => {
   })
 
   test('у каждой страницы один h1', async ({ page }) => {
-    for (const path of ['/', '/catalog', '/catalog/toys', '/product/lesnoy-duh-001', '/cart', '/about', '/delivery', '/custom', '/search?q=серьги']) {
+    for (const path of ['/', '/catalog', '/catalog/amigurumi', '/product/mishka-amigurumi', '/cart', '/about', '/delivery', '/custom', '/search?q=свитер']) {
       await page.goto(path)
       await expect(page.getByRole('heading', { level: 1 }), path).toHaveCount(1)
     }
@@ -97,7 +99,7 @@ test.describe('SEO', () => {
 })
 
 test.describe('доступность и вёрстка', () => {
-  const paths = ['/', '/catalog', '/catalog/jewelry', '/product/zayka-lunnitsa-004', '/cart', '/about', '/delivery', '/custom', '/search?q=шарф']
+  const paths = ['/', '/catalog', '/catalog/hats', '/product/lisenok-amigurumi', '/cart', '/about', '/delivery', '/custom', '/search?q=шарф']
 
   for (const width of [360, 768, 1280]) {
     for (const path of paths) {
@@ -112,7 +114,7 @@ test.describe('доступность и вёрстка', () => {
   }
 
   test('у всех картинок есть alt, у всех полей — подпись', async ({ page }) => {
-    for (const path of ['/', '/catalog', '/product/lesnoy-duh-001', '/about']) {
+    for (const path of ['/', '/catalog', '/product/mishka-amigurumi', '/about']) {
       await page.goto(path)
       const noAlt = await page.evaluate(() => [...document.images].filter((i) => !i.hasAttribute('alt')).length)
       expect(noAlt, `${path}: картинки без alt`).toBe(0)

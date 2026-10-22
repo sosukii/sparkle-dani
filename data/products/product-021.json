@@ -1,50 +1,59 @@
 {
   "id": "product-021",
-  "slug": "polosatyy-sharf-fakultet-021",
-  "title": "Полосатый шарф «факультет»",
-  "description": "Мягкий шарф, который приятно носить каждый день. Связан в одном полотне без швов, края аккуратно обработаны. Вдохновлено миром «Гарри Поттер».",
-  "price": 3600,
+  "slug": "shapka-molochnaya-s-pomponom",
+  "title": "Шапка «Молочная» с помпоном",
+  "description": "Шапка с помпоном; наличие уточняется. Демонстрационное изделие.",
+  "price": 4600,
   "currency": "RUB",
-  "category": "warm-wear",
-  "type": "scarf",
-  "fandom": "harry-potter",
+  "category": "hats",
+  "type": "beanie",
+  "fit": "regular",
+  "fitNote": null,
   "colors": [
-    "red"
+    "cream"
   ],
-  "warmth": "warm",
-  "availability": "made_to_order",
-  "leadTimeDays": {
-    "min": 10,
-    "max": 14
-  },
+  "composition": [
+    {
+      "material": "mohair",
+      "percent": 20
+    },
+    {
+      "material": "wool",
+      "percent": 50
+    },
+    {
+      "material": "acrylic",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30"
+  ],
+  "availability": null,
   "images": [
     {
       "src": "/images/products/product-021-1.jpg",
-      "alt": "Полосатый шарф «факультет» — шарф ручной работы (вид 1)",
+      "alt": "Шапка «Молочная» с помпоном: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-021-2.jpg",
-      "alt": "Полосатый шарф «факультет» — шарф ручной работы (вид 2)",
+      "alt": "Шапка «Молочная» с помпоном: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Шерсть с акрилом"
-    },
-    {
-      "label": "Размер",
-      "value": "180 × 25 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-08-29",
+  "attributes": [],
+  "createdAt": "2026-09-05",
   "isDemo": true
 }

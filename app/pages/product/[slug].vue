@@ -44,9 +44,10 @@ const facts = computed(() => {
   const l = labels.value
   const rows: { label: string, value: string }[] = []
   if (l.type) rows.push({ label: 'Тип', value: l.type })
-  if (l.fandom) rows.push({ label: 'Фандом', value: l.fandom.label })
+  if (l.fit) rows.push({ label: 'Посадка', value: l.fit.label })
   if (l.colors.length) rows.push({ label: l.colors.length > 1 ? 'Цвета' : 'Цвет', value: l.colors.map((c) => c.label).join(', ') })
-  if (l.warmth) rows.push({ label: 'Теплота / сезон', value: l.warmth.hint ? `${l.warmth.label} (${l.warmth.hint})` : l.warmth.label })
+  if (l.composition) rows.push({ label: 'Состав', value: l.composition.map((m) => (m.percent ? `${m.percent}% ${m.title.toLowerCase()}` : m.title.toLowerCase())).join(', ') })
+  if (l.sizes) rows.push({ label: l.sizes.length > 1 ? 'Размеры' : 'Размер', value: l.sizes.map((s) => s.label).join(', ') })
   return [...rows, ...product.value.attributes]
 })
 </script>
@@ -73,19 +74,14 @@ const facts = computed(() => {
       </div>
 
       <div>
-        <ul v-if="labels.fandom || labels.category" class="flex flex-wrap gap-2">
-          <li v-if="labels.fandom">
-            <NuxtLink :to="{ path: '/catalog', query: { fandom: labels.fandom.id } }" class="chip no-underline">
-              <AppIcon name="sparkle" :size="12" class="text-link" /> {{ labels.fandom.label }}
-            </NuxtLink>
-          </li>
-          <li v-if="labels.category">
+        <ul v-if="labels.category" class="flex flex-wrap gap-2">
+          <li>
             <NuxtLink :to="`/catalog/${labels.category.slug}`" class="chip no-underline">{{ labels.category.title }}</NuxtLink>
           </li>
         </ul>
 
         <h1 class="mt-4 text-4xl sm:text-5xl" data-testid="product-title">{{ product.title }}</h1>
-        <p class="mt-4 font-display text-4xl font-semibold" data-testid="product-price">{{ formatPrice(product.price) }}</p>
+        <p class="mt-4 font-display text-4xl font-semibold" data-testid="product-price">{{ product.price === null ? 'Цена уточняется' : formatPrice(product.price) }}</p>
 
         <div class="mt-4 flex flex-wrap items-center gap-3">
           <AvailabilityBadge :availability="product.availability" />

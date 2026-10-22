@@ -1,8 +1,8 @@
 import { expect, test } from '../fixtures'
 import { addToCart, cards } from '../helpers'
 
-const IN_STOCK_ONE = 'lesnoy-duh-001' // 3 200 ₽, в наличии: 1 шт.
-const MADE_TO_ORDER = 'zayka-lunnitsa-004' // 3 400 ₽, под заказ, 7–12 дней
+const IN_STOCK_ONE = 'mishka-amigurumi' // 3 200 ₽, в наличии: 1 шт. (демо-товар)
+const MADE_TO_ORDER = 'lisenok-amigurumi' // 3 400 ₽, под заказ, 7–12 дней
 
 const digits = (text: string | null) => Number((text ?? '').replace(/\D/g, ''))
 
@@ -11,9 +11,9 @@ test('путь покупателя: главная → категория → �
   await page.getByRole('navigation', { name: 'Основная навигация' }).getByRole('link', { name: 'Каталог' }).click()
   await expect(page).toHaveURL(/\/catalog$/)
 
-  await page.getByRole('list', { name: 'Категории' }).getByRole('link', { name: 'Игрушки' }).click()
-  await expect(page).toHaveURL(/\/catalog\/toys$/)
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Игрушки')
+  await page.getByRole('list', { name: 'Категории' }).getByRole('link', { name: 'Амигуруми' }).click()
+  await expect(page).toHaveURL(/\/catalog\/amigurumi$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Амигуруми')
 
   await cards(page).first().getByRole('link').click()
   await expect(page).toHaveURL(/\/product\//)
@@ -40,7 +40,7 @@ test('корзина: количество, сумма, удаление и оч
   await expect(page.getByTestId('cart-items-count')).toHaveText('2')
 
   // Увеличиваем «под заказ» до 3 штук
-  const orderLine = page.getByTestId('cart-line').filter({ hasText: 'Зайка-лунница' })
+  const orderLine = page.getByTestId('cart-line').filter({ hasText: 'Лисёнок амигуруми' })
   await orderLine.getByTestId('qty-plus').click()
   await orderLine.getByTestId('qty-plus').click()
   await expect(orderLine.getByTestId('qty-input')).toHaveValue('3')
@@ -48,7 +48,7 @@ test('корзина: количество, сумма, удаление и оч
   expect(digits(await page.getByTestId('cart-total').innerText())).toBe(3400 * 3 + 3200)
 
   // Товар «в наличии: 1» нельзя увеличить
-  const stockLine = page.getByTestId('cart-line').filter({ hasText: 'Лесной дух' })
+  const stockLine = page.getByTestId('cart-line').filter({ hasText: 'Мишка амигуруми' })
   await expect(stockLine.getByTestId('qty-plus')).toBeDisabled()
 
   // Удаление одной позиции
@@ -70,7 +70,7 @@ test('корзина сохраняется при навигации и пос�
   await page.reload()
   await expect(page.getByTestId('cart-count')).toHaveText('2')
   await page.goto('/cart')
-  await expect(page.getByTestId('cart-line')).toContainText('Зайка-лунница')
+  await expect(page.getByTestId('cart-line')).toContainText('Лисёнок амигуруми')
   await expect(page.getByTestId('qty-input')).toHaveValue('2')
 })
 
@@ -108,7 +108,7 @@ test('связь с мастером: виден состав заказа и с
   const text = page.getByTestId('order-text')
   await expect(text).toBeVisible()
   const value = await text.inputValue()
-  expect(value).toContain('Зайка-лунница — 2 ×')
+  expect(value).toContain('Лисёнок амигуруми — 2 ×')
   expect(value.replace(/\s/g, ' ')).toMatch(/Итого: 6 800/)
 
   await page.getByTestId('copy-order').click()
@@ -124,7 +124,7 @@ test('связь с мастером: виден состав заказа и с
 test('удалённый из каталога товар в корзине помечается и не попадает в сумму', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('sparkle-dani:cart:v1', JSON.stringify([
-      { productId: 'product-999', slug: 'net-takogo-999', title: 'Исчезнувшая игрушка', price: 1000, qty: 2, availability: 'made_to_order', image: { src: '/images/products/product-001-1.jpg', alt: 'x', width: 1200, height: 1500 } },
+      { productId: 'product-999', slug: 'net-takogo-999', title: 'Исчезнувшая игрушка', price: 1000, qty: 2, availability: 'made_to_order', image: { src: '/images/products/product-022-1.jpg', alt: 'x', width: 1200, height: 1500 } },
     ]))
   })
   await page.goto('/cart')

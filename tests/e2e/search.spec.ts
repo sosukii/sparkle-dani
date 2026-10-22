@@ -9,12 +9,12 @@ const titles = async (page: import('@playwright/test').Page) =>
   (await cards(page).locator('h3').allInnerTexts()).map((t) => t.trim())
 
 test.describe('поиск по сайту: изделия', () => {
-  test('«сережки» находит серьги, «серёжки» тоже', async ({ page }) => {
-    for (const q of ['сережки', 'серёжки', 'серьги']) {
+  test('«джемпер» находит свитера, «свитера» тоже', async ({ page }) => {
+    for (const q of ['джемпер', 'свитера', 'свитер']) {
       await search(page, q)
       const found = await titles(page)
       expect(found.length, q).toBeGreaterThanOrEqual(6)
-      expect(found.every((t) => t.startsWith('Серьги')), `${q}: ${found.join(', ')}`).toBe(true)
+      expect(found.every((t) => /^(Свитер|Джемпер)/.test(t)), `${q}: ${found.join(', ')}`).toBe(true)
     }
   })
 
@@ -25,18 +25,18 @@ test.describe('поиск по сайту: изделия', () => {
     expect(badges.every((t) => t.includes('В наличии'))).toBe(true)
   })
 
-  test('«серьги в наличии» и «до 1200» работают как условия, а не как слова', async ({ page }) => {
-    await search(page, 'серьги в наличии')
-    expect((await titles(page)).every((t) => t.startsWith('Серьги'))).toBe(true)
-    await search(page, 'до 1200')
+  test('«свитер в наличии» и «до 4000» работают как условия, а не как слова', async ({ page }) => {
+    await search(page, 'свитер в наличии')
+    expect((await titles(page)).every((t) => /^(Свитер|Джемпер)/.test(t))).toBe(true)
+    await search(page, 'до 4000')
     const prices = (await cards(page).getByText(/₽/).allInnerTexts()).map((t) => Number(t.replace(/\D/g, '')))
     expect(prices.length).toBeGreaterThan(0)
-    expect(Math.max(...prices)).toBeLessThanOrEqual(1200)
+    expect(Math.max(...prices)).toBeLessThanOrEqual(4000)
   })
 
-  test('формы слов: «розовая шапочка» находит шапку', async ({ page }) => {
-    await search(page, 'розовая шапочка')
-    expect(await titles(page)).toEqual(['Шапка с помпоном «зефир»'])
+  test('формы слов: «молочная шапочка» находит шапку', async ({ page }) => {
+    await search(page, 'молочная шапочка')
+    expect(await titles(page)).toEqual(['Шапка «Молочная» с помпоном'])
   })
 })
 
@@ -82,13 +82,13 @@ test.describe('поиск по сайту: состояния', () => {
   test('пустой запрос показывает популярное, а не пустоту', async ({ page }) => {
     await page.goto('/search')
     await expect(page.getByTestId('search-suggestions')).toContainText('Часто ищут')
-    await page.getByTestId('search-suggestions').getByRole('link', { name: 'серьги' }).click()
-    await expect(page).toHaveURL(/q=%D1%81%D0%B5%D1%80%D1%8C%D0%B3%D0%B8/)
+    await page.getByTestId('search-suggestions').getByRole('link', { name: 'свитер', exact: true }).click()
+    await expect(page).toHaveURL(/q=%D1%81%D0%B2%D0%B8%D1%82%D0%B5%D1%80/)
   })
 
   test('подсказки выглядят как обычные чипы, а не как «выбранные»', async ({ page }) => {
     await page.goto('/search')
-    const colors = await page.getByTestId('search-suggestions').getByRole('link', { name: 'серьги', exact: true }).evaluate((el) => getComputedStyle(el).backgroundColor)
+    const colors = await page.getByTestId('search-suggestions').getByRole('link', { name: 'свитер', exact: true }).evaluate((el) => getComputedStyle(el).backgroundColor)
     expect(colors).toBe('rgb(42, 23, 8)')
     await search(page, 'абракадабра')
     const again = await page.getByTestId('search-suggestions').getByRole('link', { name: 'шарф', exact: true }).evaluate((el) => getComputedStyle(el).backgroundColor)
@@ -98,7 +98,7 @@ test.describe('поиск по сайту: состояния', () => {
   test('ничего не нашлось — понятное сообщение и подсказки', async ({ page }) => {
     await search(page, 'абракадабра')
     await expect(page.getByTestId('search-suggestions')).toContainText('Ничего не нашлось')
-    await expect(page.getByTestId('search-suggestions').getByRole('link', { name: 'Игрушки' })).toBeVisible()
+    await expect(page.getByTestId('search-suggestions').getByRole('link', { name: 'Свитеры' })).toBeVisible()
   })
 
   test('результаты озвучиваются скринридеру, страница не индексируется', async ({ page }) => {

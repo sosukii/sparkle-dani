@@ -19,11 +19,10 @@ const retry = () => Promise.all([categoriesReq.refresh(), latestReq.refresh()])
 const heroItems = computed(() =>
   (categories.value ?? []).filter((c) => c.cover && c.coverProduct).slice(0, 3).map((c) => ({ image: c.cover!, product: c.coverProduct! })),
 )
-const fandoms = computed(() => latest.value?.facets.fandom ?? [])
 
 usePageSeo({
-  title: 'Вязаные игрушки, шарфы и украшения ручной работы',
-  description: `${SITE_NAME} — интернет-магазин изделий ручной работы: вязаные игрушки, тёплые вещи, украшения и вещи для дома. Мастер — ${OWNER_NAME}.`,
+  title: 'Авторский вязаный трикотаж ручной работы',
+  description: `${SITE_NAME} — магазин авторского вязаного трикотажа ручной работы: свитеры, кардиганы, шарфы и шапки. Мастер — ${OWNER_NAME}.`,
   canonicalPath: '/',
 })
 const siteUrl = useSiteUrl()
@@ -45,7 +44,7 @@ useHead({
 })
 
 const steps = [
-  { n: '01', title: 'Выберите изделие', text: 'Листайте каталог, фильтруйте по фандому, цвету и цене. Есть вещи в наличии и под заказ.' },
+  { n: '01', title: 'Выберите изделие', text: 'Листайте каталог, фильтруйте по размеру, посадке, материалу, цвету и цене. Есть вещи в наличии и под заказ.' },
   { n: '02', title: 'Соберите корзину', text: 'Добавьте всё, что понравилось. Корзина сохранится, даже если вы закроете сайт.' },
   { n: '03', title: `Напишите ${OWNER_NAME}`, text: 'Состав заказа можно скопировать одним нажатием и отправить в Telegram — дальше договоритесь о деталях.' },
 ]
@@ -58,10 +57,10 @@ const steps = [
       <div>
         <p class="eyebrow">Handmade · ручная работа</p>
         <h1 class="mt-5 text-[2.75rem] sm:text-6xl lg:text-[3.6rem] xl:text-7xl">
-          Вязаные друзья и <span class="em-accent">тёплые мелочи</span> для вашего мира
+          Авторский <span class="em-accent">вязаный трикотаж</span> ручной работы
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">
-          Игрушки-амигуруми, шарфы, украшения и вещи для дома по мотивам любимых историй. Каждое изделие связано вручную — {{ OWNER_NAME }} вкладывает в него настроение.
+          Свитеры, кардиганы, шарфы, шапки и амигуруми. Каждое изделие связано вручную, а вопросы по размеру и составу можно задать {{ OWNER_NAME }} в Telegram.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <NuxtLink to="/catalog" class="btn btn-primary px-7 no-underline">Смотреть каталог <AppIcon name="arrow-right" :size="18" /></NuxtLink>
@@ -130,21 +129,6 @@ const steps = [
         <SectionHead id="home-new" eyebrow="Новинки" title="Только что связано" to="/catalog" />
         <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
           <ProductCard v-for="p in latest?.items" :key="p.id" :product="p" />
-        </div>
-      </section>
-
-      <!-- Фандомы -->
-      <section v-if="fandoms.length" class="container-page py-14" aria-labelledby="home-fandoms">
-        <div class="rounded-[2rem] bg-raised px-6 py-12 text-center sm:px-12">
-          <p class="eyebrow">Фандомы</p>
-          <h2 id="home-fandoms" class="mt-2 text-3xl sm:text-4xl">Найдите свой <span class="em-accent">любимый мир</span></h2>
-          <ul class="mt-8 flex flex-wrap justify-center gap-3">
-            <li v-for="f in fandoms" :key="f.id">
-              <NuxtLink :to="{ path: '/catalog', query: { fandom: f.id } }" class="chip no-underline">
-                <AppIcon name="sparkle" :size="12" class="text-link" /> {{ f.label }}
-              </NuxtLink>
-            </li>
-          </ul>
         </div>
       </section>
     </template>

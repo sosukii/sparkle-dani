@@ -1,47 +1,88 @@
 {
   "id": "product-008",
-  "slug": "vodyanoy-slaymik-008",
-  "title": "Водяной слаймик",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Genshin Impact».",
-  "price": 1900,
+  "slug": "kardigan-oversayz-chernyy",
+  "title": "Кардиган оверсайз «Чёрный»",
+  "description": "Удлинённый кардиган свободного кроя. Демонстрационное изделие.",
+  "price": 36000,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "genshin",
+  "category": "cardigans",
+  "type": "cardigan",
+  "fit": "oversize",
+  "fitNote": "Свободная посадка, удлинённая спинка.",
   "colors": [
-    "blue"
+    "black"
   ],
-  "warmth": null,
-  "availability": "in_stock",
-  "stock": 4,
+  "composition": [
+    {
+      "material": "merino",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "m",
+    "l",
+    "xl"
+  ],
+  "measurements": [
+    {
+      "size": "m",
+      "values": {
+        "chest": 61,
+        "length": 68,
+        "sleeve": 63
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 64,
+        "length": 70,
+        "sleeve": 64
+      }
+    },
+    {
+      "size": "xl",
+      "values": {
+        "chest": 67,
+        "length": 72,
+        "sleeve": 65
+      }
+    }
+  ],
+  "model": {
+    "heightCm": 175,
+    "wearsSize": "m"
+  },
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 14,
+    "max": 21
+  },
   "images": [
     {
       "src": "/images/products/product-008-1.jpg",
-      "alt": "Водяной слаймик — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Кардиган оверсайз «Чёрный»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-008-2.jpg",
-      "alt": "Водяной слаймик — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Кардиган оверсайз «Чёрный»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "22 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-17",
+  "attributes": [],
+  "createdAt": "2026-09-30",
   "isDemo": true
 }
