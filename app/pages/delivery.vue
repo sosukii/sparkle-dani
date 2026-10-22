@@ -6,23 +6,30 @@ const siteUrl = useSiteUrl()
 
 usePageSeo({
   title: 'Покупка и доставка',
-  description: `Как заказать изделие ручной работы: корзина, связь с ${OWNER_NAME} в Telegram, доставка СДЭК по России или лично в руки в Москве.`,
+  description: `Как заказать изделие: корзина, готовое сообщение и связь с ${OWNER_NAME} в Telegram. Условия доставки, оплаты и возврата согласуются до заказа.`,
+  canonicalPath: '/delivery',
 })
 
 const steps = [
-  { title: 'Выберите изделие', text: 'Откройте каталог и воспользуйтесь фильтрами — по размеру, посадке, материалу, цвету и цене.' },
-  { title: 'Добавьте в корзину', text: 'Можно собрать несколько изделий. Корзина сохраняется в вашем браузере.' },
-  { title: `Нажмите «Связаться с ${OWNER_NAME}»`, text: 'Вы увидите состав заказа и сумму. Скопируйте текст заказа и отправьте его в Telegram.' },
-  { title: 'Договоритесь о деталях', text: 'Оплату и способ получения — СДЭК или лично в Москве — согласуете в переписке. Онлайн-оплаты на сайте нет.' },
+  { title: 'Выберите изделие', text: 'Откройте каталог и воспользуйтесь фильтрами: по размеру, посадке, материалу, цвету и цене.' },
+  { title: 'Добавьте в корзину', text: 'Выберите размер, если он нужен. Можно собрать несколько изделий; корзина сохраняется в вашем браузере.' },
+  { title: `Нажмите «Связаться с ${OWNER_NAME}»`, text: 'Вы увидите состав заказа и сумму. Скопируйте текст и отправьте его в Telegram: сайт сам ничего не отправляет.' },
+  { title: 'Договоритесь о деталях', text: `Оплату, получение и сроки вы согласуете с ${OWNER_NAME} в переписке. Онлайн-оплаты на сайте нет, и заказ не считается оформленным, пока вы не договорились.` },
+]
+
+// Условия, которые согласуются в переписке. Конкретные способы, сроки и цены появятся здесь, когда будут подтверждены.
+const terms = [
+  { id: 'delivery', title: 'Доставка', text: `Способ, стоимость и срок согласуются с ${OWNER_NAME} до заказа.` },
+  { id: 'payment', title: 'Оплата', text: `Способ оплаты ${OWNER_NAME} назовёт в переписке. На сайте оплата не принимается.` },
+  { id: 'returns', title: 'Возврат', text: `Условия возврата уточните у ${OWNER_NAME} до заказа: они зафиксируются в вашем диалоге.` },
 ]
 
 const faq = [
-  { q: 'Как получить заказ?', a: `Двумя способами: доставка СДЭК по России или лично в руки в Москве. Выбор вы обсуждаете с ${OWNER_NAME} в Telegram.` },
-  { q: 'Где находится магазин и в каком вы городе?', a: `Это интернет-магазин. ${OWNER_NAME} находится в Москве: отправляет заказы СДЭКом по России, а в Москве можно встретиться и забрать лично.` },
-  { q: 'Нужно ли регистрироваться?', a: 'Нет. Достаточно собрать корзину и написать мастеру в Telegram.' },
-  { q: 'Что значит «в наличии» и «под заказ»?', a: 'Изделия «в наличии» уже связаны. Изделия «под заказ» мастер сделает после согласования — примерный срок изготовления указан на карточке товара.' },
-  { q: 'Почему сайт не принимает оплату?', a: 'Мы работаем напрямую: детали оплаты и доставки обсуждаются в личной переписке, чтобы вы заранее понимали, что и когда получите.' },
-  { q: 'Что делать, если нужного нет в каталоге?', a: `Закажите своё: ${OWNER_NAME} может сделать почти что угодно по вашей идее. Подробности — на странице «Свой заказ».` },
+  { q: 'Нужно ли регистрироваться?', a: 'Нет. Достаточно собрать корзину и написать в Telegram.' },
+  { q: 'Что значит «в наличии» и «под заказ»?', a: 'Изделия «в наличии» уже связаны. Изделия «под заказ» делаются после согласования; срок изготовления указан на карточке, а если его нет, спросите.' },
+  { q: 'Почему сайт не принимает оплату?', a: `Покупка идёт напрямую: детали обсуждаются в переписке с ${OWNER_NAME}, чтобы вы заранее понимали, что и когда получите.` },
+  { q: 'Что делать, если нужного размера или оттенка нет?', a: `Напишите ${OWNER_NAME}: можно обсудить изделие по своим меркам. Подробности на странице «Свой заказ».` },
+  { q: 'Если на карточке нет цены или наличия?', a: `Это значит, что сведения пока не заполнены. Нажмите «Уточнить цену и наличие»: сообщение ${OWNER_NAME} подготовится само.` },
 ]
 
 useJsonLd(() => buildBreadcrumbJsonLd([{ name: 'Главная', path: '/' }, { name: 'Покупка и доставка', path: '/delivery' }], siteUrl))
@@ -35,7 +42,7 @@ useJsonLd(() => buildFaqJsonLd(faq))
       <p class="eyebrow">Информация</p>
       <h1 class="mt-4 max-w-3xl text-5xl sm:text-6xl lg:text-7xl">Покупка и <span class="em-accent">доставка</span></h1>
       <p class="mt-6 max-w-2xl text-lg leading-relaxed text-fg-muted">
-        Покупать у нас просто: выбираете, собираете корзину и пишете {{ OWNER_NAME }}. Без регистрации и лишних форм.
+        Покупка идёт через личную переписку в Telegram: без регистрации и лишних форм.
       </p>
     </section>
 
@@ -50,34 +57,28 @@ useJsonLd(() => buildFaqJsonLd(faq))
       </ol>
     </section>
 
+    <section class="container-page py-8 lg:py-12" aria-labelledby="delivery-terms">
+      <h2 id="delivery-terms" class="text-3xl sm:text-4xl">Доставка, оплата и возврат</h2>
+      <p class="mt-3 max-w-2xl text-fg-muted">Конкретные условия пока согласуются в переписке: здесь мы ничего не обещаем наперёд.</p>
+      <ul class="mt-8 grid gap-5 md:grid-cols-3" data-testid="delivery-terms">
+        <li v-for="t in terms" :key="t.id" class="rounded-card border border-line bg-surface p-7" :data-testid="`delivery-${t.id}`">
+          <h3 class="font-display text-2xl">{{ t.title }}</h3>
+          <p class="mt-2 leading-relaxed text-fg-muted">{{ t.text }}</p>
+        </li>
+      </ul>
+    </section>
+
     <section class="container-page py-8 lg:py-12" aria-labelledby="delivery-status">
       <h2 id="delivery-status" class="text-3xl sm:text-4xl">В наличии и под заказ</h2>
       <div class="mt-8 grid gap-5 md:grid-cols-2">
-        <div class="rounded-card bg-raised p-8">
+        <div class="rounded-card border border-line bg-surface p-8">
           <AvailabilityBadge availability="in_stock" />
-          <p class="mt-4 leading-relaxed text-fg-muted">Изделие уже готово. После согласования деталей мастер отправит его вам. Если остаток ограничен, корзина не даст добавить больше, чем есть.</p>
+          <p class="mt-4 leading-relaxed text-fg-muted">Изделие уже готово. Если остаток ограничен, корзина не даст добавить больше, чем есть.</p>
         </div>
-        <div class="rounded-card bg-raised p-8">
+        <div class="rounded-card border border-line bg-surface p-8">
           <AvailabilityBadge availability="made_to_order" />
-          <p class="mt-4 leading-relaxed text-fg-muted">Изделие делается после вашего заказа. Примерный срок изготовления указан на карточке — например, «7–12 дней».</p>
+          <p class="mt-4 leading-relaxed text-fg-muted">Изделие делается после согласования. Срок изготовления указан на карточке; если его нет, уточните у {{ OWNER_NAME }}.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="container-page py-8 lg:py-12" aria-labelledby="delivery-pay">
-      <div class="rounded-[2rem] bg-raised px-6 py-10 sm:px-12">
-        <h2 id="delivery-pay" class="text-3xl sm:text-4xl">Как получить заказ</h2>
-        <div class="mt-6 grid gap-4 md:grid-cols-2">
-          <div class="rounded-2xl bg-surface p-6" data-testid="delivery-cdek">
-            <h3 class="font-display text-2xl">СДЭК по России</h3>
-            <p class="mt-2 leading-relaxed text-fg-muted">{{ OWNER_NAME }} отправит заказ СДЭКом. Стоимость и срок доставки зависят от города — вы узнаете их заранее.</p>
-          </div>
-          <div class="rounded-2xl bg-surface p-6" data-testid="delivery-moscow">
-            <h3 class="font-display text-2xl">Лично в руки в Москве</h3>
-            <p class="mt-2 leading-relaxed text-fg-muted">Если вы в Москве, можно встретиться и забрать заказ лично. Место и время договариваетесь в Telegram.</p>
-          </div>
-        </div>
-        <p class="mt-5 max-w-3xl leading-relaxed text-fg-muted">Оплата и все детали согласуются в Telegram: так вы заранее знаете, что и когда получите.</p>
       </div>
     </section>
 
@@ -87,7 +88,7 @@ useJsonLd(() => buildFaqJsonLd(faq))
         <details v-for="item in faq" :key="item.q" class="group px-6 py-5">
           <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-display text-xl">
             {{ item.q }}
-            <AppIcon name="chevron-down" :size="20" class="transition-transform group-open:rotate-180 motion-reduce:transition-none" />
+            <AppIcon name="chevron-down" :size="20" class="shrink-0 transition-transform group-open:rotate-180 motion-reduce:transition-none" />
           </summary>
           <p class="mt-2 max-w-3xl leading-relaxed text-fg-muted">{{ item.a }}</p>
         </details>

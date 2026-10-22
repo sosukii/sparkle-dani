@@ -54,16 +54,17 @@ test('фильтры можно включить с клавиатуры', async
 
 test('состояние каталога хранится в URL и переживает перезагрузку', async ({ page }) => {
   await page.goto('/catalog?fit=oversize&color=cocoa&sort=price-asc')
-  const before = await count(page).innerText()
-  expect(before).toBe('2 изделия')
+  // На статике параметры адреса применяются после гидратации, поэтому ждём итог, а не читаем сразу.
+  await expect(count(page)).toHaveText('2 изделия')
   await page.reload()
-  await expect(count(page)).toHaveText(before)
+  await expect(count(page)).toHaveText('2 изделия')
   await expect(page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-fit-oversize')).toBeChecked()
   await expect(page.getByTestId('catalog-sort')).toHaveValue('price-asc')
 })
 
 test('перепутанный диапазон цены не ломает каталог', async ({ page }) => {
   await page.goto('/catalog?min=5000&max=1000')
+  await expect(count(page)).not.toHaveText('24 изделия') // фильтр применился (на статике — после гидратации)
   const swapped = await count(page).innerText()
   await expect(page.getByTestId('price-min').first()).toHaveValue('1000')
   await expect(page.getByTestId('price-max').first()).toHaveValue('5000')

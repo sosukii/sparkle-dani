@@ -45,8 +45,14 @@ useHead({
 
 const steps = [
   { n: '01', title: 'Выберите изделие', text: 'Листайте каталог, фильтруйте по размеру, посадке, материалу, цвету и цене. Есть вещи в наличии и под заказ.' },
-  { n: '02', title: 'Соберите корзину', text: 'Добавьте всё, что понравилось. Корзина сохранится, даже если вы закроете сайт.' },
-  { n: '03', title: `Напишите ${OWNER_NAME}`, text: 'Состав заказа можно скопировать одним нажатием и отправить в Telegram — дальше договоритесь о деталях.' },
+  { n: '02', title: 'Выберите размер и соберите корзину', text: 'У каждого изделия есть таблица измерений и справка по выбору размера. Корзина сохранится, даже если вы закроете сайт.' },
+  { n: '03', title: `Напишите ${OWNER_NAME}`, text: 'Сайт подготовит сообщение с составом заказа. Вы увидите его целиком, скопируете и отправите в Telegram сами; оплаты на сайте нет.' },
+]
+
+const help = [
+  { to: '/info/sizes', title: 'Размеры и мерки', text: 'Как сравнить изделие со своей любимой вещью и выбрать размер.' },
+  { to: '/info/materials', title: 'Материалы и уход', text: 'Что означает состав и как ухаживать за вязаными вещами.' },
+  { to: '/custom', title: 'Свой заказ', text: 'Нужно по своим меркам или идее? Опишите, что хотите.' },
 ]
 </script>
 
@@ -106,7 +112,7 @@ const steps = [
       <!-- Категории: отдельная кремовая полоса на всю ширину -->
       <div class="border-y border-line bg-raised/60">
       <section class="container-page py-14 lg:py-20" aria-labelledby="home-categories">
-        <SectionHead id="home-categories" eyebrow="Категории" title="Выберите настроение" to="/catalog" link-label="Весь каталог" />
+        <SectionHead id="home-categories" eyebrow="Категории" title="Что здесь можно выбрать" to="/catalog" link-label="Весь каталог" />
         <ul class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-5">
           <li v-for="(c, i) in categories" :key="c.id" :class="i % 2 ? 'md:mt-10' : ''">
             <NuxtLink :to="`/catalog/${c.slug}`" class="group block no-underline">
@@ -126,26 +132,14 @@ const steps = [
 
       <!-- Новинки: на светлом фоне страницы, с крупным заголовком -->
       <section class="container-page py-14 lg:py-20" aria-labelledby="home-new">
-        <SectionHead id="home-new" eyebrow="Новинки" title="Только что связано" to="/catalog" />
+        <SectionHead id="home-new" eyebrow="Новинки" title="Новые изделия" to="/catalog" />
         <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
           <ProductCard v-for="p in latest?.items" :key="p.id" :product="p" :labels="latest?.labels" />
         </div>
       </section>
     </template>
 
-    <!-- Свой заказ -->
-    <section class="container-page py-4 lg:py-8" aria-labelledby="home-custom">
-      <div class="grid items-center gap-6 rounded-[2rem] bg-accent px-6 py-10 text-fg sm:px-12 md:grid-cols-[1fr_auto]">
-        <div>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-gold">Индивидуальный заказ</p>
-          <h2 id="home-custom" class="mt-3 text-3xl sm:text-4xl">Нужно что-то <span class="font-display italic text-gold">только ваше</span>?</h2>
-          <p class="mt-3 max-w-xl text-fg">{{ OWNER_NAME }} может сделать почти что угодно по вашей идее. Мы расскажем, как это устроено, — это просто.</p>
-        </div>
-        <NuxtLink to="/custom" class="btn bg-canvas text-fg no-underline hover:bg-raised">Как заказать своё <AppIcon name="arrow-right" :size="18" /></NuxtLink>
-      </div>
-    </section>
-
-    <!-- Как это работает -->
+    <!-- Как купить -->
     <section class="container-page py-14 lg:py-20" aria-labelledby="home-how">
       <SectionHead id="home-how" eyebrow="Как купить" title="Три простых шага" />
       <ol class="mt-8 grid gap-5 md:grid-cols-3">
@@ -157,22 +151,18 @@ const steps = [
       </ol>
     </section>
 
-    <!-- О мастере -->
-    <section class="container-page py-8 lg:py-14" aria-labelledby="home-about">
-      <div class="grid items-stretch overflow-hidden rounded-[2rem] bg-raised md:grid-cols-2">
-        <div class="p-8 sm:p-12">
-          <p class="eyebrow">Обо мне</p>
-          <h2 id="home-about" class="mt-2 text-3xl sm:text-4xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span></h2>
-          <p class="mt-4 leading-relaxed text-fg-muted">Вяжу маленькие радости и очень люблю, когда они находят своего человека. Расскажу, как рождаются мои изделия.</p>
-          <NuxtLink to="/about" class="btn btn-primary mt-6 no-underline">Познакомиться <AppIcon name="arrow-right" :size="18" /></NuxtLink>
-        </div>
-        <div class="relative min-h-72 md:min-h-[24rem]">
-          <AppImage
-            src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи и вязаный зайчик "
-            :width="1200" :height="900" sizes="(min-width: 768px) 45vw, 100vw" img-class="absolute inset-0 size-full object-cover"
-          />
-        </div>
-      </div>
+    <!-- Помощь с выбором -->
+    <section class="container-page py-4 lg:py-8" aria-labelledby="home-help">
+      <SectionHead id="home-help" eyebrow="Помощь" title="Если нужно разобраться" />
+      <ul class="mt-8 grid gap-5 md:grid-cols-3">
+        <li v-for="h in help" :key="h.to">
+          <NuxtLink :to="h.to" class="group block h-full rounded-card border border-line bg-surface p-7 no-underline transition-colors hover:bg-raised" :data-testid="`home-help-${h.to.split('/').pop()}`">
+            <h3 class="flex items-center justify-between gap-3 font-display text-2xl group-hover:text-link">{{ h.title }} <AppIcon name="arrow-right" :size="18" /></h3>
+            <p class="mt-2 leading-relaxed text-fg-muted">{{ h.text }}</p>
+          </NuxtLink>
+        </li>
+      </ul>
+      <AskBanner class="mt-10" title="Остались вопросы?" />
     </section>
   </div>
 </template>
