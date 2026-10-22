@@ -49,4 +49,4 @@ public/images/products/    # фотографии товаров
 
 ## Константы магазина — `shared/utils/site.ts`
 
-`SITE_NAME`, `OWNER_NAME` (имя мастера на сайте), `TELEGRAM_USERNAME`, размеры страниц. Имя «Мари» меняется только здесь.
+`SITE_NAME`, `OWNER_NAME` (имя мастера на сайте), `TELEGRAM_USERNAME`, размеры страниц. Имя «Дани» меняется только здесь.

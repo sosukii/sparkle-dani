@@ -8,11 +8,11 @@ const cart = useCartStore()
       <p
         v-if="cart.notice"
         :key="cart.notice.id"
-        class="pointer-events-auto flex items-center gap-3 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-paper shadow-soft"
+        class="pointer-events-auto flex items-center gap-3 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-fg shadow-soft"
       >
-        <AppIcon :name="cart.notice.tone === 'success' ? 'check' : 'alert'" :size="18" class="text-rose" />
+        <AppIcon :name="cart.notice.tone === 'success' ? 'check' : 'alert'" :size="18" class="text-gold" />
         {{ cart.notice.text }}
-        <NuxtLink to="/cart" class="font-bold text-rose underline underline-offset-4">В корзину</NuxtLink>
+        <NuxtLink to="/cart" class="font-bold text-gold underline underline-offset-4">В корзину</NuxtLink>
       </p>
     </Transition>
   </div>

@@ -19,7 +19,7 @@ const handle = () => clearError({ redirect: '/' })
           {{ is404 ? 'Такой страницы' : 'Что-то' }}
           <span class="em-accent">{{ is404 ? 'у нас нет' : 'пошло не так' }}</span>
         </h1>
-        <p class="mt-5 text-lg text-ink-soft">
+        <p class="mt-5 text-lg text-fg-muted">
           {{ is404 ? 'Возможно, товар уже ушёл к новому владельцу или ссылка устарела. Загляните в каталог — там много интересного.' : 'Мы уже в курсе. Попробуйте обновить страницу или вернуться на главную.' }}
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">

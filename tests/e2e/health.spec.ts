@@ -34,5 +34,5 @@ test('все шрифты страницы действительно загру
   expect(faces.length).toBeGreaterThan(0)
   expect(faces.filter((f) => f.status === 'error')).toEqual([])
   expect(faces.some((f) => f.family.includes('Playfair') && f.status === 'loaded')).toBe(true)
-  expect(faces.some((f) => f.family.includes('Manrope') && f.status === 'loaded')).toBe(true)
+  expect(faces.some((f) => f.family.includes('Inter') && f.status === 'loaded')).toBe(true)
 })

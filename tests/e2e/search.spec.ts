@@ -89,10 +89,10 @@ test.describe('поиск по сайту: состояния', () => {
   test('подсказки выглядят как обычные чипы, а не как «выбранные»', async ({ page }) => {
     await page.goto('/search')
     const colors = await page.getByTestId('search-suggestions').getByRole('link', { name: 'серьги', exact: true }).evaluate((el) => getComputedStyle(el).backgroundColor)
-    expect(colors).toBe('rgb(255, 255, 255)')
+    expect(colors).toBe('rgb(42, 23, 8)')
     await search(page, 'абракадабра')
     const again = await page.getByTestId('search-suggestions').getByRole('link', { name: 'шарф', exact: true }).evaluate((el) => getComputedStyle(el).backgroundColor)
-    expect(again).toBe('rgb(255, 255, 255)')
+    expect(again).toBe('rgb(42, 23, 8)')
   })
 
   test('ничего не нашлось — понятное сообщение и подсказки', async ({ page }) => {

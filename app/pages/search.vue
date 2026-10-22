@@ -39,7 +39,7 @@ const nothing = computed(() => !!q.value && !data.value?.pages.length && total.v
 
 usePageSeo(() => ({
   title: q.value ? `Поиск: ${q.value}` : 'Поиск по сайту',
-  description: 'Поиск по изделиям, доставке и заказу своего изделия в магазине Sparkle Dani.',
+  description: 'Поиск по изделиям, доставке и заказу своего изделия в магазине NOCTURNE.',
   canonicalPath: '/search',
   noindex: true,
 }))
@@ -55,7 +55,7 @@ usePageSeo(() => ({
     <form class="mt-6 flex max-w-2xl gap-2" role="search" @submit.prevent="submit">
       <label for="search-page-input" class="sr-only">Что вы ищете?</label>
       <div class="relative flex-1">
-        <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />
+        <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
         <input
           id="search-page-input" v-model="input" type="search" enterkeyhint="search" autocomplete="off"
           placeholder="Серьги, в наличии, доставка…" class="field rounded-full pl-10" data-testid="search-input"
@@ -71,11 +71,11 @@ usePageSeo(() => ({
     <div class="min-h-[70vh]" data-testid="search-results">
       <template v-if="settled">
     <!-- Подсказки: пустой запрос или ничего не найдено -->
-    <section v-if="!q || nothing" class="mt-10" :class="nothing ? 'rounded-card border border-dashed border-line bg-white/60 px-6 py-10' : ''" data-testid="search-suggestions">
+    <section v-if="!q || nothing" class="mt-10" :class="nothing ? 'rounded-card border border-dashed border-line bg-surface/60 px-6 py-10' : ''" data-testid="search-suggestions">
       <template v-if="nothing">
-        <AppIcon name="sparkle" :size="28" class="text-rose" />
+        <AppIcon name="sparkle" :size="28" class="text-gold" />
         <h2 class="mt-3 text-2xl">Ничего не нашлось</h2>
-        <p class="mt-2 max-w-xl text-ink-soft">Попробуйте другое слово или выберите из популярного. Если вы ищете что-то особенное — можно заказать своё.</p>
+        <p class="mt-2 max-w-xl text-fg-muted">Попробуйте другое слово или выберите из популярного. Если вы ищете что-то особенное — можно заказать своё.</p>
       </template>
       <h2 v-else class="text-2xl">Часто ищут</h2>
       <ul class="mt-4 flex flex-wrap gap-2">
@@ -98,13 +98,13 @@ usePageSeo(() => ({
           <component
             :is="page.external ? 'a' : NuxtLink"
             v-bind="page.external ? { href: page.path, target: '_blank', rel: 'noopener noreferrer' } : { to: page.path }"
-            class="group block h-full rounded-card border border-line bg-white p-6 no-underline transition-colors hover:border-ink"
+            class="group block h-full rounded-card border border-line bg-surface p-6 no-underline transition-colors hover:border-line-strong"
             :data-testid="`search-page-${page.id}`"
           >
-            <h3 class="flex items-center justify-between gap-3 font-display text-2xl group-hover:text-berry">
+            <h3 class="flex items-center justify-between gap-3 font-display text-2xl group-hover:text-link">
               {{ page.title }} <AppIcon name="arrow-right" :size="18" class="shrink-0" />
             </h3>
-            <p class="mt-2 leading-relaxed text-ink-soft">{{ page.answer }}</p>
+            <p class="mt-2 leading-relaxed text-fg-muted">{{ page.answer }}</p>
           </component>
         </li>
       </ul>
@@ -113,8 +113,8 @@ usePageSeo(() => ({
     <!-- Изделия -->
     <section v-if="data?.result && total > 0" class="mt-12" aria-labelledby="search-products">
       <div class="flex flex-wrap items-end justify-between gap-3">
-        <h2 id="search-products" class="text-2xl">Изделия <span class="text-ink-soft">· {{ total }} {{ pluralRu(total, ['изделие', 'изделия', 'изделий']) }}</span></h2>
-        <NuxtLink v-if="total > data.result.items.length" :to="{ path: '/catalog', query: { q } }" class="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold no-underline hover:text-berry" data-testid="search-all">
+        <h2 id="search-products" class="text-2xl">Изделия <span class="text-fg-muted">· {{ total }} {{ pluralRu(total, ['изделие', 'изделия', 'изделий']) }}</span></h2>
+        <NuxtLink v-if="total > data.result.items.length" :to="{ path: '/catalog', query: { q } }" class="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold no-underline hover:text-link" data-testid="search-all">
           Все в каталоге <AppIcon name="arrow-right" :size="16" />
         </NuxtLink>
       </div>

@@ -75,7 +75,7 @@ describe('buildOrderText', () => {
   it('содержит состав, суммы и итог', () => {
     const lines = addLine(addLine([], plush, 2).lines, order, 1).lines
     const text = buildOrderText(lines, 'https://example.com')
-    expect(text).toContain('Мари')
+    expect(text).toContain('Дани')
     expect(text).toContain('1. Мишка — 2 ×')
     expect(text).toContain('https://example.com/product/p1')
     expect(text).toMatch(/Итого: 2\s?500/)

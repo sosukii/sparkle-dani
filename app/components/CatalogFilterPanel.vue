@@ -101,7 +101,7 @@ function onHigh(value: number) {
       />
       <div class="flex items-end gap-2">
         <div class="flex-1">
-          <label :for="`${idPrefix}-min`" class="mb-1 block text-xs font-semibold text-ink-soft">От</label>
+          <label :for="`${idPrefix}-min`" class="mb-1 block text-xs font-semibold text-fg-muted">От</label>
           <input
             :id="`${idPrefix}-min`" v-model="minText" type="number" inputmode="numeric" min="0" step="50"
             :placeholder="String(facets.price.min)" class="field" data-testid="price-min"
@@ -109,9 +109,9 @@ function onHigh(value: number) {
             @input="schedulePrice" @change="commitPrice" @keydown.enter.prevent="commitPrice"
           >
         </div>
-        <span class="pb-3 text-ink-soft" aria-hidden="true">—</span>
+        <span class="pb-3 text-fg-muted" aria-hidden="true">—</span>
         <div class="flex-1">
-          <label :for="`${idPrefix}-max`" class="mb-1 block text-xs font-semibold text-ink-soft">До</label>
+          <label :for="`${idPrefix}-max`" class="mb-1 block text-xs font-semibold text-fg-muted">До</label>
           <input
             :id="`${idPrefix}-max`" v-model="maxText" type="number" inputmode="numeric" min="0" step="50"
             :placeholder="String(facets.price.max)" class="field" data-testid="price-max"
@@ -120,7 +120,7 @@ function onHigh(value: number) {
           >
         </div>
       </div>
-      <p :id="`${idPrefix}-price-hint`" class="mt-2 text-xs text-ink-soft">
+      <p :id="`${idPrefix}-price-hint`" class="mt-2 text-xs text-fg-muted">
         В этом разделе: {{ formatPrice(facets.price.min) }} — {{ formatPrice(facets.price.max) }}
       </p>
     </fieldset>
@@ -139,8 +139,8 @@ function onHigh(value: number) {
             :disabled="isDisabled('color', option)" :data-testid="`filter-color-${option.id}`"
             @change="toggle('color', option.id, ($event.target as HTMLInputElement).checked)"
           >
-          <span class="inline-flex min-h-9 items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-semibold transition-colors peer-checked:border-ink peer-checked:bg-ink peer-checked:text-paper peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-berry">
-            <span class="size-4 rounded-full border border-ink/20" :style="{ backgroundColor: option.hex }" aria-hidden="true" />
+          <span class="inline-flex min-h-9 items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-semibold transition-colors peer-checked:border-line-strong peer-checked:bg-accent peer-checked:text-fg peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-link">
+            <span class="size-4 rounded-full border border-line-strong" :style="{ backgroundColor: option.hex }" aria-hidden="true" />
             {{ option.label }}
             <span class="text-xs font-medium opacity-60">{{ option.count }}</span>
           </span>
@@ -151,20 +151,20 @@ function onHigh(value: number) {
       <ul v-else class="space-y-1">
         <li v-for="option in facets[group.key]" :key="option.id">
           <label
-            class="flex min-h-10 cursor-pointer items-center gap-3 rounded-lg px-1 text-sm hover:bg-cream"
+            class="flex min-h-10 cursor-pointer items-center gap-3 rounded-lg px-1 text-sm hover:bg-raised"
             :class="isDisabled(group.key, option) ? 'cursor-not-allowed opacity-45' : ''"
           >
             <input
-              type="checkbox" class="size-5 shrink-0 accent-berry" :value="option.id"
+              type="checkbox" class="size-5 shrink-0 accent-link" :value="option.id"
               :checked="isSelected(group.key, option)" :disabled="isDisabled(group.key, option)"
               :data-testid="`filter-${group.key}-${option.id}`"
               @change="toggle(group.key, option.id, ($event.target as HTMLInputElement).checked)"
             >
             <span class="flex-1 font-semibold">
               {{ option.label }}
-              <span v-if="option.hint" class="block text-xs font-medium text-ink-soft">{{ option.hint }}</span>
+              <span v-if="option.hint" class="block text-xs font-medium text-fg-muted">{{ option.hint }}</span>
             </span>
-            <span class="text-xs text-ink-soft">{{ option.count }}</span>
+            <span class="text-xs text-fg-muted">{{ option.count }}</span>
           </label>
         </li>
       </ul>

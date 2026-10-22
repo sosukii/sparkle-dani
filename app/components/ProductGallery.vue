@@ -13,8 +13,8 @@ const current = computed(() => props.images[index.value] ?? props.images[0]!)
       <li v-for="(img, i) in images" :key="img.src">
         <button
           type="button"
-          class="block size-16 overflow-hidden rounded-2xl border-2 bg-cream transition-colors sm:size-20"
-          :class="i === index ? 'border-ink' : 'border-transparent hover:border-line'"
+          class="block size-16 overflow-hidden rounded-2xl border-2 bg-raised transition-colors sm:size-20"
+          :class="i === index ? 'border-line-strong' : 'border-transparent hover:border-line'"
           :aria-pressed="i === index"
           :aria-label="`Показать фото ${i + 1} из ${images.length}`"
           :data-testid="`thumb-${i}`"
@@ -24,7 +24,7 @@ const current = computed(() => props.images[index.value] ?? props.images[0]!)
         </button>
       </li>
     </ul>
-    <div class="order-1 grid overflow-hidden rounded-[1.75rem] bg-cream shadow-soft sm:order-2">
+    <div class="order-1 grid overflow-hidden rounded-[1.75rem] bg-raised shadow-soft sm:order-2">
       <Transition name="fade">
         <AppImage
           :key="current.src"

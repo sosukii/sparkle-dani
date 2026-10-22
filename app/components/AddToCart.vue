@@ -29,13 +29,13 @@ function add() {
         <AppIcon name="bag" :size="18" /> {{ allInCart ? 'Всё уже в корзине' : 'Добавить в корзину' }}
       </button>
     </div>
-    <p v-else class="rounded-2xl bg-cream px-4 py-3 text-sm font-semibold text-ink-soft">Сейчас нет в наличии</p>
+    <p v-else class="rounded-2xl bg-raised px-4 py-3 text-sm font-semibold text-fg-muted">Сейчас нет в наличии</p>
 
-    <p v-if="inCart > 0" class="mt-3 flex flex-wrap items-center gap-x-3 text-sm text-ink-soft" data-testid="in-cart-note">
-      <span>В корзине: <strong class="text-ink">{{ inCart }}</strong></span>
-      <NuxtLink to="/cart" class="font-bold text-berry underline underline-offset-4">Перейти в корзину</NuxtLink>
+    <p v-if="inCart > 0" class="mt-3 flex flex-wrap items-center gap-x-3 text-sm text-fg-muted" data-testid="in-cart-note">
+      <span>В корзине: <strong class="text-fg">{{ inCart }}</strong></span>
+      <NuxtLink to="/cart" class="font-bold text-link underline underline-offset-4">Перейти в корзину</NuxtLink>
     </p>
-    <p v-if="product.availability === 'in_stock' && typeof product.stock === 'number' && product.stock > 0 && available === product.stock && product.stock <= 5" class="mt-3 text-sm font-semibold text-ink-soft">
+    <p v-if="product.availability === 'in_stock' && typeof product.stock === 'number' && product.stock > 0 && available === product.stock && product.stock <= 5" class="mt-3 text-sm font-semibold text-fg-muted">
       Осталось: {{ product.stock }} шт.
     </p>
   </div>

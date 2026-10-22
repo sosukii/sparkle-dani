@@ -20,7 +20,7 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
 <template>
   <!-- Карточки в ряду одной высоты: название — 2 строки, цена под ним, статус и действие прижаты к низу. -->
   <article class="group relative flex h-full flex-col" data-testid="product-card">
-    <div class="relative overflow-hidden rounded-card bg-cream shadow-soft">
+    <div class="relative overflow-hidden rounded-card bg-raised shadow-soft">
       <AppImage
         :src="product.images[0]!.src"
         :alt="product.images[0]!.alt"
@@ -35,7 +35,7 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
       <h3 class="line-clamp-2 min-h-[2.5em] hyphens-auto break-words font-display text-lg leading-tight">
         <NuxtLink
           :to="`/product/${product.slug}`"
-          class="no-underline after:absolute after:inset-0 after:content-[''] hover:text-berry"
+          class="no-underline after:absolute after:inset-0 after:content-[''] hover:text-link"
         >
           {{ product.title }}
         </NuxtLink>
@@ -47,7 +47,7 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
 
       <!-- Действия поверх «растянутой» ссылки карточки (z-10), чтобы нажатия не уходили на страницу товара -->
       <div class="relative z-10 mt-auto pt-3" data-testid="card-actions">
-        <p v-if="soldOut" class="grid h-10 place-items-center rounded-full bg-cream text-sm font-semibold text-ink-soft">Нет в наличии</p>
+        <p v-if="soldOut" class="grid h-10 place-items-center rounded-full bg-raised text-sm font-semibold text-fg-muted">Нет в наличии</p>
         <button
           v-else-if="qty === 0"
           type="button" class="btn btn-soft h-10 min-h-10 w-full px-4"
@@ -58,11 +58,11 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
         </button>
         <div
           v-else
-          class="flex h-10 items-center justify-between rounded-full border border-line bg-white" role="group"
+          class="flex h-10 items-center justify-between rounded-full border border-line bg-surface" role="group"
           :aria-label="`В корзине: ${product.title}`" data-testid="card-stepper"
         >
           <button
-            type="button" class="grid size-10 place-items-center rounded-full hover:bg-cream"
+            type="button" class="grid size-10 place-items-center rounded-full hover:bg-raised"
             :aria-label="qty <= 1 ? `Убрать из корзины: ${product.title}` : `Уменьшить количество: ${product.title}`"
             data-testid="card-minus" @click="decrease"
           >
@@ -70,7 +70,7 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
           </button>
           <span class="min-w-6 text-center text-sm font-bold" aria-live="polite" data-testid="card-qty">{{ qty }}</span>
           <button
-            type="button" class="grid size-10 place-items-center rounded-full hover:bg-cream disabled:opacity-40"
+            type="button" class="grid size-10 place-items-center rounded-full hover:bg-raised disabled:opacity-40"
             :disabled="qty >= limit" :aria-label="`Увеличить количество: ${product.title}`"
             :title="qty >= limit ? 'Это всё, что есть в наличии' : undefined"
             data-testid="card-plus" @click="increase"

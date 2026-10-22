@@ -19,9 +19,9 @@ usePageSeo({
 })
 
 const makes = [
-  { icon: 'heart', title: 'Игрушки-амигуруми', text: 'Мягкие друзья с вышитыми глазками и собственным характером. Одни охраняют уют на полке, другие отправляются с вами в рюкзаке на край света.', tint: 'bg-rose-soft' },
-  { icon: 'sparkle', title: 'Тёплые вещи', text: 'Шарфы, шапки и варежки, в которых хочется гулять до первой звезды, даже когда за окном совсем не лето.', tint: 'bg-lilac-soft' },
-  { icon: 'bag', title: 'Мелочи для себя', text: 'Бисерные серьги и браслеты, сумочки, косметички и костеры. Маленькие детали, с которыми день получается ярче.', tint: 'bg-mint-soft' },
+  { icon: 'heart', title: 'Игрушки-амигуруми', text: 'Мягкие друзья с вышитыми глазками и собственным характером. Одни охраняют уют на полке, другие отправляются с вами в рюкзаке на край света.', tint: 'bg-raised' },
+  { icon: 'sparkle', title: 'Тёплые вещи', text: 'Шарфы, шапки и варежки, в которых хочется гулять до первой звезды, даже когда за окном совсем не лето.', tint: 'bg-raised' },
+  { icon: 'bag', title: 'Мелочи для себя', text: 'Бисерные серьги и браслеты, сумочки, косметички и костеры. Маленькие детали, с которыми день получается ярче.', tint: 'bg-raised' },
 ] as const
 
 const process = [
@@ -45,7 +45,7 @@ const values = [
       <div>
         <p class="eyebrow">Обо мне</p>
         <h1 class="mt-4 text-5xl sm:text-6xl lg:text-7xl">Привет, я <span class="em-accent">{{ OWNER_NAME }}</span>!</h1>
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">
           Я вяжу крючком маленькие радости: игрушек с характером, шарфы, в которые хочется закутаться, и мелочи, от которых обычный день становится чуточку сказочнее. Многое — по мотивам историй, которые люблю сама. Если вы узнаёте в этом себя, заходите: вам здесь рады.
         </p>
         <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8 no-underline">
@@ -53,7 +53,7 @@ const values = [
         </a>
       </div>
       <div class="relative">
-        <AppIcon name="sparkle" :size="40" class="absolute -left-3 -top-4 z-10 text-rose" />
+        <AppIcon name="sparkle" :size="40" class="absolute -left-3 -top-4 z-10 text-gold" />
         <AppImage
           src="/images/about/workspace.jpg" alt="Рабочий стол мастера: клубки пряжи, крючок и вязаный зайчик"
           :width="1200" :height="900" sizes="(min-width: 1024px) 45vw, 100vw" priority
@@ -66,9 +66,9 @@ const values = [
       <SectionHead id="about-makes" eyebrow="Что я делаю" title="Что выходит из-под моего крючка" />
       <ul class="mt-8 grid gap-5 md:grid-cols-3">
         <li v-for="m in makes" :key="m.title" class="rounded-card p-8" :class="m.tint">
-          <AppIcon :name="m.icon" :size="28" class="text-berry" />
+          <AppIcon :name="m.icon" :size="28" class="text-link" />
           <h3 class="mt-4 text-2xl">{{ m.title }}</h3>
-          <p class="mt-2 leading-relaxed text-ink-soft">{{ m.text }}</p>
+          <p class="mt-2 leading-relaxed text-fg-muted">{{ m.text }}</p>
         </li>
       </ul>
     </section>
@@ -76,21 +76,21 @@ const values = [
     <section class="container-page py-12 lg:py-16" aria-labelledby="about-process">
       <SectionHead id="about-process" eyebrow="Как всё устроено" title="Путь одного изделия" />
       <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <li v-for="s in process" :key="s.n" class="rounded-card border border-line bg-white p-7">
-          <span class="grid size-10 place-items-center rounded-full bg-ink font-display text-lg text-paper">{{ s.n }}</span>
+        <li v-for="s in process" :key="s.n" class="rounded-card border border-line bg-surface p-7">
+          <span class="grid size-10 place-items-center rounded-full bg-accent font-display text-lg text-fg">{{ s.n }}</span>
           <h3 class="mt-4 text-xl">{{ s.title }}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-ink-soft">{{ s.text }}</p>
+          <p class="mt-2 text-sm leading-relaxed text-fg-muted">{{ s.text }}</p>
         </li>
       </ol>
     </section>
 
     <section class="container-page py-12 lg:py-16" aria-labelledby="about-values">
-      <div class="rounded-[2rem] bg-cream px-6 py-12 sm:px-12">
+      <div class="rounded-[2rem] bg-raised px-6 py-12 sm:px-12">
         <SectionHead id="about-values" eyebrow="Что для меня важно" title="Мои принципы" />
         <dl class="mt-8 grid gap-x-10 gap-y-7 sm:grid-cols-2">
-          <div v-for="v in values" :key="v.title" class="border-t border-ink/15 pt-5">
+          <div v-for="v in values" :key="v.title" class="border-t border-line-strong pt-5">
             <dt class="font-display text-xl">{{ v.title }}</dt>
-            <dd class="mt-1.5 leading-relaxed text-ink-soft">{{ v.text }}</dd>
+            <dd class="mt-1.5 leading-relaxed text-fg-muted">{{ v.text }}</dd>
           </div>
         </dl>
       </div>
@@ -101,20 +101,20 @@ const values = [
       <ul class="mt-6 flex flex-wrap gap-3">
         <li v-for="f in fandoms" :key="f.id">
           <NuxtLink :to="{ path: '/catalog', query: { fandom: f.id } }" class="chip no-underline">
-            <AppIcon name="sparkle" :size="12" class="text-berry" /> {{ f.label }}
+            <AppIcon name="sparkle" :size="12" class="text-link" /> {{ f.label }}
           </NuxtLink>
         </li>
       </ul>
     </section>
 
     <section class="container-page pt-12 lg:pt-16">
-      <div class="rounded-[2rem] bg-ink px-6 py-14 text-center text-paper sm:px-12">
-        <h2 class="text-3xl sm:text-5xl">Хотите что-то <span class="font-display italic text-rose">особенное</span>?</h2>
-        <p class="mx-auto mt-4 max-w-xl text-paper/80">Выберите изделие из каталога или закажите своё: расскажите идею, а я придумаю, как её связать.</p>
+      <div class="rounded-card bg-raised px-6 py-14 text-center text-fg sm:px-12">
+        <h2 class="text-3xl sm:text-5xl">Хотите что-то <span class="font-display italic text-gold">особенное</span>?</h2>
+        <p class="mx-auto mt-4 max-w-xl text-fg">Выберите изделие из каталога или закажите своё: расскажите идею, а я придумаю, как её связать.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <NuxtLink to="/catalog" class="btn bg-paper text-ink no-underline hover:bg-rose">В каталог</NuxtLink>
-          <NuxtLink to="/custom" class="btn bg-rose text-ink no-underline hover:bg-paper">Заказать своё</NuxtLink>
-          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn border-2 border-paper/70 text-paper no-underline hover:bg-paper hover:text-ink">
+          <NuxtLink to="/catalog" class="btn btn-primary no-underline">В каталог</NuxtLink>
+          <NuxtLink to="/custom" class="btn btn-soft no-underline">Заказать своё</NuxtLink>
+          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-ghost no-underline">
             <AppIcon name="telegram" :size="18" /> {{ CONTACT_LABEL }}
           </a>
         </div>

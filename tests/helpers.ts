@@ -44,6 +44,6 @@ export async function dialogSettled(page: Page) {
     const backdrop = getComputedStyle(dialog, '::backdrop')
     return style.opacity === '1'
       && (style.transform === 'none' || style.transform === 'matrix(1, 0, 0, 1, 0, 0)')
-      && backdrop.backgroundColor === 'rgba(43, 27, 46, 0.5)'
+      && backdrop.backgroundColor === 'rgba(0, 0, 0, 0.65)'
   })
 }

@@ -1,15 +1,16 @@
 @import 'tailwindcss';
 
 /* Шрифты облегчены скриптом scripts/build-fonts.mjs (app/assets/fonts, в git не хранится).
-   Файлы разбиты по unicode-range: браузер грузит только то, что есть на странице. ₽ в этих шрифтах нет — его рисует системный. */
+   Файлы разбиты по unicode-range: браузер грузит только то, что есть на странице. ₽ в этих шрифтах нет — его рисует системный.
+   Inter — интерфейс и текст, Playfair Display — крупные русские заголовки, Bodoni Moda — только латинский логотип (кириллицы в ней нет). */
 @font-face {
-  font-family: 'Manrope Variable'; font-style: normal; font-weight: 200 800; font-display: swap;
-  src: url('../fonts/manrope-cyrillic.woff2') format('woff2');
+  font-family: 'Inter Variable'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url('../fonts/inter-cyrillic.woff2') format('woff2');
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 @font-face {
-  font-family: 'Manrope Variable'; font-style: normal; font-weight: 200 800; font-display: swap;
-  src: url('../fonts/manrope-latin.woff2') format('woff2');
+  font-family: 'Inter Variable'; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
   unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
 }
 @font-face {
@@ -32,6 +33,12 @@
   src: url('../fonts/playfair-latin-italic.woff2') format('woff2');
   unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
 }
+/* Логотип короткий и предзагружается; optional исключает сдвиг макета при подмене шрифта. */
+@font-face {
+  font-family: 'Bodoni Moda Variable'; font-style: normal; font-weight: 400 900; font-display: optional;
+  src: url('../fonts/bodoni-latin.woff2') format('woff2');
+  unicode-range: U+0020-007E, U+00A0, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00D7, U+2013-2014, U+2018-201E, U+2022, U+2026, U+202F, U+2212;
+}
 
 /* Запасные шрифты, подогнанные под веб-шрифты (scripts/measure-fallback-metrics.mjs):
    пока шрифт грузится, текст занимает столько же места, и при подмене страница не «прыгает» (CLS). */
@@ -51,43 +58,48 @@
   size-adjust: 109.28%; ascent-override: 98.83%; descent-override: 22.88%; line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'Manrope Fallback'; font-style: normal; font-weight: 200 599;
+  font-family: 'Inter Fallback'; font-style: normal; font-weight: 100 599;
   src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
-  size-adjust: 100.61%; ascent-override: 106.36%; descent-override: 29.82%; line-gap-override: 0%;
+  size-adjust: 106.33%; ascent-override: 91.22%; descent-override: 22.57%; line-gap-override: 0%;
 }
 @font-face {
-  font-family: 'Manrope Fallback'; font-style: normal; font-weight: 600 800;
+  font-family: 'Inter Fallback'; font-style: normal; font-weight: 600 900;
   src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('Arimo Bold');
-  size-adjust: 98.58%; ascent-override: 108.54%; descent-override: 30.43%; line-gap-override: 0%;
+  size-adjust: 101.32%; ascent-override: 95.74%; descent-override: 23.69%; line-gap-override: 0%;
 }
 
+/* Палитра утверждённого макета (design ok / DESIGN.md), разложенная по ролям. Новых цветов нет.
+   Пары «текст на фоне» проверяет tests/unit/contrast.test.ts (WCAG AA). */
 @theme {
-  --font-sans: 'Manrope Variable', 'Manrope Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Playfair Display Variable', 'Playfair Fallback', ui-serif, Georgia, serif;
+  --font-logo: 'Bodoni Moda Variable', 'Playfair Fallback', ui-serif, Georgia, serif;
 
-  --color-paper: #fbf6f1;
-  --color-cream: #f4eadf;
-  --color-ink: #2b1b2e;
-  --color-ink-soft: #5b4a5f;
-  --color-line: #e6d9cc;
-  --color-berry: #a3174f;
-  --color-berry-dark: #7d1039;
-  --color-rose: #f4a6c0;
-  --color-rose-deep: #cf4b7a;
-  --color-rose-soft: #fde7ef;
-  --color-lilac: #b79ae0;
-  --color-lilac-soft: #ece4fa;
-  --color-mint-soft: #dcf3ea;
-  --color-butter: #fdf0c9;
+  --color-canvas: #210f03;
+  --color-surface: #2a1708;
+  --color-raised: #2f1b0b;
+  --color-high: #3b2515;
+  --color-fg: #ffdcc5;
+  --color-fg-muted: #dac1b9;
+  --color-line: #54433d;
+  --color-line-strong: #a28c85;
+  --color-accent: #743014;
+  --color-accent-hover: #95492b;
+  --color-link: #ffb59a;
+  --color-gold: #e8d1a7;
+  --color-olive: #9d9167;
+  --color-danger: #ffb4ab;
+  --color-danger-bg: #93000a;
 
-  --radius-card: 1.5rem;
-  --shadow-soft: 0 1px 2px rgb(43 27 46 / 0.06), 0 10px 28px -14px rgb(43 27 46 / 0.22);
+  --radius-card: 0.75rem;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 12px 28px -14px rgb(0 0 0 / 0.6);
 }
 
 @layer base {
   html {
-    background: var(--color-paper);
-    color: var(--color-ink);
+    background: var(--color-canvas);
+    color: var(--color-fg);
+    color-scheme: dark;
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 6rem;
@@ -109,11 +121,11 @@
   /* <picture> не создаёт собственного блока — размеры задаёт вложенная <img>. */
   picture { display: contents; }
   :focus-visible {
-    outline: 3px solid var(--color-berry);
+    outline: 3px solid var(--color-link);
     outline-offset: 3px;
     border-radius: 0.5rem;
   }
-  ::selection { background: var(--color-rose); color: var(--color-ink); }
+  ::selection { background: var(--color-gold); color: var(--color-canvas); }
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
   }
@@ -132,43 +144,43 @@
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
   }
   .eyebrow {
-    @apply text-xs font-bold uppercase tracking-[0.18em] text-berry;
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-gold;
   }
   .em-accent {
-    @apply font-display italic font-medium text-berry;
+    @apply font-display italic font-medium text-gold;
   }
 
   .btn {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold no-underline transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md px-6 py-2.5 text-sm font-semibold no-underline transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply bg-ink text-paper hover:bg-berry active:bg-berry-dark;
+    @apply bg-accent text-fg hover:bg-accent-hover active:bg-accent-hover;
   }
   .btn-soft {
-    @apply bg-rose-soft text-ink hover:bg-rose active:bg-rose;
+    @apply border border-line-strong bg-raised text-fg hover:bg-high active:bg-high;
   }
   .btn-ghost {
-    @apply border-2 border-ink/80 text-ink hover:bg-ink hover:text-paper;
+    @apply border border-line-strong text-fg hover:bg-raised;
   }
   .btn-sm { @apply min-h-9 px-4 py-1.5 text-xs; }
 
   .chip {
-    @apply inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink no-underline transition-colors hover:border-ink;
+    @apply inline-flex min-h-9 items-center gap-1.5 rounded-md border border-line-strong bg-surface px-3.5 py-1.5 text-sm font-medium text-fg no-underline transition-colors hover:bg-raised;
   }
   .chip[aria-current='page'], .chip[data-active='true'] {
-    @apply border-ink bg-ink text-paper;
+    @apply border-accent bg-accent text-fg;
   }
   /* Ссылки с query (?q=…) роутер считает «текущей страницей» при любом запросе — такие чипы остаются обычными. */
   .chip-plain[aria-current='page'] {
-    @apply border-line bg-white text-ink hover:border-ink;
+    @apply border-line-strong bg-surface text-fg hover:bg-raised;
   }
 
   .field {
-    @apply min-h-11 w-full rounded-xl border border-line bg-white px-3.5 text-base text-ink transition-colors duration-150 placeholder:text-ink-soft/70 hover:border-ink/40 sm:text-sm;
+    @apply min-h-11 w-full rounded-md border border-line-strong bg-surface px-3.5 text-base text-fg transition-colors duration-150 placeholder:text-fg-muted hover:bg-raised sm:text-sm;
   }
   /* Один чёткий контур вместо «рамка + обводка»: видимый, но не тяжёлый. */
   .field:focus-visible {
-    outline: 2px solid var(--color-berry);
+    outline: 2px solid var(--color-link);
     outline-offset: 0;
     border-color: transparent;
   }
@@ -176,7 +188,7 @@
   .select-field {
     appearance: none;
     padding-right: 2.5rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b1b2e'%3E%3Cpath d='M6.4 8.6 12 14.2l5.6-5.6L19 10l-7 7-7-7 1.4-1.4Z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dac1b9'%3E%3Cpath d='M6.4 8.6 12 14.2l5.6-5.6L19 10l-7 7-7-7 1.4-1.4Z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.875rem center;
     background-size: 1.1rem;
@@ -192,7 +204,7 @@
     margin: 0;
   }
 
-  .prose-soft p { @apply mb-4 leading-relaxed text-ink-soft; }
+  .prose-soft p { @apply mb-4 leading-relaxed text-fg-muted; }
 }
 
 .sr-only-focusable:not(:focus):not(:focus-within) {
@@ -217,12 +229,12 @@
     dialog.sheet[open] { opacity: 0; transform: translateY(2.5rem); }
   }
   dialog.modal::backdrop, dialog.sheet::backdrop {
-    background: rgb(43 27 46 / 0);
+    background: rgb(0 0 0 / 0);
     transition: background-color 0.22s ease, overlay 0.22s allow-discrete, display 0.22s allow-discrete;
   }
-  dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(43 27 46 / 0.5); }
+  dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(0 0 0 / 0.65); }
   @starting-style {
-    dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(43 27 46 / 0); }
+    dialog.modal[open]::backdrop, dialog.sheet[open]::backdrop { background: rgb(0 0 0 / 0); }
   }
 
   /* Сворачивание панелей (мобильное меню и поиск) без JS-измерения высоты */
@@ -277,7 +289,7 @@
     position: absolute;
     height: 100%;
     border-radius: 999px;
-    background: var(--color-berry);
+    background: var(--color-gold);
     left: calc(var(--lo) * 100%);
     width: calc((var(--hi) - var(--lo)) * 100%);
   }
@@ -300,8 +312,8 @@
     height: var(--thumb);
     margin-top: 0.125rem;
     border-radius: 50%;
-    background: #fff;
-    border: 2px solid var(--color-berry);
+    background: var(--color-gold);
+    border: 2px solid var(--color-canvas);
     box-shadow: var(--shadow-soft);
     cursor: grab;
     transition: transform 0.15s ease;
@@ -311,15 +323,15 @@
     width: calc(var(--thumb) - 4px);
     height: calc(var(--thumb) - 4px);
     border-radius: 50%;
-    background: #fff;
-    border: 2px solid var(--color-berry);
+    background: var(--color-gold);
+    border: 2px solid var(--color-canvas);
     box-shadow: var(--shadow-soft);
     cursor: grab;
   }
   .price-range input[type='range']:active::-webkit-slider-thumb { transform: scale(1.12); cursor: grabbing; }
   .price-range input[type='range']:focus-visible { outline: none; }
-  .price-range input[type='range']:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-berry); outline-offset: 2px; }
-  .price-range input[type='range']:focus-visible::-moz-range-thumb { outline: 3px solid var(--color-berry); outline-offset: 2px; }
+  .price-range input[type='range']:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-link); outline-offset: 2px; }
+  .price-range input[type='range']:focus-visible::-moz-range-thumb { outline: 3px solid var(--color-link); outline-offset: 2px; }
 }
 
 /* ───────── Мобильные жесты и строки с горизонтальной прокруткой ───────── */
