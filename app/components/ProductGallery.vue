@@ -24,14 +24,22 @@ const current = computed(() => props.images[index.value] ?? props.images[0]!)
         </button>
       </li>
     </ul>
-    <div class="order-1 grid overflow-hidden rounded-[1.75rem] bg-raised shadow-soft sm:order-2">
+    <div class="order-1 sm:order-2">
+    <div class="grid overflow-hidden rounded-[1.75rem] bg-raised shadow-soft">
       <Transition name="fade">
         <AppImage
           :key="current.src"
           :src="current.src" :alt="current.alt" :width="current.width" :height="current.height"
-          sizes="(min-width: 1024px) 42vw, 100vw" priority img-class="aspect-[4/5] w-full object-cover [grid-area:1/1]" data-testid="gallery-main"
+          sizes="(min-width: 1024px) 42vw, 100vw" priority img-class="aspect-[4/5] max-h-[50dvh] sm:max-h-[62dvh] w-full object-cover [grid-area:1/1] lg:max-h-none" data-testid="gallery-main"
         />
       </Transition>
+    </div>
+    <p v-if="current.placeholder" class="mt-2 text-xs text-fg-muted" data-testid="gallery-placeholder">
+      Временная картинка: фотографии этого изделия будут добавлены.
+    </p>
+    <p v-else-if="images.length > 1" class="mt-2 text-xs text-fg-muted" aria-live="polite">
+      Фото {{ index + 1 }} из {{ images.length }}<template v-if="current.kind === 'detail'">: деталь вязки</template><template v-else-if="current.kind === 'on-model'">: на модели</template>
+    </p>
     </div>
   </div>
 </template>

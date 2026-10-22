@@ -19,7 +19,7 @@ export interface CategorySummary extends Category {
 export interface ProductLabels {
   category: { slug: string, title: string } | null
   type: string | null
-  fit: { id: string, label: string } | null
+  fit: { id: string, label: string, hint?: string } | null
   colors: Taxonomy['colors']
   /** Состав с названиями и общими сведениями о материалах; null — состав не известен. */
   composition: { id: string, title: string, summary: string, percent: number | null }[] | null
@@ -31,8 +31,12 @@ export interface ProductLabels {
   care: CareItem[] | null
 }
 
+/** Рост модели на фото и надетый размер, уже с подписью размера. */
+export type ModelInfo = { heightCm: number, wearsSize: { id: string, label: string } }
+
 export interface ProductPageData {
   product: Product
   related: Product[]
   labels: ProductLabels
+  model: ModelInfo | null
 }

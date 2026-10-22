@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { maxQty } from '#shared/utils/cart'
+import { lineKey, maxQty } from '#shared/utils/cart'
 import { formatPrice, pluralRu } from '#shared/utils/format'
 import { CONTACT_LABEL } from '#shared/utils/site'
 
@@ -46,7 +46,7 @@ function clearAll() {
         </p>
         <TransitionGroup tag="ul" name="line" class="divide-y divide-line rounded-card border border-line bg-surface">
           <li
-            v-for="line in cart.lines" :key="line.productId"
+            v-for="line in cart.lines" :key="lineKey(line)"
             class="grid grid-cols-[5.5rem_1fr] gap-4 p-4 sm:grid-cols-[7rem_1fr_auto] sm:p-5"
             :class="line.unavailable ? 'opacity-60' : ''" data-testid="cart-line"
           >
@@ -58,6 +58,7 @@ function clearAll() {
               <h2 class="font-display text-xl leading-tight">
                 <NuxtLink :to="`/product/${line.slug}`" class="no-underline hover:text-link">{{ line.title }}</NuxtLink>
               </h2>
+              <p v-if="line.sizeLabel" class="mt-1 text-sm font-semibold" data-testid="line-size">Размер: {{ line.sizeLabel }}</p>
               <p class="mt-1 text-sm text-fg-muted">{{ formatPrice(line.price) }} за шт.</p>
               <p v-if="line.unavailable" class="mt-2 text-sm font-bold text-link">Больше недоступно</p>
               <AvailabilityBadge v-else class="mt-2" :availability="line.availability" />
@@ -65,9 +66,9 @@ function clearAll() {
               <div class="mt-3 flex flex-wrap items-center gap-3">
                 <QuantityStepper
                   v-if="!line.unavailable" :model-value="line.qty" :max="Math.max(maxQty(line), 1)"
-                  :label="`Количество: ${line.title}`" @update:model-value="cart.setQty(line.productId, $event)"
+                  :label="`Количество: ${line.title}`" @update:model-value="cart.setQty(lineKey(line), $event)"
                 />
-                <button type="button" class="inline-flex min-h-11 items-center gap-1.5 px-2 text-sm font-semibold text-fg-muted hover:text-link" :aria-label="`Удалить: ${line.title}`" data-testid="remove-line" @click="cart.remove(line.productId)">
+                <button type="button" class="inline-flex min-h-11 items-center gap-1.5 px-2 text-sm font-semibold text-fg-muted hover:text-link" :aria-label="`Удалить: ${line.title}`" data-testid="remove-line" @click="cart.remove(lineKey(line))">
                   <AppIcon name="trash" :size="16" /> Удалить
                 </button>
               </div>

@@ -57,6 +57,35 @@ for (const [device, viewport] of Object.entries(viewports)) {
       await shot(page, `product-made-to-order-${device}`)
     })
 
+    test('товар с размерами и пояснениями', async ({ page }) => {
+      await page.goto('/product/sviter-krupnoy-vyazki-kakao')
+      await page.getByTestId('size-m').check()
+      await shot(page, `product-sized-${device}`)
+    })
+
+    test('товар без сведений', async ({ page }) => {
+      await page.goto('/product/sviter-olivkovyy')
+      await shot(page, `product-unknown-${device}`)
+    })
+
+    test('справка по размеру', async ({ page }) => {
+      await page.goto('/product/sviter-krupnoy-vyazki-kakao')
+      await page.getByTestId('size-help').click()
+      await expect(page.getByRole('dialog', { name: 'Как выбрать размер' })).toBeVisible()
+      await dialogSettled(page)
+      await shot(page, `size-dialog-${device}`, false)
+    })
+
+    test('материалы и уход', async ({ page }) => {
+      await page.goto('/info/materials')
+      await shot(page, `info-materials-${device}`)
+    })
+
+    test('размеры и мерки', async ({ page }) => {
+      await page.goto('/info/sizes')
+      await shot(page, `info-sizes-${device}`)
+    })
+
     test('корзина с товарами', async ({ page }) => {
       await addToCart(page, 'lisenok-amigurumi', 2)
       await addToCart(page, 'mishka-amigurumi')

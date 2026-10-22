@@ -27,6 +27,7 @@ export function buildProductPage(catalog: CatalogData, slug: string): ProductPag
   return {
     product,
     related,
+    model: product.model ? { heightCm: product.model.heightCm, wearsSize: sizeOf(product.model.wearsSize) } : null,
     labels: {
       category: category ? { slug: category.slug, title: category.title } : null,
       type: taxonomy.types.find((t) => t.id === product.type)?.label ?? null,

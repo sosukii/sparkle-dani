@@ -6,6 +6,7 @@ import {
   removeLine,
   setLineQty,
   isOrderable,
+  productQty,
   toCartLine,
   type CartLine,
 } from '#shared/utils/cart'
@@ -39,7 +40,8 @@ function sanitize(input: unknown): CartLine[] {
       || (l.availability !== null && l.availability !== 'in_stock' && l.availability !== 'made_to_order')
     ) continue
     const qty = Math.min(Math.max(Math.floor(l.qty), 1), MAX_QTY_PER_LINE)
-    lines.push({ ...(l as CartLine), qty })
+    const size = typeof l.size === 'string' ? l.size : null
+    lines.push({ ...(l as CartLine), size, sizeLabel: size && typeof l.sizeLabel === 'string' ? l.sizeLabel : null, qty })
   }
   return lines
 }
@@ -90,9 +92,9 @@ export const useCartStore = defineStore('cart', () => {
     noticeTimer = setTimeout(() => (notice.value = null), 3500)
   }
 
-  function add(product: Product, qty = 1) {
+  function add(product: Product, qty = 1, size: { id: string, label: string } | null = null) {
     if (!isOrderable(product)) return { lines: lines.value, added: 0, limited: false }
-    const result = addLine(lines.value, toCartLine(product), qty)
+    const result = addLine(lines.value, toCartLine(product, 1, size), qty)
     lines.value = result.lines
     if (result.added === 0) say('Больше нет в наличии: всё доступное уже в корзине', 'info')
     else if (result.limited) say(`Добавлено ${result.added} — больше в наличии нет`, 'info')
@@ -100,20 +102,22 @@ export const useCartStore = defineStore('cart', () => {
     return result
   }
 
-  function setQty(productId: string, qty: number) {
-    lines.value = setLineQty(lines.value, productId, qty)
+  /** `key` — ключ позиции (`lineKey`): id товара или «id:размер». */
+  function setQty(key: string, qty: number) {
+    lines.value = setLineQty(lines.value, key, qty)
   }
 
-  function remove(productId: string) {
-    lines.value = removeLine(lines.value, productId)
+  function remove(key: string) {
+    lines.value = removeLine(lines.value, key)
   }
 
   function clear() {
     lines.value = []
   }
 
+  /** Сколько штук изделия в корзине во всех размерах. */
   function quantityOf(productId: string): number {
-    return lines.value.find((l) => l.productId === productId)?.qty ?? 0
+    return productQty(lines.value, productId)
   }
 
   /** Подтягивает актуальные цены и остатки из каталога. */
