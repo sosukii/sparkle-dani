@@ -1,46 +1,59 @@
 {
   "id": "product-024",
-  "slug": "shapka-kotik-s-ushkami-024",
-  "title": "Шапка-котик с ушками",
-  "description": "Уютная шапка с мягкой резинкой по краю. Хорошо держит форму и не колется. Вдохновлено миром «Genshin Impact».",
-  "price": 2600,
+  "slug": "sova-amigurumi",
+  "title": "Сова амигуруми",
+  "description": "Вязаная игрушка-фигурка. Демонстрационное изделие.",
+  "price": 3600,
   "currency": "RUB",
-  "category": "warm-wear",
-  "type": "hat",
-  "fandom": "genshin",
+  "category": "amigurumi",
+  "type": "amigurumi",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "white"
+    "gray",
+    "cream"
   ],
-  "warmth": "demi",
-  "availability": "made_to_order",
-  "leadTimeDays": {
-    "min": 7,
-    "max": 10
-  },
+  "composition": [
+    {
+      "material": "cotton",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "dry-flat"
+  ],
+  "availability": "in_stock",
+  "stock": 2,
   "images": [
     {
       "src": "/images/products/product-024-1.jpg",
-      "alt": "Шапка-котик с ушками — шапка ручной работы (вид 1)",
+      "alt": "Сова амигуруми: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-024-2.jpg",
-      "alt": "Шапка-котик с ушками — шапка ручной работы (вид 2)",
+      "alt": "Сова амигуруми: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
   "attributes": [
     {
-      "label": "Материал",
-      "value": "Шерсть с акрилом"
-    },
-    {
-      "label": "Обхват головы",
-      "value": "54–58 см"
+      "label": "Высота",
+      "value": "18 см"
     }
   ],
-  "createdAt": "2026-08-24",
+  "createdAt": "2026-09-02",
   "isDemo": true
 }

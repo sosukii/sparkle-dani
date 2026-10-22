@@ -1,4 +1,4 @@
-import type { Category, Product, Taxonomy } from '#shared/types/product'
+import type { CareItem, Category, Material, Product, Taxonomy } from '#shared/types/product'
 import { createJsonProductRepository } from './json-product.repository'
 
 /**
@@ -12,6 +12,8 @@ export interface ProductRepository {
   getProductsByIds(ids: string[]): Promise<Product[]>
   listCategories(): Promise<Category[]>
   getTaxonomy(): Promise<Taxonomy>
+  listMaterials(): Promise<Material[]>
+  listCare(): Promise<CareItem[]>
 }
 
 let instance: ProductRepository | undefined

@@ -58,7 +58,7 @@ usePageSeo(() => ({
         <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
         <input
           id="search-page-input" v-model="input" type="search" enterkeyhint="search" autocomplete="off"
-          placeholder="Серьги, в наличии, доставка…" class="field rounded-full pl-10" data-testid="search-input"
+          placeholder="Свитер, в наличии, доставка…" class="field rounded-full pl-10" data-testid="search-input"
         >
       </div>
       <button type="submit" class="btn btn-primary">Найти</button>

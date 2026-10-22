@@ -1,12 +1,14 @@
 import type { ZodType } from 'zod'
-import { categorySchema, productSchema, taxonomySchema } from '#shared/types/product'
-import type { Category, Product, Taxonomy } from '#shared/types/product'
+import { careItemSchema, categorySchema, materialSchema, productSchema, taxonomySchema } from '#shared/types/product'
+import type { CareItem, Category, Material, Product, Taxonomy } from '#shared/types/product'
 import type { ProductRepository } from './product.repository'
 
 interface Snapshot {
   products: Product[]
   categories: Category[]
   taxonomy: Taxonomy
+  materials: Material[]
+  care: CareItem[]
 }
 
 const storage = () => useStorage('assets:data')
@@ -27,14 +29,19 @@ function describeIssues(error: unknown): string {
 async function load(): Promise<Snapshot> {
   const taxonomy = await readJson('taxonomy.json', taxonomySchema)
   const categories = await readJson('categories.json', categorySchema.array())
+  const materials = await readJson('materials.json', materialSchema.array())
+  const care = await readJson('care.json', careItemSchema.array())
   const keys = (await storage().getKeys('products')).filter((k) => k.endsWith('.json')).sort()
 
   const known = {
     categories: new Set(categories.map((c) => c.id)),
-    fandoms: new Set(taxonomy.fandoms.map((o) => o.id)),
     types: new Set(taxonomy.types.map((o) => o.id)),
     colors: new Set(taxonomy.colors.map((o) => o.id)),
-    warmth: new Set(taxonomy.warmth.map((o) => o.id)),
+    fits: new Set(taxonomy.fits.map((o) => o.id)),
+    sizes: new Set(taxonomy.sizes.map((o) => o.id)),
+    measures: new Set(taxonomy.measures.map((o) => o.id)),
+    materials: new Set(materials.map((o) => o.id)),
+    care: new Set(care.map((o) => o.id)),
   }
   const ids = new Set<string>()
   const slugs = new Set<string>()
@@ -47,9 +54,16 @@ async function load(): Promise<Snapshot> {
       const problems: string[] = []
       if (!known.categories.has(product.category)) problems.push(`неизвестная категория «${product.category}»`)
       if (!known.types.has(product.type)) problems.push(`неизвестный тип «${product.type}»`)
-      if (product.fandom && !known.fandoms.has(product.fandom)) problems.push(`неизвестный фандом «${product.fandom}»`)
-      if (product.warmth && !known.warmth.has(product.warmth)) problems.push(`неизвестная теплота «${product.warmth}»`)
+      if (product.fit && !known.fits.has(product.fit)) problems.push(`неизвестная посадка «${product.fit}»`)
       for (const c of product.colors) if (!known.colors.has(c)) problems.push(`неизвестный цвет «${c}»`)
+      for (const s of product.sizes ?? []) if (!known.sizes.has(s)) problems.push(`неизвестный размер «${s}»`)
+      for (const m of product.composition ?? []) if (!known.materials.has(m.material)) problems.push(`неизвестный материал «${m.material}»`)
+      for (const c of product.care ?? []) if (!known.care.has(c)) problems.push(`неизвестная рекомендация по уходу «${c}»`)
+      for (const row of product.measurements ?? []) {
+        if (!(product.sizes ?? []).includes(row.size)) problems.push(`измерения для размера «${row.size}», которого нет в sizes`)
+        for (const key of Object.keys(row.values)) if (!known.measures.has(key)) problems.push(`неизвестное измерение «${key}»`)
+      }
+      if (product.model && !(product.sizes ?? []).includes(product.model.wearsSize)) problems.push(`на модели размер «${product.model.wearsSize}», которого нет в sizes`)
       if (ids.has(product.id)) problems.push(`повторяющийся id «${product.id}»`)
       if (slugs.has(product.slug)) problems.push(`повторяющийся slug «${product.slug}»`)
       if (problems.length) throw new Error(problems.join('; '))
@@ -61,7 +75,7 @@ async function load(): Promise<Snapshot> {
       console.error(`[catalog] ${file} пропущен: ${describeIssues(error)}`)
     }
   }
-  return { products, categories, taxonomy }
+  return { products, categories, taxonomy, materials, care }
 }
 
 export function createJsonProductRepository(): ProductRepository {
@@ -98,6 +112,12 @@ export function createJsonProductRepository(): ProductRepository {
     },
     async getTaxonomy() {
       return (await snapshot()).taxonomy
+    },
+    async listMaterials() {
+      return (await snapshot()).materials
+    },
+    async listCare() {
+      return (await snapshot()).care
     },
   }
 }

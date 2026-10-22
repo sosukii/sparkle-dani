@@ -27,7 +27,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
     })
 
     test('каталог с активными фильтрами', async ({ page }) => {
-      await page.goto('/catalog?fandom=sailor-moon&color=pink&sort=price-desc')
+      await page.goto('/catalog?fit=oversize&color=cocoa&sort=price-desc')
       await shot(page, `catalog-filtered-${device}`)
     })
 
@@ -37,23 +37,23 @@ for (const [device, viewport] of Object.entries(viewports)) {
     })
 
     test('категория, вторая страница', async ({ page }) => {
-      await page.goto('/catalog/toys?page=2')
-      await shot(page, `catalog-toys-page2-${device}`)
+      await page.goto('/catalog?page=2')
+      await shot(page, `catalog-page2-${device}`)
     })
 
     test('товар в наличии', async ({ page }) => {
-      await page.goto('/product/lesnoy-duh-001')
+      await page.goto('/product/mishka-amigurumi')
       await shot(page, `product-in-stock-${device}`)
     })
 
     test('товар под заказ', async ({ page }) => {
-      await page.goto('/product/zayka-lunnitsa-004')
+      await page.goto('/product/lisenok-amigurumi')
       await shot(page, `product-made-to-order-${device}`)
     })
 
     test('корзина с товарами', async ({ page }) => {
-      await addToCart(page, 'zayka-lunnitsa-004', 2)
-      await addToCart(page, 'lesnoy-duh-001')
+      await addToCart(page, 'lisenok-amigurumi', 2)
+      await addToCart(page, 'mishka-amigurumi')
       await page.goto('/cart')
       await expect(page.getByTestId('cart-line')).toHaveCount(2)
       await shot(page, `cart-filled-${device}`)
@@ -66,7 +66,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
     })
 
     test('диалог заказа', async ({ page }) => {
-      await addToCart(page, 'zayka-lunnitsa-004', 2)
+      await addToCart(page, 'lisenok-amigurumi', 2)
       await page.goto('/cart')
       await page.getByTestId('contact-button').click()
       await expect(page.getByTestId('order-text')).toBeVisible()
@@ -94,8 +94,8 @@ for (const [device, viewport] of Object.entries(viewports)) {
       await shot(page, `search-section-${device}`)
     })
 
-    test('поиск: синонимы (сережки → серьги)', async ({ page }) => {
-      await page.goto('/search?q=сережки')
+    test('поиск: синонимы (джемпер → свитер)', async ({ page }) => {
+      await page.goto('/search?q=джемпер')
       await shot(page, `search-products-${device}`)
     })
 
@@ -105,7 +105,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
     })
 
     test('каталог: много выбранных фильтров в одну строку', async ({ page }) => {
-      await page.goto('/catalog?fandom=ghibli,sailor-moon,genshin&color=pink,green,blue&type=amigurumi,keychain&avail=in_stock&min=500&max=3000')
+      await page.goto('/catalog?type=sweater,cardigan,scarf&color=cocoa,olive,wine&fit=oversize,regular&avail=in_stock&min=3000&max=30000')
       await shot(page, `catalog-many-filters-${device}`, false)
     })
 
@@ -120,7 +120,7 @@ test.describe('мобильная панель фильтров', () => {
   test.use({ viewport: viewports.mobile })
 
   test('открыта', async ({ page }) => {
-    await page.goto('/catalog/warm-wear')
+    await page.goto('/catalog/sweaters')
     await settle(page)
     await page.getByTestId('open-filters').click()
     await expect(page.getByRole('dialog', { name: 'Фильтры' })).toBeVisible()

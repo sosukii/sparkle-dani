@@ -1,46 +1,59 @@
 {
   "id": "product-017",
-  "slug": "brelok-slaymik-017",
-  "title": "Брелок «слаймик»",
-  "description": "Крошечный друг для ключей и рюкзака. Связан крючком, на прочной металлической фурнитуре. Вдохновлено миром «Genshin Impact».",
-  "price": 800,
+  "slug": "varezhki-chernye",
+  "title": "Варежки «Чёрные»",
+  "description": "Классические варежки. Демонстрационное изделие.",
+  "price": 3600,
   "currency": "RUB",
-  "category": "toys",
-  "type": "keychain",
-  "fandom": "genshin",
+  "category": "accessories",
+  "type": "mittens",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "blue"
+    "black"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "s",
+    "m"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "no-wring",
+    "dry-flat",
+    "no-bleach"
+  ],
   "availability": "made_to_order",
   "leadTimeDays": {
-    "min": 5,
-    "max": 8
+    "min": 7,
+    "max": 10
   },
   "images": [
     {
       "src": "/images/products/product-017-1.jpg",
-      "alt": "Брелок «слаймик» — брелок ручной работы (вид 1)",
+      "alt": "Варежки «Чёрные»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-017-2.jpg",
-      "alt": "Брелок «слаймик» — брелок ручной работы (вид 2)",
+      "alt": "Варежки «Чёрные»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, металлическая фурнитура"
-    },
-    {
-      "label": "Длина",
-      "value": "9 см"
-    }
-  ],
-  "createdAt": "2026-09-04",
+  "attributes": [],
+  "createdAt": "2026-09-08",
   "isDemo": true
 }

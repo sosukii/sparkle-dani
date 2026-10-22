@@ -1,25 +1,35 @@
 import type { CatalogContext } from '#shared/types/catalog'
+import type { OrderableProduct } from '#shared/utils/cart'
 import type { Product } from '#shared/types/product'
 
 export const ctx: CatalogContext = {
   taxonomy: {
-    fandoms: [
-      { id: 'ghibli', label: 'Studio Ghibli' },
-      { id: 'sailor-moon', label: 'Сейлор Мун' },
-    ],
     types: [
-      { id: 'amigurumi', label: 'Игрушка-амигуруми' },
+      { id: 'sweater', label: 'Свитер' },
       { id: 'scarf', label: 'Шарф' },
     ],
     colors: [
-      { id: 'pink', label: 'Розовый', hex: '#f4a6c0' },
-      { id: 'green', label: 'Зелёный', hex: '#6fae7a' },
+      { id: 'cocoa', label: 'Какао', hex: '#442d1c' },
+      { id: 'olive', label: 'Оливковый', hex: '#9d9167' },
     ],
-    warmth: [{ id: 'warm', label: 'Тёплое' }],
+    fits: [
+      { id: 'regular', label: 'Обычная' },
+      { id: 'oversize', label: 'Оверсайз' },
+    ],
+    sizes: [
+      { id: 's', label: 'S' },
+      { id: 'm', label: 'M' },
+      { id: 'one-size', label: 'Один размер' },
+    ],
+    measures: [{ id: 'chest', label: 'Ширина изделия по груди' }],
   },
   categories: [
-    { id: 'toys', slug: 'toys', title: 'Игрушки', description: '' },
-    { id: 'warm-wear', slug: 'warm-wear', title: 'Шарфы и шапки', description: '' },
+    { id: 'sweaters', slug: 'sweaters', title: 'Свитеры', description: '' },
+    { id: 'accessories', slug: 'accessories', title: 'Шарфы и аксессуары', description: '' },
+  ],
+  materials: [
+    { id: 'wool', title: 'Шерсть', summary: 'Волокно животного происхождения.' },
+    { id: 'cotton', title: 'Хлопок', summary: 'Растительное волокно.' },
   ],
 }
 
@@ -32,11 +42,16 @@ export function product(overrides: Partial<Product> & Pick<Product, 'id'>): Prod
     description: '',
     price: 1000,
     currency: 'RUB',
-    category: 'toys',
-    type: 'amigurumi',
-    fandom: null,
+    category: 'sweaters',
+    type: 'sweater',
+    fit: null,
+    fitNote: null,
     colors: [],
-    warmth: null,
+    composition: null,
+    sizes: null,
+    measurements: null,
+    model: null,
+    care: null,
     availability: 'in_stock',
     images: [image],
     attributes: [],
@@ -46,9 +61,15 @@ export function product(overrides: Partial<Product> & Pick<Product, 'id'>): Prod
   }
 }
 
+/** Товар с известной ценой: только такой можно положить в корзину. */
+export function orderable(overrides: Partial<Product> & Pick<Product, 'id'>): OrderableProduct {
+  return { ...product({ price: 1000, ...overrides }), price: overrides.price ?? 1000 }
+}
+
 export const products: Product[] = [
-  product({ id: 'a', title: 'Лесной дух', price: 3200, fandom: 'ghibli', colors: ['green'], createdAt: '2026-03-01' }),
-  product({ id: 'b', title: 'Зайка-лунница', price: 3400, fandom: 'sailor-moon', colors: ['pink'], createdAt: '2026-02-01' }),
-  product({ id: 'c', title: 'Мишка', price: 1900, colors: ['pink', 'green'], createdAt: '2026-01-15' }),
-  product({ id: 'd', title: 'Шарф «ёлка»', price: 2900, category: 'warm-wear', type: 'scarf', colors: ['green'], warmth: 'warm', createdAt: '2026-04-01' }),
+  product({ id: 'a', title: 'Свитер крупной вязки', price: 28500, fit: 'oversize', colors: ['cocoa'], composition: [{ material: 'wool', percent: 100 }], sizes: ['s', 'm'], createdAt: '2026-03-01' }),
+  product({ id: 'b', title: 'Свитер лёгкий', price: 14500, fit: 'regular', colors: ['olive'], composition: [{ material: 'cotton', percent: 100 }], sizes: ['m'], createdAt: '2026-02-01' }),
+  // Все сведения неизвестны: цена, наличие, состав, размеры, посадка.
+  product({ id: 'c', title: 'Свитер оливковый', price: null, availability: null, colors: ['olive'], createdAt: '2026-01-15' }),
+  product({ id: 'd', title: 'Шарф «ёлка»', price: 6800, category: 'accessories', type: 'scarf', colors: ['cocoa', 'olive'], composition: [{ material: 'wool', percent: 100 }], sizes: ['one-size'], createdAt: '2026-04-01' }),
 ]

@@ -18,6 +18,12 @@ describe('buildProductJsonLd', () => {
     expect(buildProductJsonLd(product({ id: 'x', isDemo: true }), 'https://example.com')).toBeNull()
   })
 
+  it('без цены или наличия предложение (offers) не выдумывается', () => {
+    const base = { id: 'x', slug: 'x-1', isDemo: false }
+    expect(buildProductJsonLd(product({ ...base, price: null }), 'https://example.com')).not.toHaveProperty('offers')
+    expect(buildProductJsonLd(product({ ...base, availability: null }), 'https://example.com')).not.toHaveProperty('offers')
+  })
+
   it('строит корректный Product для настоящего товара', () => {
     const ld = buildProductJsonLd(product({ id: 'x', slug: 'mishka-1', price: 1900, isDemo: false, availability: 'made_to_order' }), 'https://example.com/')
     expect(ld).toMatchObject({

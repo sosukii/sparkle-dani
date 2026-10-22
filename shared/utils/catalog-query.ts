@@ -13,8 +13,8 @@ import { analyzeQuery, matchesAllGroups, normalizeText, stemsOfText } from './se
 
 export { normalizeText }
 
-type FacetGroup = 'fandom' | 'type' | 'color' | 'warmth' | 'availability'
-const FACET_GROUPS: FacetGroup[] = ['fandom', 'type', 'color', 'warmth', 'availability']
+type FacetGroup = 'type' | 'color' | 'fit' | 'size' | 'material' | 'availability'
+const FACET_GROUPS: FacetGroup[] = ['type', 'color', 'fit', 'size', 'material', 'availability']
 const AVAILABILITY_LABELS = [
   { id: 'in_stock', label: 'В наличии' },
   { id: 'made_to_order', label: 'Под заказ' },
@@ -68,10 +68,11 @@ export function parseCatalogQuery(
   return {
     q,
     category: category || undefined,
-    fandom: toList(raw.fandom),
     type: toList(raw.type),
     color: toList(raw.color),
-    warmth: toList(raw.warmth),
+    fit: toList(raw.fit),
+    size: toList(raw.size),
+    material: toList(raw.material),
     availability: toList(raw.avail).filter((v) => v === 'in_stock' || v === 'made_to_order'),
     minPrice,
     maxPrice,
@@ -122,11 +123,11 @@ function searchStems(product: Product, ctx: CatalogContext): string[] {
       [
         product.title,
         product.description,
-        labelOf(ctx.taxonomy.fandoms, product.fandom),
         labelOf(ctx.taxonomy.types, product.type),
-        labelOf(ctx.taxonomy.warmth, product.warmth),
+        labelOf(ctx.taxonomy.fits, product.fit),
         ctx.categories.find((c) => c.id === product.category)?.title ?? '',
         ...product.colors.map((c) => labelOf(ctx.taxonomy.colors, c)),
+        ...(product.composition ?? []).map((m) => ctx.materials.find((x) => x.id === m.material)?.title ?? ''),
       ].join(' '),
     )
     byProduct.set(product, stems)
@@ -139,6 +140,18 @@ function searchStems(product: Product, ctx: CatalogContext): string[] {
 function matchesGroup(selected: string[], values: (string | null)[]): boolean {
   if (selected.length === 0) return true
   return values.some((v) => v !== null && selected.includes(v))
+}
+
+/** Значения товара по группе фильтра. Неизвестное (null) не совпадает ни с одним выбранным значением. */
+function valuesOf(p: Product, group: FacetGroup): (string | null)[] {
+  switch (group) {
+    case 'type': return [p.type]
+    case 'color': return p.colors
+    case 'fit': return [p.fit]
+    case 'size': return p.sizes ?? []
+    case 'material': return (p.composition ?? []).map((m) => m.material)
+    default: return [p.availability]
+  }
 }
 
 /** Применяет фильтры. `except` — пропустить одну группу (нужно для подсчёта фасетов). */
@@ -154,18 +167,17 @@ export function filterProducts(
     if (filters.category && p.category !== filters.category) return false
     if (intent) {
       if (intent.availability && p.availability !== intent.availability) return false
-      if (intent.minPrice !== undefined && p.price < intent.minPrice) return false
-      if (intent.maxPrice !== undefined && p.price > intent.maxPrice) return false
+      // Товар с неизвестной ценой не попадает под условие по цене: показывать его как «дешёвый» было бы выдумкой.
+      if (intent.minPrice !== undefined && (p.price === null || p.price < intent.minPrice)) return false
+      if (intent.maxPrice !== undefined && (p.price === null || p.price > intent.maxPrice)) return false
       if (intent.groups.length && !matchesAllGroups(searchStems(p, ctx), intent.groups)) return false
     }
-    if (except !== 'fandom' && !matchesGroup(filters.fandom, [p.fandom])) return false
-    if (except !== 'type' && !matchesGroup(filters.type, [p.type])) return false
-    if (except !== 'color' && !matchesGroup(filters.color, p.colors)) return false
-    if (except !== 'warmth' && !matchesGroup(filters.warmth, [p.warmth])) return false
-    if (except !== 'availability' && !matchesGroup(filters.availability, [p.availability])) return false
+    for (const group of FACET_GROUPS) {
+      if (except !== group && !matchesGroup(filters[group], valuesOf(p, group))) return false
+    }
     if (except !== 'price') {
-      if (filters.minPrice !== undefined && p.price < filters.minPrice) return false
-      if (filters.maxPrice !== undefined && p.price > filters.maxPrice) return false
+      if (filters.minPrice !== undefined && (p.price === null || p.price < filters.minPrice)) return false
+      if (filters.maxPrice !== undefined && (p.price === null || p.price > filters.maxPrice)) return false
     }
     return true
   })
@@ -173,11 +185,16 @@ export function filterProducts(
 
 export function sortProducts(products: Product[], sort: SortKey): Product[] {
   const list = [...products]
+  // Товары без цены в сортировке по цене всегда в конце: неизвестная цена не «самая низкая» и не «самая высокая».
+  const byPrice = (dir: 1 | -1) => (a: Product, b: Product) => {
+    if (a.price === null || b.price === null) return a.price === b.price ? 0 : a.price === null ? 1 : -1
+    return (a.price - b.price) * dir || a.title.localeCompare(b.title, 'ru')
+  }
   switch (sort) {
     case 'price-asc':
-      return list.sort((a, b) => a.price - b.price || a.title.localeCompare(b.title, 'ru'))
+      return list.sort(byPrice(1))
     case 'price-desc':
-      return list.sort((a, b) => b.price - a.price || a.title.localeCompare(b.title, 'ru'))
+      return list.sort(byPrice(-1))
     case 'title':
       return list.sort((a, b) => a.title.localeCompare(b.title, 'ru'))
     default:
@@ -187,14 +204,13 @@ export function sortProducts(products: Product[], sort: SortKey): Product[] {
 
 function buildFacets(scope: Product[], filters: CatalogFilters, ctx: CatalogContext): Facets {
   const dictionaries: Record<FacetGroup, { id: string, label: string, hex?: string, hint?: string }[]> = {
-    fandom: ctx.taxonomy.fandoms,
     type: ctx.taxonomy.types,
     color: ctx.taxonomy.colors,
-    warmth: ctx.taxonomy.warmth,
+    fit: ctx.taxonomy.fits,
+    size: ctx.taxonomy.sizes,
+    material: ctx.materials.map((m) => ({ id: m.id, label: m.title })),
     availability: AVAILABILITY_LABELS,
   }
-  const valuesOf = (p: Product, group: FacetGroup): (string | null)[] =>
-    group === 'color' ? p.colors : [p[group]]
 
   const facets = {} as Record<FacetGroup, FacetOption[]>
   for (const group of FACET_GROUPS) {
@@ -213,7 +229,7 @@ function buildFacets(scope: Product[], filters: CatalogFilters, ctx: CatalogCont
       .filter((o) => o.presentInScope || filters[group].includes(o.id))
       .map(({ presentInScope: _unused, ...rest }) => rest)
   }
-  const prices = scope.map((p) => p.price)
+  const prices = scope.map((p) => p.price).filter((v): v is number => v !== null)
   return {
     ...facets,
     price: prices.length ? { min: Math.min(...prices), max: Math.max(...prices) } : null,
@@ -224,7 +240,7 @@ export function queryCatalog(products: Product[], filters: CatalogFilters, ctx: 
   // «Область» для фасетов: категория + поиск, но без остальных фильтров.
   const scope = filterProducts(
     products,
-    { ...filters, fandom: [], type: [], color: [], warmth: [], availability: [], minPrice: undefined, maxPrice: undefined },
+    { ...filters, type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined },
     ctx,
   )
   // «дешёвые» / «дорогие» в строке поиска меняют сортировку, если пользователь не выбрал её сам.

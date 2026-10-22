@@ -1,47 +1,42 @@
 {
   "id": "product-006",
-  "slug": "lunnyy-kotik-006",
-  "title": "Лунный котик",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Сейлор Мун».",
-  "price": 2800,
+  "slug": "sviter-olivkovyy",
+  "title": "Свитер «Оливковый»",
+  "description": "Свитер: сведения о составе, размерах, цене и наличии пока не получены. Демонстрационное изделие.",
+  "price": null,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "sailor-moon",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "lilac"
+    "olive"
   ],
-  "warmth": null,
-  "availability": "in_stock",
-  "stock": 3,
+  "composition": null,
+  "sizes": null,
+  "measurements": null,
+  "model": null,
+  "care": null,
+  "availability": null,
   "images": [
     {
       "src": "/images/products/product-006-1.jpg",
-      "alt": "Лунный котик — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Свитер «Оливковый»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-006-2.jpg",
-      "alt": "Лунный котик — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Свитер «Оливковый»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "18 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-20",
+  "attributes": [],
+  "createdAt": "2026-09-15",
   "isDemo": true
 }

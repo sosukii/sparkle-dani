@@ -1,50 +1,88 @@
 {
   "id": "product-004",
-  "slug": "zayka-lunnitsa-004",
-  "title": "Зайка-лунница",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Сейлор Мун».",
-  "price": 3400,
+  "slug": "dzhemper-legkiy-molochnyy",
+  "title": "Джемпер лёгкий «Молочный»",
+  "description": "Тонкий джемпер для лёгкого образа. Демонстрационное изделие.",
+  "price": 14500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "sailor-moon",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": "regular",
+  "fitNote": "Прямой силуэт без сильного прилегания.",
   "colors": [
-    "white"
+    "cream"
   ],
-  "warmth": null,
-  "availability": "made_to_order",
-  "leadTimeDays": {
-    "min": 7,
-    "max": 12
+  "composition": [
+    {
+      "material": "cotton",
+      "percent": 60
+    },
+    {
+      "material": "acrylic",
+      "percent": 40
+    }
+  ],
+  "sizes": [
+    "xs",
+    "s",
+    "m"
+  ],
+  "measurements": [
+    {
+      "size": "xs",
+      "values": {
+        "chest": 46,
+        "length": 58,
+        "sleeve": 58
+      }
+    },
+    {
+      "size": "s",
+      "values": {
+        "chest": 49,
+        "length": 60,
+        "sleeve": 60
+      }
+    },
+    {
+      "size": "m",
+      "values": {
+        "chest": 52,
+        "length": 62,
+        "sleeve": 61
+      }
+    }
+  ],
+  "model": {
+    "heightCm": 168,
+    "wearsSize": "s"
   },
+  "care": [
+    "hand-wash-30",
+    "no-bleach",
+    "iron-low"
+  ],
+  "availability": "in_stock",
+  "stock": 3,
   "images": [
     {
       "src": "/images/products/product-004-1.jpg",
-      "alt": "Зайка-лунница — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Джемпер лёгкий «Молочный»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-004-2.jpg",
-      "alt": "Зайка-лунница — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Джемпер лёгкий «Молочный»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "24 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-23",
+  "attributes": [],
+  "createdAt": "2026-09-25",
   "isDemo": true
 }

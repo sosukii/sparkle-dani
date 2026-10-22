@@ -1,47 +1,58 @@
 {
   "id": "product-022",
-  "slug": "sharf-snud-myata-022",
-  "title": "Шарф-снуд «мята»",
-  "description": "Мягкий шарф, который приятно носить каждый день. Связан в одном полотне без швов, края аккуратно обработаны.",
-  "price": 2900,
+  "slug": "mishka-amigurumi",
+  "title": "Мишка амигуруми",
+  "description": "Вязаная игрушка-фигурка. Демонстрационное изделие.",
+  "price": 3200,
   "currency": "RUB",
-  "category": "warm-wear",
-  "type": "scarf",
-  "fandom": null,
+  "category": "amigurumi",
+  "type": "amigurumi",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "mint"
+    "cocoa"
   ],
-  "warmth": "demi",
+  "composition": [
+    {
+      "material": "cotton",
+      "percent": 100
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "dry-flat"
+  ],
   "availability": "in_stock",
-  "stock": 2,
+  "stock": 1,
   "images": [
     {
       "src": "/images/products/product-022-1.jpg",
-      "alt": "Шарф-снуд «мята» — шарф ручной работы (вид 1)",
+      "alt": "Мишка амигуруми: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-022-2.jpg",
-      "alt": "Шарф-снуд «мята» — шарф ручной работы (вид 2)",
+      "alt": "Мишка амигуруми: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
   "attributes": [
     {
-      "label": "Материал",
-      "value": "Шерсть с акрилом"
-    },
-    {
-      "label": "Размер",
-      "value": "180 × 25 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
+      "label": "Высота",
+      "value": "22 см"
     }
   ],
-  "createdAt": "2026-08-27",
+  "createdAt": "2026-10-06",
   "isDemo": true
 }

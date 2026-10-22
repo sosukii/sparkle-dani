@@ -1,47 +1,75 @@
 {
   "id": "product-003",
-  "slug": "seryy-kotik-puteshestvennik-003",
-  "title": "Серый котик-путешественник",
-  "description": "Мягкая вязаная игрушка, связанная крючком. Набивка — холлофайбер, глазки вышиты нитью, поэтому игрушка подойдёт и для подарка. Вдохновлено миром «Studio Ghibli».",
-  "price": 2900,
+  "slug": "sviter-polo-grafit",
+  "title": "Свитер-поло «Графит»",
+  "description": "Свитер с воротником-поло, гладкая вязка. Демонстрационное изделие.",
+  "price": 18500,
   "currency": "RUB",
-  "category": "toys",
-  "type": "amigurumi",
-  "fandom": "ghibli",
+  "category": "sweaters",
+  "type": "sweater",
+  "fit": "regular",
+  "fitNote": null,
   "colors": [
-    "gray"
+    "charcoal"
   ],
-  "warmth": null,
+  "composition": [
+    {
+      "material": "wool",
+      "percent": 50
+    },
+    {
+      "material": "cotton",
+      "percent": 50
+    }
+  ],
+  "sizes": [
+    "m",
+    "l"
+  ],
+  "measurements": [
+    {
+      "size": "m",
+      "values": {
+        "chest": 52,
+        "length": 62,
+        "sleeve": 61
+      }
+    },
+    {
+      "size": "l",
+      "values": {
+        "chest": 55,
+        "length": 64,
+        "sleeve": 62
+      }
+    }
+  ],
+  "model": null,
+  "care": [
+    "hand-wash-30",
+    "dry-flat"
+  ],
   "availability": "in_stock",
-  "stock": 2,
+  "stock": 1,
   "images": [
     {
       "src": "/images/products/product-003-1.jpg",
-      "alt": "Серый котик-путешественник — игрушка-амигуруми ручной работы (вид 1)",
+      "alt": "Свитер-поло «Графит»: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-003-2.jpg",
-      "alt": "Серый котик-путешественник — игрушка-амигуруми ручной работы (вид 2)",
+      "alt": "Свитер-поло «Графит»: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [
-    {
-      "label": "Материал",
-      "value": "Хлопковая пряжа, холлофайбер"
-    },
-    {
-      "label": "Высота",
-      "value": "22 см"
-    },
-    {
-      "label": "Уход",
-      "value": "Ручная стирка при 30 °C"
-    }
-  ],
-  "createdAt": "2026-09-25",
+  "attributes": [],
+  "createdAt": "2026-09-28",
   "isDemo": true
 }

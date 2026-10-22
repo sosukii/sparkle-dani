@@ -6,10 +6,11 @@ export type SortKey = (typeof SORT_KEYS)[number]
 export interface CatalogFilters {
   q: string
   category?: string
-  fandom: string[]
   type: string[]
   color: string[]
-  warmth: string[]
+  fit: string[]
+  size: string[]
+  material: string[]
   /** Наличие: `in_stock` / `made_to_order`. */
   availability: string[]
   minPrice?: number
@@ -28,12 +29,13 @@ export interface FacetOption {
 }
 
 export interface Facets {
-  fandom: FacetOption[]
   type: FacetOption[]
   color: FacetOption[]
-  warmth: FacetOption[]
+  fit: FacetOption[]
+  size: FacetOption[]
+  material: FacetOption[]
   availability: FacetOption[]
-  /** Границы цен в текущем наборе (категория + поиск) — для подсказок в полях. */
+  /** Границы известных цен в текущем наборе (категория + поиск) — для подсказок в полях. */
   price: { min: number, max: number } | null
 }
 
@@ -49,4 +51,5 @@ export interface CatalogResult {
 export interface CatalogContext {
   taxonomy: import('./product').Taxonomy
   categories: import('./product').Category[]
+  materials: import('./product').Material[]
 }

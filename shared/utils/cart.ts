@@ -9,14 +9,19 @@ export interface CartLine {
   title: string
   price: number
   image: { src: string, alt: string, width: number, height: number }
-  availability: Availability
+  /** null — наличие не известно (товар можно заказать, детали согласуются с Дани). */
+  availability: Availability | null
   stock?: number
   qty: number
   /** true — товар больше нет в каталоге (удалён/скрыт). */
   unavailable?: boolean
 }
 
-export function toCartLine(product: Product, qty = 1): CartLine {
+/** Товар с неизвестной ценой в корзину не кладётся: сумма заказа не должна строиться на выдуманных числах. */
+export type OrderableProduct = Product & { price: number }
+export const isOrderable = (product: Product): product is OrderableProduct => product.price !== null
+
+export function toCartLine(product: OrderableProduct, qty = 1): CartLine {
   const first = product.images[0]!
   return {
     productId: product.id,
@@ -81,7 +86,7 @@ export function reconcileLines(lines: CartLine[], fresh: Product[]): CartLine[] 
   const byId = new Map(fresh.map((p) => [p.id, p]))
   return lines.map((l) => {
     const product = byId.get(l.productId)
-    if (!product) return { ...l, unavailable: true }
+    if (!product || !isOrderable(product)) return { ...l, unavailable: true }
     const next = toCartLine(product, l.qty)
     return { ...next, qty: Math.min(l.qty, Math.max(maxQty(next), 1)) }
   })

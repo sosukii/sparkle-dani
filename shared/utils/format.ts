@@ -8,6 +8,11 @@ export function formatPrice(value: number): string {
   return priceFormatter.format(value)
 }
 
+/** Цена для показа покупателю; null (цена не определена) никогда не превращается в «0 ₽». */
+export function formatPriceOrNull(value: number | null): string | null {
+  return value === null ? null : priceFormatter.format(value)
+}
+
 /** Склонение: pluralRu(2, ['товар', 'товара', 'товаров']) → «товара». */
 export function pluralRu(n: number, forms: [string, string, string]): string {
   const abs = Math.abs(n) % 100

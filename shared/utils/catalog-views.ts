@@ -17,11 +17,12 @@ export function summarizeCategories(catalog: CatalogData): CategorySummary[] {
 export function buildProductPage(catalog: CatalogData, slug: string): ProductPageData | null {
   const product = catalog.products.find((p) => p.slug === slug)
   if (!product) return null
-  const { taxonomy, categories } = catalog
+  const { taxonomy, categories, materials, care } = catalog
+  const sizeOf = (id: string) => taxonomy.sizes.find((s) => s.id === id) ?? { id, label: id }
   const category = categories.find((c) => c.id === product.category)
   const related = catalog.products
     .filter((p) => p.category === product.category && p.id !== product.id)
-    .sort((a, b) => Number(b.fandom === product.fandom) - Number(a.fandom === product.fandom) || b.createdAt.localeCompare(a.createdAt))
+    .sort((a, b) => Number(b.type === product.type) - Number(a.type === product.type) || b.createdAt.localeCompare(a.createdAt))
     .slice(0, 4)
   return {
     product,
@@ -29,9 +30,22 @@ export function buildProductPage(catalog: CatalogData, slug: string): ProductPag
     labels: {
       category: category ? { slug: category.slug, title: category.title } : null,
       type: taxonomy.types.find((t) => t.id === product.type)?.label ?? null,
-      fandom: product.fandom ? (taxonomy.fandoms.find((f) => f.id === product.fandom) ?? null) : null,
+      fit: product.fit ? (taxonomy.fits.find((f) => f.id === product.fit) ?? null) : null,
       colors: taxonomy.colors.filter((c) => product.colors.includes(c.id)),
-      warmth: product.warmth ? (taxonomy.warmth.find((w) => w.id === product.warmth) ?? null) : null,
+      composition: product.composition
+        ? product.composition.map((item) => {
+          const material = materials.find((m) => m.id === item.material)
+          return { id: item.material, title: material?.title ?? item.material, summary: material?.summary ?? '', percent: item.percent }
+        })
+        : null,
+      sizes: product.sizes ? product.sizes.map(sizeOf) : null,
+      measurements: product.measurements
+        ? product.measurements.map((row) => ({
+          size: sizeOf(row.size),
+          values: Object.entries(row.values).map(([id, cm]) => ({ id, label: taxonomy.measures.find((m) => m.id === id)?.label ?? id, cm })),
+        }))
+        : null,
+      care: product.care ? care.filter((c) => product.care!.includes(c.id)) : null,
     },
   }
 }

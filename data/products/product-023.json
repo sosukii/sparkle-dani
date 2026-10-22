@@ -1,34 +1,64 @@
 {
   "id": "product-023",
-  "slug": "shapka-s-pomponom-zefir-023",
-  "title": "Шапка с помпоном «зефир»",
-  "description": "Уютная шапка с мягкой резинкой по краю. Хорошо держит форму и не колется.",
-  "price": 2200,
+  "slug": "lisenok-amigurumi",
+  "title": "Лисёнок амигуруми",
+  "description": "Вязаная игрушка-фигурка. Демонстрационное изделие.",
+  "price": 3400,
   "currency": "RUB",
-  "category": "warm-wear",
-  "type": "hat",
-  "fandom": null,
+  "category": "amigurumi",
+  "type": "amigurumi",
+  "fit": null,
+  "fitNote": null,
   "colors": [
-    "pink"
+    "caramel"
   ],
-  "warmth": "warm",
-  "availability": "in_stock",
-  "stock": 3,
+  "composition": [
+    {
+      "material": "cotton",
+      "percent": 70
+    },
+    {
+      "material": "acrylic",
+      "percent": 30
+    }
+  ],
+  "sizes": [
+    "one-size"
+  ],
+  "measurements": null,
+  "model": null,
+  "care": [
+    "hand-wash-30"
+  ],
+  "availability": "made_to_order",
+  "leadTimeDays": {
+    "min": 7,
+    "max": 12
+  },
   "images": [
     {
       "src": "/images/products/product-023-1.jpg",
-      "alt": "Шапка с помпоном «зефир» — шапка ручной работы (вид 1)",
+      "alt": "Лисёнок амигуруми: временная картинка-заглушка (общий вид)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "overview",
+      "placeholder": true
     },
     {
       "src": "/images/products/product-023-2.jpg",
-      "alt": "Шапка с помпоном «зефир» — шапка ручной работы (вид 2)",
+      "alt": "Лисёнок амигуруми: временная картинка-заглушка (деталь вязки)",
       "width": 1200,
-      "height": 1500
+      "height": 1500,
+      "kind": "detail",
+      "placeholder": true
     }
   ],
-  "attributes": [],
-  "createdAt": "2026-08-26",
+  "attributes": [
+    {
+      "label": "Высота",
+      "value": "20 см"
+    }
+  ],
+  "createdAt": "2026-09-21",
   "isDemo": true
 }
