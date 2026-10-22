@@ -72,7 +72,7 @@ defineExpose({ open, close })
         </template>
         <p v-else class="mt-3 text-fg-muted" data-testid="size-no-measurements">
           Измерений этого изделия пока нет. Напишите Дани: она подскажет размер по вашим меркам.
-          <button type="button" class="font-semibold text-link underline underline-offset-4" @click="close(); emit('ask')">Написать сообщение</button>
+          <button type="button" class="inline-flex min-h-9 items-center font-semibold text-link underline underline-offset-4" @click="close(); emit('ask')">Написать сообщение</button>
         </p>
         <p v-if="model" class="mt-3 text-sm" data-testid="size-model">
           На модели рост {{ model.heightCm }} см, размер {{ model.wearsSize.label }}.

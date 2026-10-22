@@ -17,7 +17,7 @@ const emit = defineEmits<{ ask: [topic: string] }>()
     </ul>
     <p v-else class="mt-4 text-sm text-fg-muted" data-testid="care-unknown">
       Рекомендации по уходу для этого изделия пока не указаны.
-      <button type="button" class="font-semibold text-link underline underline-offset-4" @click="emit('ask', 'как ухаживать за изделием')">Спросить {{ OWNER_NAME }}</button>
+      <button type="button" class="inline-flex min-h-9 items-center font-semibold text-link underline underline-offset-4" @click="emit('ask', 'как ухаживать за изделием')">Спросить {{ OWNER_NAME }}</button>
     </p>
     <p class="mt-3 text-sm">
       <NuxtLink :to="{ path: '/info/materials', query: { from: slug }, hash: '#care' }" class="font-semibold text-link underline underline-offset-4">Подробнее об уходе</NuxtLink>

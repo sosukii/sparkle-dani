@@ -1,7 +1,10 @@
 import { expect, test } from '../fixtures'
 
 // Страницы без ошибок и предупреждений в консоли: битый шрифт, неудачный запрос или ошибка гидратации сразу видны.
-const pages = ['/', '/catalog', '/catalog/hats', '/product/lisenok-amigurumi', '/cart', '/about', '/delivery', '/custom', '/search?q=свитер']
+const pages = [
+  '/', '/catalog', '/catalog/hats', '/catalog?fit=oversize', '/product/lisenok-amigurumi', '/product/sviter-krupnoy-vyazki-kakao', '/product/sviter-olivkovyy',
+  '/cart', '/about', '/delivery', '/custom', '/info/materials', '/info/sizes', '/search?q=свитер',
+]
 
 for (const path of pages) {
   test(`консоль и сеть без ошибок: ${path}`, async ({ page }) => {

@@ -34,7 +34,7 @@ function clearAll() {
       v-else-if="!cart.lines.length"
       class="mt-10"
       title="В корзине пока пусто"
-      text="Загляните в каталог — возможно, там уже ждёт ваш новый вязаный друг."
+      text="Выберите изделие в каталоге: размер, состав и уход описаны на странице каждого."
     >
       <NuxtLink to="/catalog" class="btn btn-primary no-underline">Перейти в каталог</NuxtLink>
     </EmptyState>

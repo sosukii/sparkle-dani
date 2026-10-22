@@ -45,7 +45,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
 <template>
   <header class="sticky top-0 z-40 border-b border-line/70 bg-canvas/95 backdrop-blur">
     <div class="container-page flex h-16 items-center gap-3 lg:h-[4.5rem] lg:gap-5 xl:gap-8">
-      <NuxtLink to="/" class="flex shrink-0 flex-col whitespace-nowrap leading-none no-underline" aria-label="NOCTURNE — на главную">
+      <NuxtLink to="/" class="flex shrink-0 flex-col whitespace-nowrap leading-none no-underline">
         <span class="font-logo text-xl font-semibold tracking-[0.12em] lg:text-2xl">{{ SITE_NAME }}</span>
         <span class="mt-1 hidden text-[0.625rem] font-medium uppercase tracking-[0.2em] text-fg-muted sm:block">Авторский трикотаж</span>
       </NuxtLink>

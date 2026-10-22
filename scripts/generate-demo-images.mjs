@@ -22,8 +22,8 @@ function mix(hex, amount) {
 function svg(hex, scale) {
   const w = 24 * scale
   const h = 30 * scale
-  const light = mix(hex, 38)
-  const dark = mix(hex, -26)
+  const light = mix(hex, 24)
+  const dark = mix(hex, -16)
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
     <pattern id="k" width="${w}" height="${h}" patternUnits="userSpaceOnUse">
@@ -52,7 +52,7 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
   for (const image of product.images) {
     if (!image.placeholder) continue
     const name = image.src.split('/').pop()
-    await sharp(Buffer.from(svg(hex, image.kind === "detail" ? 2.6 : 1.2))).jpeg({ quality: 62, mozjpeg: true }).toFile(join(out, name))
+    await sharp(Buffer.from(svg(hex, image.kind === "detail" ? 5 : 3.2))).jpeg({ quality: 55, mozjpeg: true }).toFile(join(out, name))
     count++
   }
 }

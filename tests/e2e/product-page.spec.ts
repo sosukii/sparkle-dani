@@ -55,6 +55,18 @@ test.describe('характеристики и пояснения', () => {
     await expect(page.getByTestId('care-unknown')).toBeVisible()
   })
 
+  test('галерея: миниатюры переключают фото, состояние понятно и с клавиатуры', async ({ page }) => {
+    await page.goto(FULL)
+    const detail = page.locator('img[alt*="деталь вязки"]')
+    await expect(page.getByTestId('thumb-0')).toHaveAttribute('aria-pressed', 'true')
+    await expect(detail).toHaveCount(1) // только миниатюра: на большом фото общий вид
+    await page.getByTestId('thumb-1').focus()
+    await page.keyboard.press('Enter')
+    await expect(page.getByTestId('thumb-1')).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByTestId('thumb-0')).toHaveAttribute('aria-pressed', 'false')
+    await expect(detail).toHaveCount(2) // миниатюра и большое фото
+  })
+
   test('честно сказано, что картинка временная', async ({ page }) => {
     await page.goto(FULL)
     await expect(page.getByTestId('gallery-placeholder')).toContainText('Временная картинка')
