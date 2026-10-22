@@ -214,7 +214,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
         <p v-if="data.hiddenUnknown > 0" class="mt-3 rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg-muted" data-testid="hidden-unknown">
           Ещё {{ data.hiddenUnknown }} {{ pluralRu(data.hiddenUnknown, ['изделие', 'изделия', 'изделий']) }}
           не вошло в выборку: {{ data.hiddenUnknown === 1 ? 'о нём' : 'о них' }} нет сведений по выбранным условиям (посадка, размер, состав, цена или наличие).
-          <button type="button" class="font-semibold text-link underline underline-offset-4" data-testid="show-unknown" @click="update({ includeUnknown: true })">Показать</button>
+          <button type="button" class="inline-flex min-h-9 items-center font-semibold text-link underline underline-offset-4" data-testid="show-unknown" @click="update({ includeUnknown: true })">Показать</button>
           <span class="whitespace-nowrap"> или <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="font-semibold text-link underline underline-offset-4">спросить {{ OWNER_NAME }}</a></span>
         </p>
 

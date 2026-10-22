@@ -54,7 +54,7 @@ const sizes = computed(() => props.labels.sizes?.map((s) => s.label).join(', ') 
           </template>
           <template v-else>
             <span class="text-fg-muted" data-testid="composition-unknown">Состав пока не указан.</span>
-            <button type="button" class="ml-1 font-semibold text-link underline underline-offset-4" @click="emit('ask', 'состав изделия')">Уточнить у {{ OWNER_NAME }}</button>
+            <button type="button" class="ml-1 inline-flex min-h-9 items-center font-semibold text-link underline underline-offset-4" @click="emit('ask', 'состав изделия')">Уточнить у {{ OWNER_NAME }}</button>
           </template>
         </dd>
       </div>
@@ -65,7 +65,7 @@ const sizes = computed(() => props.labels.sizes?.map((s) => s.label).join(', ') 
           <span v-if="sizes" class="font-semibold">{{ sizes }}</span>
           <template v-else>
             <span class="text-fg-muted">Размеры пока не указаны.</span>
-            <button type="button" class="ml-1 font-semibold text-link underline underline-offset-4" @click="emit('ask', 'какие размеры доступны')">Уточнить у {{ OWNER_NAME }}</button>
+            <button type="button" class="ml-1 inline-flex min-h-9 items-center font-semibold text-link underline underline-offset-4" @click="emit('ask', 'какие размеры доступны')">Уточнить у {{ OWNER_NAME }}</button>
           </template>
         </dd>
       </div>
