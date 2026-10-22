@@ -15,7 +15,7 @@ const link = (page: number) => ({ query: { ...props.query, ...(page > 1 ? { page
       <AppIcon name="arrow-left" :size="16" /> Назад
     </NuxtLink>
     <template v-for="(item, i) in items" :key="i">
-      <span v-if="item === null" class="px-1 text-ink-soft" aria-hidden="true">…</span>
+      <span v-if="item === null" class="px-1 text-fg-muted" aria-hidden="true">…</span>
       <NuxtLink
         v-else
         :to="link(item)"

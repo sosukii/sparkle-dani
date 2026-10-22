@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   site: {
     // Только origin (без /sparkle-dani): sitemap/robots сами добавляют baseURL. Берётся из NUXT_PUBLIC_SITE_URL.
     url: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-    name: 'Sparkle Dani',
+    name: 'NOCTURNE',
   },
   runtimeConfig: {
     public: {
@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     baseURL: BASE,
     head: {
       htmlAttrs: { lang: 'ru' },
-      meta: [{ name: 'theme-color', content: '#fbf6f1' }],
+      meta: [{ name: 'theme-color', content: '#210f03' }],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: `${BASE}favicon.svg` }],
     },
   },

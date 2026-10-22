@@ -37,18 +37,18 @@ defineExpose({ open })
 <template>
   <dialog
     ref="dialog"
-    class="modal m-auto w-[min(92vw,38rem)] rounded-[1.75rem] bg-paper p-0 text-ink shadow-soft"
+    class="modal m-auto w-[min(92vw,38rem)] rounded-[1.75rem] bg-canvas p-0 text-fg shadow-soft"
     aria-labelledby="order-title"
     @click="(e) => e.target === dialog && close()"
   >
     <div class="p-6 sm:p-8">
       <div class="flex items-start justify-between gap-4">
         <h2 id="order-title" class="text-3xl">Ваш заказ для {{ OWNER_NAME }}</h2>
-        <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full hover:bg-cream" aria-label="Закрыть" @click="close">
+        <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full hover:bg-raised" aria-label="Закрыть" @click="close">
           <AppIcon name="close" :size="22" />
         </button>
       </div>
-      <p class="mt-2 text-sm text-ink-soft">
+      <p class="mt-2 text-sm text-fg-muted">
         Мы ничего не отправляем автоматически. Скопируйте текст, откройте Telegram и отправьте его сообщением — дальше {{ OWNER_NAME }} ответит вам лично.
       </p>
 
@@ -66,7 +66,7 @@ defineExpose({ open })
           <AppIcon name="telegram" :size="18" /> 2. Открыть Telegram
         </a>
       </div>
-      <p v-if="copyFailed" class="mt-3 text-sm font-semibold text-berry" role="status">
+      <p v-if="copyFailed" class="mt-3 text-sm font-semibold text-link" role="status">
         Не удалось скопировать автоматически — текст выделен, нажмите Ctrl/⌘ + C.
       </p>
     </div>

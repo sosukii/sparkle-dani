@@ -17,8 +17,8 @@ const SAMPLE = 'Вязаные друзья и тёплые мелочи для 
 const cases = [
   { name: 'Playfair normal 600', face: `@font-face{font-family:W;src:url(${url('playfair-cyrillic.woff2')});font-weight:400 900}`, web: '600 100px W', fb: '700 100px "Times New Roman"' },
   { name: 'Playfair italic 500', face: `@font-face{font-family:W;font-style:italic;src:url(${url('playfair-cyrillic-italic.woff2')});font-weight:400 900}`, web: 'italic 500 100px W', fb: 'italic 400 100px "Times New Roman"' },
-  { name: 'Manrope 400', face: `@font-face{font-family:W;src:url(${url('manrope-cyrillic.woff2')});font-weight:200 800}`, web: '400 100px W', fb: '400 100px Arial' },
-  { name: 'Manrope 700', face: `@font-face{font-family:W;src:url(${url('manrope-cyrillic.woff2')});font-weight:200 800}`, web: '700 100px W', fb: '700 100px Arial' },
+  { name: 'Inter 400', face: `@font-face{font-family:W;src:url(${url('inter-cyrillic.woff2')});font-weight:100 900}`, web: '400 100px W', fb: '400 100px Arial' },
+  { name: 'Inter 600', face: `@font-face{font-family:W;src:url(${url('inter-cyrillic.woff2')});font-weight:100 900}`, web: '600 100px W', fb: '700 100px Arial' },
 ]
 
 const browser = await chromium.launch()

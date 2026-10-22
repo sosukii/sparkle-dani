@@ -10,7 +10,7 @@ const search = ref('')
 const links = [
   { to: '/catalog', label: 'Каталог' },
   { to: '/custom', label: 'Свой заказ' },
-  { to: '/about', label: 'Обо мне' },
+  { to: '/about', label: 'О бренде' },
   { to: '/delivery', label: 'Покупка и доставка' },
 ]
 
@@ -43,11 +43,11 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 border-b border-line/70 bg-paper/95 backdrop-blur">
+  <header class="sticky top-0 z-40 border-b border-line/70 bg-canvas/95 backdrop-blur">
     <div class="container-page flex h-16 items-center gap-3 lg:h-[4.5rem] lg:gap-5 xl:gap-8">
-      <NuxtLink to="/" class="flex shrink-0 items-center gap-2 whitespace-nowrap no-underline" aria-label="Sparkle Dani — на главную">
-        <AppIcon name="sparkle" :size="22" class="text-berry" />
-        <span class="font-display text-xl font-semibold tracking-tight lg:text-2xl">{{ SITE_NAME }}</span>
+      <NuxtLink to="/" class="flex shrink-0 flex-col whitespace-nowrap leading-none no-underline" aria-label="NOCTURNE — на главную">
+        <span class="font-logo text-xl font-semibold tracking-[0.12em] lg:text-2xl">{{ SITE_NAME }}</span>
+        <span class="mt-1 hidden text-[0.625rem] font-medium uppercase tracking-[0.2em] text-fg-muted sm:block">Авторский трикотаж</span>
       </NuxtLink>
 
       <nav class="ml-2 hidden items-center gap-0.5 whitespace-nowrap lg:flex xl:ml-4 xl:gap-1" aria-label="Основная навигация">
@@ -55,8 +55,8 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
           v-for="link in links"
           :key="link.to"
           :to="link.to"
-          class="rounded-full px-3 py-2 text-sm font-semibold no-underline transition-colors hover:bg-cream xl:px-4"
-          :class="isActive(link.to) ? 'bg-cream text-berry' : 'text-ink'"
+          class="rounded-md px-3 py-2 text-sm font-medium no-underline transition-colors hover:bg-raised xl:px-4"
+          :class="isActive(link.to) ? 'bg-raised text-gold' : 'text-fg'"
           :aria-current="isActive(link.to) ? 'page' : undefined"
         >
           {{ link.label }}
@@ -66,7 +66,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
       <form class="ml-auto hidden w-40 shrink lg:block xl:w-72" role="search" @submit.prevent="submitSearch">
         <label for="site-search" class="sr-only">Поиск по сайту</label>
         <div class="relative">
-          <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />
+          <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
           <input
             id="site-search"
             v-model="search"
@@ -74,7 +74,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
             enterkeyhint="search"
             autocomplete="off"
             placeholder="Поиск по сайту"
-            class="field rounded-full pl-10"
+            class="field pl-10"
           >
         </div>
       </form>
@@ -82,7 +82,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
       <div class="ml-auto flex items-center gap-1 lg:ml-0">
         <button
           type="button"
-          class="grid size-11 place-items-center rounded-full hover:bg-cream lg:hidden"
+          class="grid size-11 place-items-center rounded-full hover:bg-raised lg:hidden"
           :aria-expanded="searchOpen"
           aria-controls="mobile-search"
           aria-label="Поиск"
@@ -92,19 +92,19 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
         </button>
         <NuxtLink
           to="/cart"
-          class="relative grid size-11 place-items-center rounded-full no-underline hover:bg-cream"
+          class="relative grid size-11 place-items-center rounded-full no-underline hover:bg-raised"
           :aria-label="cart.hydrated && cart.count ? `Корзина, товаров: ${cart.count}` : 'Корзина'"
         >
           <AppIcon name="bag" :size="22" />
           <span
             v-if="cart.hydrated && cart.count"
             data-testid="cart-count"
-            class="absolute right-0.5 top-0.5 grid min-w-5 place-items-center rounded-full bg-berry px-1 text-[0.7rem] font-bold leading-5 text-white"
+            class="absolute right-0.5 top-0.5 grid min-w-5 place-items-center rounded-full bg-accent px-1 text-[0.7rem] font-bold leading-5 text-fg"
           >{{ cart.count }}</span>
         </NuxtLink>
         <button
           type="button"
-          class="grid size-11 place-items-center rounded-full hover:bg-cream lg:hidden"
+          class="grid size-11 place-items-center rounded-full hover:bg-raised lg:hidden"
           :aria-expanded="menuOpen"
           aria-controls="mobile-menu"
           :aria-label="menuOpen ? 'Закрыть меню' : 'Открыть меню'"
@@ -126,7 +126,7 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
             enterkeyhint="search"
             autocomplete="off"
             placeholder="Поиск по сайту"
-            class="field rounded-full"
+            class="field"
           >
         </form>
       </div>
@@ -138,8 +138,8 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(`${t
           <li v-for="link in links" :key="link.to">
             <NuxtLink
               :to="link.to"
-              class="flex min-h-12 items-center rounded-xl px-3 font-display text-xl no-underline hover:bg-cream"
-              :class="isActive(link.to) ? 'text-berry' : 'text-ink'"
+              class="flex min-h-12 items-center rounded-xl px-3 font-display text-xl no-underline hover:bg-raised"
+              :class="isActive(link.to) ? 'text-link' : 'text-fg'"
               :aria-current="isActive(link.to) ? 'page' : undefined"
             >
               {{ link.label }}

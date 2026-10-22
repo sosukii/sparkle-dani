@@ -1,6 +1,7 @@
 // Готовит облегчённые шрифты (только нужные символы) из пакетов @fontsource-variable → app/assets/fonts/ (в git не хранится).
 // Кириллица берётся как есть, латиница урезается до букв, цифр и знаков препинания.
-// Значка ₽ нет ни в Manrope, ни в Playfair — его рисует системный шрифт (поэтому файлы «latin-ext» не нужны вовсе).
+// Значка ₽ нет ни в Inter (в нужном начертании), ни в Playfair, ни в Bodoni Moda — его рисует системный шрифт (файлы «latin-ext» не нужны).
+// Bodoni Moda не содержит кириллицы: он нужен только для латинского логотипа NOCTURNE.
 import { createRequire } from 'node:module'
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -10,16 +11,18 @@ const require = createRequire(import.meta.url)
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = join(root, 'app/assets/fonts')
 const pkg = (name) => dirname(require.resolve(`${name}/package.json`))
-const manrope = join(pkg('@fontsource-variable/manrope'), 'files')
+const inter = join(pkg('@fontsource-variable/inter'), 'files')
 const playfair = join(pkg('@fontsource-variable/playfair-display'), 'files')
+const bodoni = join(pkg('@fontsource-variable/bodoni-moda'), 'files')
 
 const range = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => String.fromCodePoint(from + i)).join('')
 // Должно совпадать с unicode-range в app/assets/css/main.css
 const LATIN = range(0x20, 0x7e) + range(0xa0, 0xbf) + '×' + range(0x2010, 0x2015) + range(0x2018, 0x201e) + '•… −'
 
 const jobs = [
-  { out: 'manrope-cyrillic.woff2', copy: join(manrope, 'manrope-cyrillic-wght-normal.woff2') },
-  { out: 'manrope-latin.woff2', src: join(manrope, 'manrope-latin-wght-normal.woff2'), text: LATIN },
+  { out: 'inter-cyrillic.woff2', copy: join(inter, 'inter-cyrillic-wght-normal.woff2') },
+  { out: 'inter-latin.woff2', src: join(inter, 'inter-latin-wght-normal.woff2'), text: LATIN },
+  { out: 'bodoni-latin.woff2', src: join(bodoni, 'bodoni-moda-latin-wght-normal.woff2'), text: LATIN },
   { out: 'playfair-cyrillic.woff2', copy: join(playfair, 'playfair-display-cyrillic-wght-normal.woff2') },
   { out: 'playfair-cyrillic-italic.woff2', copy: join(playfair, 'playfair-display-cyrillic-wght-italic.woff2') },
   { out: 'playfair-latin.woff2', src: join(playfair, 'playfair-display-latin-wght-normal.woff2'), text: LATIN },

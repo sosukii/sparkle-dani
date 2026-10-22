@@ -34,7 +34,7 @@ test.describe('страницы ошибок', () => {
 test.describe('SEO', () => {
   test('главная: title, description, OG и canonical', async ({ page }) => {
     await page.goto('/')
-    await expect(page).toHaveTitle(/Sparkle Dani/)
+    await expect(page).toHaveTitle(/NOCTURNE/)
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.{40,}/)
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /.+/)
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /^http.+og-default\.jpg$/)
@@ -44,7 +44,7 @@ test.describe('SEO', () => {
 
   test('товар: уникальные метаданные', async ({ page }) => {
     await page.goto('/product/lesnoy-duh-001')
-    await expect(page).toHaveTitle('Лесной дух — Sparkle Dani')
+    await expect(page).toHaveTitle('Лесной дух — NOCTURNE')
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/product\/lesnoy-duh-001$/)
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /product-001-1\.jpg$/)
     // Для демо-товаров разметку Product не отдаём, а хлебные крошки (они отражают реальную навигацию) — да

@@ -53,17 +53,17 @@ const facts = computed(() => {
 
 <template>
   <div v-if="data" class="container-page py-8 lg:py-12">
-    <nav aria-label="Хлебные крошки" class="mb-6 text-sm text-ink-soft">
+    <nav aria-label="Хлебные крошки" class="mb-6 text-sm text-fg-muted">
       <ol class="flex flex-wrap items-center gap-2">
-        <li><NuxtLink to="/" class="no-underline hover:text-berry">Главная</NuxtLink></li>
+        <li><NuxtLink to="/" class="no-underline hover:text-link">Главная</NuxtLink></li>
         <li aria-hidden="true">/</li>
-        <li><NuxtLink to="/catalog" class="no-underline hover:text-berry">Каталог</NuxtLink></li>
+        <li><NuxtLink to="/catalog" class="no-underline hover:text-link">Каталог</NuxtLink></li>
         <template v-if="labels.category">
           <li aria-hidden="true">/</li>
-          <li><NuxtLink :to="`/catalog/${labels.category.slug}`" class="no-underline hover:text-berry">{{ labels.category.title }}</NuxtLink></li>
+          <li><NuxtLink :to="`/catalog/${labels.category.slug}`" class="no-underline hover:text-link">{{ labels.category.title }}</NuxtLink></li>
         </template>
         <li aria-hidden="true">/</li>
-        <li aria-current="page" class="font-semibold text-ink">{{ product.title }}</li>
+        <li aria-current="page" class="font-semibold text-fg">{{ product.title }}</li>
       </ol>
     </nav>
 
@@ -76,7 +76,7 @@ const facts = computed(() => {
         <ul v-if="labels.fandom || labels.category" class="flex flex-wrap gap-2">
           <li v-if="labels.fandom">
             <NuxtLink :to="{ path: '/catalog', query: { fandom: labels.fandom.id } }" class="chip no-underline">
-              <AppIcon name="sparkle" :size="12" class="text-berry" /> {{ labels.fandom.label }}
+              <AppIcon name="sparkle" :size="12" class="text-link" /> {{ labels.fandom.label }}
             </NuxtLink>
           </li>
           <li v-if="labels.category">
@@ -89,25 +89,25 @@ const facts = computed(() => {
 
         <div class="mt-4 flex flex-wrap items-center gap-3">
           <AvailabilityBadge :availability="product.availability" />
-          <p v-if="product.availability === 'made_to_order' && product.leadTimeDays" class="text-sm font-semibold text-ink-soft" data-testid="lead-time">
+          <p v-if="product.availability === 'made_to_order' && product.leadTimeDays" class="text-sm font-semibold text-fg-muted" data-testid="lead-time">
             Срок изготовления: {{ formatLeadTime(product.leadTimeDays) }}
           </p>
         </div>
 
-        <p v-if="product.description" class="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">{{ product.description }}</p>
+        <p v-if="product.description" class="mt-6 max-w-xl text-lg leading-relaxed text-fg-muted">{{ product.description }}</p>
 
         <div class="mt-8">
           <AddToCart :product="product" />
-          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold no-underline hover:text-berry">
+          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold no-underline hover:text-link">
             <AppIcon name="telegram" :size="18" /> Есть вопрос? {{ CONTACT_LABEL }}
           </a>
         </div>
 
         <section v-if="facts.length" class="mt-10" aria-labelledby="product-facts">
           <h2 id="product-facts" class="text-2xl">Характеристики</h2>
-          <dl class="mt-4 divide-y divide-line rounded-card border border-line bg-white">
+          <dl class="mt-4 divide-y divide-line rounded-card border border-line bg-surface">
             <div v-for="row in facts" :key="row.label" class="grid grid-cols-[8.5rem_1fr] gap-4 px-5 py-3 text-sm sm:grid-cols-[11rem_1fr]">
-              <dt class="font-semibold text-ink-soft">{{ row.label }}</dt>
+              <dt class="font-semibold text-fg-muted">{{ row.label }}</dt>
               <dd class="font-semibold">{{ row.value }}</dd>
             </div>
           </dl>

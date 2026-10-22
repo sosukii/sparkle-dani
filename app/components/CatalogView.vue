@@ -103,7 +103,7 @@ const isFilteredView = computed(() => !!filters.value.q || hasActiveFilters(filt
 usePageSeo(() => ({
   title: filters.value.q ? `Поиск: ${filters.value.q}` : (filters.value.page > 1 ? `${title.value}, страница ${filters.value.page}` : title.value),
   description: currentCategory.value?.description
-    ? `${currentCategory.value.description} Изделия ручной работы в магазине Sparkle Dani.`
+    ? `${currentCategory.value.description} Изделия ручной работы в магазине NOCTURNE.`
     : 'Каталог изделий ручной работы: вязаные игрушки, шарфы и шапки, украшения, сумки и вещи для дома. Фильтры по фандому, цвету и цене.',
   canonicalPath: props.category ? `/catalog/${props.category}` : '/catalog',
   noindex: isFilteredView.value,
@@ -122,20 +122,20 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
   <div class="container-page py-8 lg:py-12">
     <!-- Шапка -->
     <header>
-      <nav aria-label="Хлебные крошки" class="mb-4 text-sm text-ink-soft">
+      <nav aria-label="Хлебные крошки" class="mb-4 text-sm text-fg-muted">
         <ol class="flex flex-wrap items-center gap-2">
-          <li><NuxtLink to="/" class="no-underline hover:text-berry">Главная</NuxtLink></li>
+          <li><NuxtLink to="/" class="no-underline hover:text-link">Главная</NuxtLink></li>
           <li aria-hidden="true">/</li>
-          <li v-if="currentCategory"><NuxtLink to="/catalog" class="no-underline hover:text-berry">Каталог</NuxtLink></li>
+          <li v-if="currentCategory"><NuxtLink to="/catalog" class="no-underline hover:text-link">Каталог</NuxtLink></li>
           <li v-if="currentCategory" aria-hidden="true">/</li>
-          <li aria-current="page" class="font-semibold text-ink">{{ title }}</li>
+          <li aria-current="page" class="font-semibold text-fg">{{ title }}</li>
         </ol>
       </nav>
       <h1 class="text-4xl sm:text-5xl lg:text-6xl">
         <template v-if="filters.q">Поиск: <span class="em-accent">{{ filters.q }}</span></template>
         <template v-else>{{ title }}</template>
       </h1>
-      <p v-if="currentCategory?.description && !filters.q" class="mt-3 max-w-2xl text-lg text-ink-soft">{{ currentCategory.description }}</p>
+      <p v-if="currentCategory?.description && !filters.q" class="mt-3 max-w-2xl text-lg text-fg-muted">{{ currentCategory.description }}</p>
 
       <ul class="mt-6 flex flex-wrap gap-2" aria-label="Категории">
         <li>
@@ -166,7 +166,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
           <form class="min-w-[12rem] flex-1" role="search" @submit.prevent="submitSearch">
             <label for="catalog-search" class="sr-only">Поиск по каталогу</label>
             <div class="relative">
-              <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft" />
+              <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
               <input
                 id="catalog-search" v-model="searchText" type="search" enterkeyhint="search" autocomplete="off"
                 placeholder="Название, фандом, цвет…" class="field pl-10" data-testid="catalog-search" @input="onSearchInput"
@@ -184,13 +184,13 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
           </div>
           <button type="button" class="btn btn-soft lg:hidden" data-testid="open-filters" @click="openSheet">
             <AppIcon name="filter" :size="18" /> Фильтры
-            <span v-if="activeCount" class="grid min-w-5 place-items-center rounded-full bg-berry px-1 text-xs leading-5 text-white">{{ activeCount }}</span>
+            <span v-if="activeCount" class="grid min-w-5 place-items-center rounded-full bg-accent px-1 text-xs leading-5 text-fg">{{ activeCount }}</span>
           </button>
         </div>
 
         <!-- Счётчик и активные фильтры -->
         <div class="mt-4 flex items-center gap-3" aria-live="polite">
-          <p class="shrink-0 text-sm font-semibold text-ink-soft" data-testid="result-count">
+          <p class="shrink-0 text-sm font-semibold text-fg-muted" data-testid="result-count">
             {{ data.total }} {{ pluralRu(data.total, ['изделие', 'изделия', 'изделий']) }}
           </p>
           <!-- Выбранные фильтры — одна прокручиваемая строка; «Сбросить всё» вынесено из неё и всегда на виду -->
@@ -201,7 +201,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
               {{ chip.label }} <AppIcon name="close" :size="14" />
             </button>
           </div>
-          <button v-if="activeCount || filters.q" type="button" class="ml-auto min-h-9 shrink-0 px-1 text-sm font-bold text-berry underline underline-offset-4" data-testid="clear-filters" @click="clearAll()">
+          <button v-if="activeCount || filters.q" type="button" class="ml-auto min-h-9 shrink-0 px-1 text-sm font-bold text-link underline underline-offset-4" data-testid="clear-filters" @click="clearAll()">
             Сбросить всё
           </button>
         </div>
@@ -231,14 +231,14 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
     <!-- Фильтры: мобильная панель -->
     <dialog
       ref="sheet"
-      class="sheet m-0 mt-auto max-h-[88dvh] w-full max-w-none overflow-hidden rounded-t-3xl bg-paper p-0 text-ink lg:hidden"
+      class="sheet m-0 mt-auto max-h-[88dvh] w-full max-w-none overflow-hidden rounded-t-3xl bg-canvas p-0 text-fg lg:hidden"
       aria-labelledby="sheet-title"
       @click="onSheetClick"
     >
       <div class="flex max-h-[88dvh] flex-col">
         <div class="flex items-center justify-between border-b border-line px-5 py-4">
           <h2 id="sheet-title" class="text-2xl">Фильтры</h2>
-          <button type="button" class="grid size-11 place-items-center rounded-full hover:bg-cream" aria-label="Закрыть фильтры" @click="closeSheet">
+          <button type="button" class="grid size-11 place-items-center rounded-full hover:bg-raised" aria-label="Закрыть фильтры" @click="closeSheet">
             <AppIcon name="close" :size="22" />
           </button>
         </div>

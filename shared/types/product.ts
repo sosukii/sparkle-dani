@@ -43,7 +43,7 @@ export const productSchema = z
     attributes: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).default([]),
     /** Дата добавления, YYYY-MM-DD. Нужна для сортировки «сначала новые». */
     createdAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-    /** true — демонстрационный товар, не настоящее изделие Мари. */
+    /** true — демонстрационный товар, не настоящее изделие Дани. */
     isDemo: z.boolean().default(false),
   })
 

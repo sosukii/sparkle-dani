@@ -31,7 +31,7 @@ test('основная кнопка ведёт в Telegram', async ({ page }) =>
 test('шаблон первого сообщения копируется одним нажатием', async ({ page }) => {
   await page.goto('/custom')
   const template = await page.getByTestId('custom-template').inputValue()
-  expect(template).toContain('Здравствуйте, Мари!')
+  expect(template).toContain('Здравствуйте, Дани!')
   expect(template).toContain('Бюджет')
   await page.getByTestId('custom-copy').click()
   await expect(page.getByTestId('custom-copy')).toContainText('Скопировано')
