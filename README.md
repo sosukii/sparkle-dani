@@ -40,6 +40,7 @@ Production-проверка: `npm run build && node .output/server/index.mjs`.
 - `pre-commit` (Husky) запускает полный `npm test`, включая скриншоты. Упавшие проверки блокируют коммит. `--no-verify` без договорённости не используем.
 - `pre-push` не повторяет работу: если дерево коммита уже прошло `pre-commit`, он это пропускает, иначе запускает `npm test`.
 - GitHub Actions (`.github/workflows/ci.yml`) выполняет те же команды на push и pull request (Ubuntu, Node из `.nvmrc`), плюс `test:static`. При падении сохраняет отчёт и скриншоты как артефакт `playwright-artifacts`.
+- Уведомление в Telegram после деплоя: задайте в GitHub (Settings → Secrets and variables → Actions) секреты `TELEGRAM_BOT_TOKEN` (токен бота от @BotFather) и `TELEGRAM_CHAT_ID` (id вашего чата с ботом; сначала напишите боту любое сообщение). После каждого успешного деплоя бот пришлёт ссылку. Без секретов шаг пропускается.
 - Деплой (`.github/workflows/pages.yml`) запускается **только после успешного CI** на `main` и публикует статическую сборку на GitHub Pages. Можно запустить и вручную (Actions → Deploy to GitHub Pages → Run workflow).
 
 ### Визуальные тесты — как с ними работать

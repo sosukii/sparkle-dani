@@ -60,6 +60,29 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Сообщение в Telegram со ссылкой на новый деплой. Работает, только если в настройках репозитория заданы секреты
+  # TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID (см. README); без них шаг тихо пропускается. Токен нигде не печатается.
+  notify:
+    needs: deploy
+    runs-on: ubuntu-24.04
+    permissions: {}
+    env:
+      TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+      CHANGE: ${{ github.event.workflow_run.display_title || 'ручной запуск' }}
+    steps:
+      - name: Отправить ссылку в Telegram
+        if: env.TG_TOKEN != '' && env.TG_CHAT != ''
+        run: |
+          curl -sS --fail-with-body -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TG_CHAT}" \
+            --data-urlencode "text=NOCTURNE: деплой обновлён ✅
+          ${CHANGE}
+          ${PAGE_URL}" > /dev/null
