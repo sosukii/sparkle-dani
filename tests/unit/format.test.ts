@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatLeadTime, formatPrice, pluralRu } from '#shared/utils/format'
+import { formatLeadTime, formatPrice, formatSizes, formatPriceOrNull, pluralRu } from '#shared/utils/format'
 
 describe('format', () => {
   it('форматирует цену в рублях без копеек', () => {
@@ -18,5 +18,22 @@ describe('format', () => {
     expect(formatLeadTime({ min: 7, max: 12 })).toBe('7–12 дней')
     expect(formatLeadTime({ min: 1, max: 2 })).toBe('1–2 дня')
     expect(formatLeadTime({ min: 5, max: 5 })).toBe('5 дней')
+  })
+
+  it('неизвестная цена не превращается в «0 ₽»', () => {
+    expect(formatPriceOrNull(null)).toBeNull()
+    expect(formatPriceOrNull(0)?.replace(/\s/g, ' ')).toBe('0 ₽')
+  })
+
+  it('размеры одной строкой: диапазон из подряд идущих, иначе список', () => {
+    const order = [
+      { id: 'xs', label: 'XS' }, { id: 's', label: 'S' }, { id: 'm', label: 'M' },
+      { id: 'l', label: 'L' }, { id: 'xl', label: 'XL' }, { id: 'one-size', label: 'Один размер' },
+    ]
+    expect(formatSizes(['s', 'm', 'l'], order)).toBe('S–L')
+    expect(formatSizes(['l', 'xs', 's', 'm', 'xl'], order)).toBe('XS–XL')
+    expect(formatSizes(['s', 'l'], order)).toBe('S, L')
+    expect(formatSizes(['m'], order)).toBe('M')
+    expect(formatSizes(['one-size'], order)).toBe('Один размер')
   })
 })

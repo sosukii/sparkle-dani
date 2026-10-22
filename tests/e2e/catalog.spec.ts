@@ -214,6 +214,52 @@ test('плашка «под заказ» не ломает карточку и �
   await expect(card).toContainText('Под заказ · 7–12 дней')
 })
 
+test('карточка показывает посадку и размеры, если они известны', async ({ page }) => {
+  await page.goto('/catalog/sweaters')
+  await expect(cards(page).filter({ hasText: 'Свитер крупной вязки' }).getByTestId('card-meta')).toHaveText('Посадка: оверсайз · S–L')
+  // сведения не известны → строка пустая, но место под неё сохранено (карточки остаются выровненными)
+  await expect(cards(page).filter({ hasText: 'Свитер «Оливковый»' }).getByTestId('card-meta')).toHaveText('')
+})
+
+test('изделия без нужных сведений не прячутся молча: о них сказано, их можно показать', async ({ page }) => {
+  await page.goto('/catalog?fit=oversize')
+  await expect(count(page)).toHaveText('5 изделий')
+  const note = page.getByTestId('hidden-unknown')
+  await expect(note).toContainText('Ещё 11 изделий')
+  await expect(note.getByRole('link', { name: /спросить Дани/ })).toHaveAttribute('href', 'https://t.me/sosukii')
+
+  await note.getByTestId('show-unknown').click()
+  await expect(page).toHaveURL(/unknown=1/)
+  await expect(count(page)).toHaveText('16 изделий')
+  await expect(note).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Убрать фильтр: Включая изделия без сведений' })).toBeVisible()
+  await expect(page.getByRole('complementary', { name: 'Фильтры' }).getByTestId('filter-include-unknown')).toBeChecked()
+
+  await page.getByRole('button', { name: 'Убрать фильтр: Включая изделия без сведений' }).click()
+  await expect(count(page)).toHaveText('5 изделий')
+})
+
+test('переключатель «включая изделия без сведений» появляется только вместе с такими фильтрами', async ({ page }) => {
+  await page.goto('/catalog')
+  const side = page.getByRole('complementary', { name: 'Фильтры' })
+  await expect(side.getByTestId('filter-include-unknown')).toHaveCount(0)
+  await side.getByTestId('filter-color-cocoa').check() // цвет известен у всех
+  await expect(side.getByTestId('filter-include-unknown')).toHaveCount(0)
+  await side.getByTestId('filter-fit-oversize').check()
+  await side.getByTestId('filter-include-unknown').check()
+  await expect(page).toHaveURL(/unknown=1/)
+})
+
+test('внизу каталога есть приглашение написать Дани, а в пустом результате тоже', async ({ page }) => {
+  await page.goto('/catalog')
+  const banner = page.getByTestId('ask-banner')
+  await expect(banner.getByRole('link', { name: /Связаться с Дани/ })).toHaveAttribute('href', 'https://t.me/sosukii')
+  await expect(banner.getByRole('link', { name: 'Свой заказ' })).toHaveAttribute('href', /\/custom/)
+
+  await page.goto('/catalog?q=абракадабра')
+  await expect(page.getByTestId('empty-state').getByRole('link', { name: /Спросить Дани/ })).toHaveAttribute('href', 'https://t.me/sosukii')
+})
+
 test.describe('мобильная версия', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 

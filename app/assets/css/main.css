@@ -351,4 +351,8 @@
     mask-image: linear-gradient(to right, transparent 0, #000 0.5rem, #000 calc(100% - 1.5rem), transparent 100%);
   }
   .chip-scroller::-webkit-scrollbar { display: none; }
+  /* Строка чипов прокручивается только на узких экранах, на широких переносится как обычно. */
+  @media (min-width: 640px) {
+    .chip-scroller-wrap { flex-wrap: wrap; overflow: visible; mask-image: none; }
+  }
 }

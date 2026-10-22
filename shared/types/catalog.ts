@@ -15,6 +15,8 @@ export interface CatalogFilters {
   availability: string[]
   minPrice?: number
   maxPrice?: number
+  /** true — вместе с подходящими показывать изделия, у которых нужные сведения не известны (посадка, размеры, состав, цена, наличие). */
+  includeUnknown: boolean
   sort: SortKey
   page: number
   pageSize: number
@@ -46,6 +48,10 @@ export interface CatalogResult {
   pageSize: number
   totalPages: number
   facets: Facets
+  /** Сколько изделий не вошло в выборку только потому, что нужные сведения о них не известны. */
+  hiddenUnknown: number
+  /** Подписи для карточек: посадка и порядок размеров из справочника. */
+  labels: { fits: Record<string, string>, sizes: { id: string, label: string }[] }
 }
 
 export interface CatalogContext {

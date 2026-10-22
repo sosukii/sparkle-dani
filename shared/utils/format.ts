@@ -27,3 +27,17 @@ export function formatLeadTime(range: { min: number, max: number }): string {
   const unit = pluralRu(range.max, ['день', 'дня', 'дней'])
   return range.min === range.max ? `${range.max} ${unit}` : `${range.min}–${range.max} ${unit}`
 }
+
+/**
+ * Размеры одной строкой: «S–L» для подряд идущих (от трёх), иначе через запятую; «Один размер» как есть.
+ * `order` — справочник размеров в порядке возрастания.
+ */
+export function formatSizes(ids: string[], order: { id: string, label: string }[]): string {
+  const known = order.map((o) => o.id)
+  const picked = ids
+    .map((id) => ({ id, i: known.indexOf(id) }))
+    .sort((a, b) => a.i - b.i)
+  const label = (id: string) => order.find((o) => o.id === id)?.label ?? id
+  const contiguous = picked.length >= 3 && picked.every((p, k) => p.i >= 0 && (k === 0 || p.i === picked[k - 1]!.i + 1))
+  return contiguous ? `${label(picked[0]!.id)}–${label(picked.at(-1)!.id)}` : picked.map((p) => label(p.id)).join(', ')
+}

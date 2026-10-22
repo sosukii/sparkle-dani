@@ -31,6 +31,12 @@ for (const [device, viewport] of Object.entries(viewports)) {
       await shot(page, `catalog-filtered-${device}`)
     })
 
+    test('каталог: часть изделий без сведений по фильтру', async ({ page }) => {
+      await page.goto('/catalog?fit=oversize')
+      await expect(page.getByTestId('hidden-unknown')).toBeVisible()
+      await shot(page, `catalog-hidden-unknown-${device}`)
+    })
+
     test('каталог: пустой результат', async ({ page }) => {
       await page.goto('/catalog?q=абракадабра')
       await shot(page, `catalog-empty-${device}`)

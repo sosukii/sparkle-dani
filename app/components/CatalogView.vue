@@ -9,6 +9,7 @@ import {
 } from '#shared/utils/catalog-query'
 import { pluralRu, formatPrice } from '#shared/utils/format'
 import { buildBreadcrumbJsonLd } from '#shared/utils/seo'
+import { OWNER_NAME, TELEGRAM_URL } from '#shared/utils/site'
 
 const props = defineProps<{ category?: string }>()
 
@@ -33,7 +34,7 @@ const { data, error, pending, refresh } = await useAsyncData<CatalogResult>(
 )
 
 // ── обновление URL ──
-type Patch = Partial<Pick<CatalogFilters, 'q' | 'type' | 'color' | 'fit' | 'size' | 'material' | 'availability' | 'minPrice' | 'maxPrice' | 'sort' | 'page'>>
+type Patch = Partial<Pick<CatalogFilters, 'q' | 'type' | 'color' | 'fit' | 'size' | 'material' | 'availability' | 'minPrice' | 'maxPrice' | 'includeUnknown' | 'sort' | 'page'>>
 function update(patch: Patch, mode: 'replace' | 'push' = 'replace') {
   const next = { ...filters.value, ...patch, page: patch.page ?? 1 }
   const query = serializeCatalogFilters(next)
@@ -44,8 +45,8 @@ const setPage = async () => {
   document.getElementById('catalog-results')?.scrollIntoView({ block: 'start' })
 }
 
-const clearFilters = () => update({ type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined })
-const clearAll = () => update({ q: '', type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined, sort: DEFAULT_SORT })
+const clearFilters = () => update({ type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined, includeUnknown: false })
+const clearAll = () => update({ q: '', type: [], color: [], fit: [], size: [], material: [], availability: [], minPrice: undefined, maxPrice: undefined, includeUnknown: false, sort: DEFAULT_SORT })
 
 // ── поиск ──
 const searchText = ref(filters.value.q)
@@ -78,6 +79,9 @@ const activeChips = computed(() => {
       ? `${formatPrice(f.minPrice)} — ${formatPrice(f.maxPrice)}`
       : f.minPrice !== undefined ? `от ${formatPrice(f.minPrice)}` : `до ${formatPrice(f.maxPrice!)}`
     chips.push({ key: 'price', label, remove: () => update({ minPrice: undefined, maxPrice: undefined }) })
+  }
+  if (f.includeUnknown && chips.length) {
+    chips.push({ key: 'unknown', label: 'Включая изделия без сведений', remove: () => update({ includeUnknown: false }) })
   }
   return chips
 })
@@ -137,12 +141,12 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
       </h1>
       <p v-if="currentCategory?.description && !filters.q" class="mt-3 max-w-2xl text-lg text-fg-muted">{{ currentCategory.description }}</p>
 
-      <ul class="mt-6 flex flex-wrap gap-2" aria-label="Категории">
+      <ul class="chip-scroller chip-scroller-wrap -mx-4 mt-6 px-4 sm:mx-0 sm:px-0" aria-label="Категории">
         <li>
-          <NuxtLink to="/catalog" class="chip no-underline" :aria-current="!currentCategory ? 'page' : undefined">Все</NuxtLink>
+          <NuxtLink to="/catalog" class="chip whitespace-nowrap no-underline" :aria-current="!currentCategory ? 'page' : undefined">Все</NuxtLink>
         </li>
         <li v-for="c in categories" :key="c.id">
-          <NuxtLink :to="`/catalog/${c.slug}`" class="chip no-underline" :aria-current="currentCategory?.id === c.id ? 'page' : undefined">
+          <NuxtLink :to="`/catalog/${c.slug}`" class="chip whitespace-nowrap no-underline" :aria-current="currentCategory?.id === c.id ? 'page' : undefined">
             {{ c.title }}
           </NuxtLink>
         </li>
@@ -163,7 +167,7 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
         <h2 class="sr-only">Изделия</h2>
         <!-- Панель: поиск, сортировка, мобильный фильтр -->
         <div class="flex flex-wrap items-center gap-3">
-          <form class="min-w-[12rem] flex-1" role="search" @submit.prevent="submitSearch">
+          <form class="w-full sm:min-w-[12rem] sm:flex-1" role="search" @submit.prevent="submitSearch">
             <label for="catalog-search" class="sr-only">Поиск по каталогу</label>
             <div class="relative">
               <AppIcon name="search" :size="18" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted" />
@@ -173,16 +177,16 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
               >
             </div>
           </form>
-          <div>
+          <div class="min-w-0 flex-1 sm:flex-none">
             <label for="catalog-sort" class="sr-only">Сортировка</label>
             <select
-              id="catalog-sort" class="field select-field w-auto" :value="filters.sort" data-testid="catalog-sort"
+              id="catalog-sort" class="field select-field w-full sm:w-auto" :value="filters.sort" data-testid="catalog-sort"
               @change="update({ sort: ($event.target as HTMLSelectElement).value as CatalogFilters['sort'] })"
             >
               <option v-for="o in sortOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
             </select>
           </div>
-          <button type="button" class="btn btn-soft lg:hidden" data-testid="open-filters" @click="openSheet">
+          <button type="button" class="btn btn-soft shrink-0 lg:hidden" data-testid="open-filters" @click="openSheet">
             <AppIcon name="filter" :size="18" /> Фильтры
             <span v-if="activeCount" class="grid min-w-5 place-items-center rounded-full bg-accent px-1 text-xs leading-5 text-fg">{{ activeCount }}</span>
           </button>
@@ -206,10 +210,18 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
           </button>
         </div>
 
+        <!-- Изделия, у которых нужные сведения не известны: не прячем молча, а говорим о них и даём выбор -->
+        <p v-if="data.hiddenUnknown > 0" class="mt-3 rounded-md border border-line bg-surface px-4 py-3 text-sm text-fg-muted" data-testid="hidden-unknown">
+          Ещё {{ data.hiddenUnknown }} {{ pluralRu(data.hiddenUnknown, ['изделие', 'изделия', 'изделий']) }}
+          не вошло в выборку: {{ data.hiddenUnknown === 1 ? 'о нём' : 'о них' }} нет сведений по выбранным условиям (посадка, размер, состав, цена или наличие).
+          <button type="button" class="font-semibold text-link underline underline-offset-4" data-testid="show-unknown" @click="update({ includeUnknown: true })">Показать</button>
+          <span class="whitespace-nowrap"> или <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="font-semibold text-link underline underline-offset-4">спросить {{ OWNER_NAME }}</a></span>
+        </p>
+
         <!-- Сетка -->
         <div v-if="data.items.length" class="mt-6 transition-opacity duration-150" :class="pending ? 'opacity-50' : ''">
           <div class="grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-5 md:grid-cols-3">
-            <ProductCard v-for="(p, i) in data.items" :key="p.id" :product="p" :priority="i < 2" />
+            <ProductCard v-for="(p, i) in data.items" :key="p.id" :product="p" :priority="i < 2" :labels="data.labels" />
           </div>
           <PaginationNav :page="data.page" :total-pages="data.totalPages" :query="paginationQuery" @click.capture="setPage" />
         </div>
@@ -221,10 +233,15 @@ const paginationQuery = computed(() => serializeCatalogFilters({ ...filters.valu
           :text="filters.q ? `По запросу «${filters.q}» с выбранными фильтрами ничего нет. Попробуйте изменить запрос или сбросить фильтры.` : 'С такими фильтрами изделий нет. Попробуйте убрать часть условий.'"
         >
           <button type="button" class="btn btn-primary" @click="clearAll()">Сбросить фильтры</button>
+          <a :href="TELEGRAM_URL" target="_blank" rel="noopener noreferrer" class="btn btn-ghost no-underline">
+            <AppIcon name="telegram" :size="18" /> Спросить {{ OWNER_NAME }}
+          </a>
           <NuxtLink v-if="currentCategory" to="/catalog" class="btn btn-ghost no-underline">Весь каталог</NuxtLink>
         </EmptyState>
 
         <ErrorState v-if="error" class="mt-6" title="Не удалось обновить список" @retry="refresh()" />
+
+        <AskBanner class="mt-14" />
       </section>
     </div>
 
