@@ -77,7 +77,8 @@ jobs:
     env:
       TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
-      PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+      # Параметр v обходит кэш превью ссылок в Telegram: иначе он показывает карточку из первого сообщения.
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }}?v=${{ github.event.workflow_run.head_sha || github.sha }}
       CHANGE: ${{ github.event.workflow_run.display_title || 'ручной запуск' }}
     steps:
       - uses: actions/checkout@v4
