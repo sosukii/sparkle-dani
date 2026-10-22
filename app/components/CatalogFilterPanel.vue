@@ -3,7 +3,7 @@ import type { CatalogFilters, FacetOption, Facets } from '#shared/types/catalog'
 import { formatPrice } from '#shared/utils/format'
 
 type GroupKey = 'availability' | 'type' | 'color' | 'fit' | 'size' | 'material'
-type Patch = Partial<Pick<CatalogFilters, GroupKey | 'minPrice' | 'maxPrice'>>
+type Patch = Partial<Pick<CatalogFilters, GroupKey | 'minPrice' | 'maxPrice' | 'includeUnknown'>>
 
 const props = defineProps<{ facets: Facets, filters: CatalogFilters, idPrefix: string }>()
 const emit = defineEmits<{ update: [patch: Patch] }>()
@@ -24,6 +24,13 @@ function toggle(key: GroupKey, id: string, checked: boolean) {
   const current = props.filters[key]
   emit('update', { [key]: checked ? [...current, id] : current.filter((x) => x !== id) })
 }
+
+// Переключатель нужен, только когда выбран фильтр по сведениям, которые бывают неизвестны.
+const hasKnowledgeFilters = computed(() =>
+  props.filters.fit.length > 0 || props.filters.size.length > 0 || props.filters.material.length > 0
+  || props.filters.availability.length > 0 || props.filters.minPrice !== undefined || props.filters.maxPrice !== undefined
+  || props.filters.includeUnknown,
+)
 
 const isSelected = (key: GroupKey, option: FacetOption) => props.filters[key].includes(option.id)
 // Опции, после выбора которых ничего не найдётся, блокируем — чтобы не заводить пользователя в тупик.
@@ -170,5 +177,17 @@ function onHigh(value: number) {
         </li>
       </ul>
     </fieldset>
+
+    <!-- Неизвестное не равно «нет»: покупатель сам решает, показывать ли изделия без нужных сведений -->
+    <label v-if="hasKnowledgeFilters" class="flex cursor-pointer items-start gap-3 rounded-md border border-line bg-surface p-3 text-sm">
+      <input
+        type="checkbox" class="mt-0.5 size-5 shrink-0 accent-link" :checked="filters.includeUnknown"
+        data-testid="filter-include-unknown" @change="emit('update', { includeUnknown: ($event.target as HTMLInputElement).checked })"
+      >
+      <span>
+        <span class="font-semibold">Включая изделия без сведений</span>
+        <span class="mt-0.5 block text-xs text-fg-muted">Показывать и те, где посадка, размер, состав, цена или наличие пока не указаны.</span>
+      </span>
+    </label>
   </div>
 </template>

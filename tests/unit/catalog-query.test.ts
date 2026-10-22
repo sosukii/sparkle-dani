@@ -114,6 +114,34 @@ describe('фильтры работают вместе', () => {
   })
 })
 
+describe('изделия с неизвестными сведениями', () => {
+  it('по умолчанию не попадают под фильтры по этим сведениям, но считаются отдельно', () => {
+    expect(run({ fit: 'oversize' }).hiddenUnknown).toBe(2) // c и d: посадка не указана
+    expect(run({ max: '30000' }).hiddenUnknown).toBe(1) // c: цена не известна
+    expect(run({ color: 'cocoa' }).hiddenUnknown).toBe(0) // цвет известен всегда
+    expect(run({}).hiddenUnknown).toBe(0)
+  })
+
+  it('includeUnknown добавляет их к выборке и обнуляет счётчик скрытых', () => {
+    const r = run({ fit: 'oversize', unknown: '1' })
+    expect(r.items.map((p) => p.id).sort()).toEqual(['a', 'c', 'd'])
+    expect(r.hiddenUnknown).toBe(0)
+    expect(ids({ max: '10000', unknown: '1' })).toEqual(['d', 'c'])
+  })
+
+  it('не отменяет известные несовпадения: другая посадка по-прежнему не подходит', () => {
+    expect(ids({ fit: 'oversize', unknown: '1' })).not.toContain('b') // b точно «обычная»
+  })
+
+  it('сохраняется в адресе и не считается активным фильтром сам по себе', () => {
+    const f = parseCatalogQuery({ unknown: '1' })
+    expect(f.includeUnknown).toBe(true)
+    expect(serializeCatalogFilters(f)).toEqual({ unknown: '1' })
+    expect(hasActiveFilters(f)).toBe(false)
+    expect(parseCatalogQuery({ unknown: '0' }).includeUnknown).toBe(false)
+  })
+})
+
 describe('поиск', () => {
   it('нечувствителен к регистру и ё/е', () => {
     expect(ids({ q: 'ЕЛКА' })).toEqual(['d'])
@@ -183,11 +211,24 @@ describe('фасеты', () => {
   })
 
   it('показывает только те опции, которые есть в категории', () => {
-    const r = run({ category: 'accessories' })
+    const r = run({ category: 'sweaters' })
+    expect(r.facets.fit.map((o) => o.id)).toEqual(['regular', 'oversize'])
+    expect(r.facets.size.map((o) => o.id)).toEqual(['s', 'm'])
+    expect(r.facets.material.map((o) => o.id)).toEqual(['wool', 'cotton'])
+    expect(r.facets.color.map((o) => o.id)).toEqual(['cocoa', 'olive'])
+  })
+
+  it('группа, которая ничего не сужает, скрыта: все изделия области одного типа или без таких сведений', () => {
+    const r = run({ category: 'accessories' }) // в области одно изделие «d»
+    expect(r.facets.type).toEqual([])
     expect(r.facets.fit).toEqual([])
-    expect(r.facets.size.map((o) => o.id)).toEqual(['one-size'])
-    expect(r.facets.material.map((o) => o.id)).toEqual(['wool'])
-    expect(r.facets.price).toEqual({ min: 6800, max: 6800 })
+    expect(r.facets.material).toEqual([])
+    // а у категории свитеров тип один на всех, поэтому и там группа не нужна
+    expect(run({ category: 'sweaters' }).facets.type).toEqual([])
+  })
+
+  it('скрытая группа появляется, если по ней уже что-то выбрано', () => {
+    expect(run({ category: 'accessories', material: 'wool' }).facets.material.map((o) => o.id)).toEqual(['wool'])
   })
 
   it('границы цены считаются только по известным ценам', () => {

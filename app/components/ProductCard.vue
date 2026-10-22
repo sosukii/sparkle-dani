@@ -1,9 +1,21 @@
 <script setup lang="ts">
 import { isOrderable, maxQty, toCartLine } from '#shared/utils/cart'
-import { formatPrice } from '#shared/utils/format'
+import { formatPrice, formatSizes } from '#shared/utils/format'
+import type { CatalogResult } from '#shared/types/catalog'
 import type { Product } from '#shared/types/product'
 
-const props = defineProps<{ product: Product, priority?: boolean }>()
+const props = defineProps<{ product: Product, priority?: boolean, labels?: CatalogResult['labels'] }>()
+
+// Одна строка для сравнения изделий в сетке: посадка и размеры, только если они известны.
+const meta = computed(() => {
+  const l = props.labels
+  if (!l) return ''
+  const parts: string[] = []
+  const fit = props.product.fit ? l.fits[props.product.fit] : null
+  if (fit) parts.push(`Посадка: ${fit.toLowerCase()}`)
+  if (props.product.sizes) parts.push(formatSizes(props.product.sizes, l.sizes))
+  return parts.join(' · ')
+})
 
 const cart = useCartStore()
 // Корзина читается из localStorage уже после гидратации, поэтому до неё всегда показываем кнопку «В корзину».
@@ -41,7 +53,8 @@ const decrease = () => (qty.value <= 1 ? cart.remove(props.product.id) : cart.se
           {{ product.title }}
         </NuxtLink>
       </h3>
-      <p class="mt-1.5 text-base font-bold" :class="product.price === null ? 'text-fg-muted' : ''">{{ product.price === null ? 'Цена уточняется' : formatPrice(product.price) }}</p>
+      <p class="mt-1 min-h-5 truncate text-xs text-fg-muted" data-testid="card-meta">{{ meta }}</p>
+      <p class="mt-1 text-base font-bold" :class="product.price === null ? 'text-fg-muted' : ''">{{ product.price === null ? 'Цена уточняется' : formatPrice(product.price) }}</p>
       <p class="min-w-0 pt-2.5">
         <AvailabilityBadge :availability="product.availability" :lead-time="product.leadTimeDays" />
       </p>

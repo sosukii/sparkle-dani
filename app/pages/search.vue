@@ -119,7 +119,7 @@ usePageSeo(() => ({
         </NuxtLink>
       </div>
       <div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4">
-        <ProductCard v-for="p in data.result.items" :key="p.id" :product="p" />
+        <ProductCard v-for="p in data.result.items" :key="p.id" :product="p" :labels="data.result.labels" />
       </div>
     </section>
       </template>

@@ -128,7 +128,7 @@ const steps = [
       <section class="container-page py-14 lg:py-20" aria-labelledby="home-new">
         <SectionHead id="home-new" eyebrow="Новинки" title="Только что связано" to="/catalog" />
         <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
-          <ProductCard v-for="p in latest?.items" :key="p.id" :product="p" />
+          <ProductCard v-for="p in latest?.items" :key="p.id" :product="p" :labels="latest?.labels" />
         </div>
       </section>
     </template>

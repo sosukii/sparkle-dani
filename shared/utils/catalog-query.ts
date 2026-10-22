@@ -76,6 +76,7 @@ export function parseCatalogQuery(
     availability: toList(raw.avail).filter((v) => v === 'in_stock' || v === 'made_to_order'),
     minPrice,
     maxPrice,
+    includeUnknown: raw.unknown === '1' || raw.unknown === 1 || raw.unknown === true,
     sort: (SORT_KEYS as readonly string[]).includes(sortRaw as string) ? (sortRaw as SortKey) : DEFAULT_SORT,
     page: toInt(raw.page, 1, 1, 10_000),
     pageSize: toInt(raw.pageSize, DEFAULT_PAGE_SIZE, 1, MAX_PAGE_SIZE),
@@ -91,6 +92,7 @@ export function serializeCatalogFilters(filters: CatalogFilters): Record<string,
   }
   if (filters.minPrice !== undefined) query.min = String(filters.minPrice)
   if (filters.maxPrice !== undefined) query.max = String(filters.maxPrice)
+  if (filters.includeUnknown) query.unknown = '1'
   if (filters.sort !== DEFAULT_SORT) query.sort = filters.sort
   if (filters.page > 1) query.page = String(filters.page)
   return query
@@ -137,9 +139,21 @@ function searchStems(product: Product, ctx: CatalogContext): string[] {
 
 // ───────────── фильтрация, сортировка, фасеты ─────────────
 
-function matchesGroup(selected: string[], values: (string | null)[]): boolean {
+function matchesGroup(selected: string[], values: (string | null)[], unknown = false, includeUnknown = false): boolean {
   if (selected.length === 0) return true
+  if (unknown && includeUnknown) return true
   return values.some((v) => v !== null && selected.includes(v))
+}
+
+/** Сведения этого вида у товара не известны (а не «нет»). Цвет и тип известны всегда. */
+function isUnknown(p: Product, group: FacetGroup): boolean {
+  switch (group) {
+    case 'fit': return p.fit === null
+    case 'size': return p.sizes === null
+    case 'material': return p.composition === null
+    case 'availability': return p.availability === null
+    default: return false
+  }
 }
 
 /** Значения товара по группе фильтра. Неизвестное (null) не совпадает ни с одним выбранным значением. */
@@ -173,11 +187,17 @@ export function filterProducts(
       if (intent.groups.length && !matchesAllGroups(searchStems(p, ctx), intent.groups)) return false
     }
     for (const group of FACET_GROUPS) {
-      if (except !== group && !matchesGroup(filters[group], valuesOf(p, group))) return false
+      if (except !== group && !matchesGroup(filters[group], valuesOf(p, group), isUnknown(p, group), filters.includeUnknown)) return false
     }
     if (except !== 'price') {
-      if (filters.minPrice !== undefined && (p.price === null || p.price < filters.minPrice)) return false
-      if (filters.maxPrice !== undefined && (p.price === null || p.price > filters.maxPrice)) return false
+      const priceFiltered = filters.minPrice !== undefined || filters.maxPrice !== undefined
+      if (p.price === null) {
+        if (priceFiltered && !filters.includeUnknown) return false
+      }
+      else {
+        if (filters.minPrice !== undefined && p.price < filters.minPrice) return false
+        if (filters.maxPrice !== undefined && p.price > filters.maxPrice) return false
+      }
     }
     return true
   })
@@ -228,6 +248,10 @@ function buildFacets(scope: Product[], filters: CatalogFilters, ctx: CatalogCont
       // Показываем только то, что вообще есть в этой категории — либо уже выбрано пользователем.
       .filter((o) => o.presentInScope || filters[group].includes(o.id))
       .map(({ presentInScope: _unused, ...rest }) => rest)
+    // Группа, в которой каждый вариант есть у всех изделий области (например, один «Свитер» в категории свитеров),
+    // ничего не сужает, поэтому её не показываем — если только что-то уже не выбрано.
+    const universal = (id: string) => scope.every((p) => valuesOf(p, group).includes(id))
+    if (scope.length > 0 && filters[group].length === 0 && facets[group].every((o) => universal(o.id))) facets[group] = []
   }
   const prices = scope.map((p) => p.price).filter((v): v is number => v !== null)
   return {
@@ -249,6 +273,10 @@ export function queryCatalog(products: Product[], filters: CatalogFilters, ctx: 
   const totalPages = Math.max(1, Math.ceil(matched.length / filters.pageSize))
   const page = Math.min(filters.page, totalPages)
   const start = (page - 1) * filters.pageSize
+  // Изделия, которые отсеяны только из-за неизвестных сведений: покупателю важно знать, что они есть.
+  const hiddenUnknown = filters.includeUnknown || !hasActiveFilters(filters)
+    ? 0
+    : filterProducts(products, { ...filters, includeUnknown: true }, ctx).length - matched.length
   return {
     items: matched.slice(start, start + filters.pageSize),
     total: matched.length,
@@ -256,5 +284,7 @@ export function queryCatalog(products: Product[], filters: CatalogFilters, ctx: 
     pageSize: filters.pageSize,
     totalPages,
     facets: buildFacets(scope, filters, ctx),
+    hiddenUnknown,
+    labels: { fits: Object.fromEntries(ctx.taxonomy.fits.map((f) => [f.id, f.label])), sizes: ctx.taxonomy.sizes },
   }
 }
