@@ -1,0 +1,36 @@
+name: Notify CI result
+
+# Сообщение в Telegram о результате CI на main: «пепелина зеленая!» или «пепелина упала (».
+# Работает, только если заданы секреты TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID; без них тихо пропускается.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  notify:
+    if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-24.04
+    env:
+      TG_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TG_CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+      RESULT: ${{ github.event.workflow_run.conclusion }}
+      CHANGE: ${{ github.event.workflow_run.display_title }}
+      RUN_URL: ${{ github.event.workflow_run.html_url }}
+    steps:
+      - name: Отправить результат в Telegram
+        if: env.TG_TOKEN != '' && env.TG_CHAT != ''
+        run: |
+          if [ "$RESULT" = "success" ]; then
+            HEAD="пепелина зеленая! ✅"
+          else
+            HEAD="пепелина упала ( ❌"
+          fi
+          curl -sS --fail-with-body -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TG_CHAT}" \
+            --data-urlencode "text=${HEAD}
+          ${CHANGE}
+          ${RUN_URL}" > /dev/null
