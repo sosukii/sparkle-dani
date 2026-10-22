@@ -34,6 +34,8 @@ const year = new Date().getFullYear()
           <li><NuxtLink to="/custom" class="no-underline hover:text-link">Свой заказ</NuxtLink></li>
           <li><NuxtLink to="/about" class="no-underline hover:text-link">О бренде</NuxtLink></li>
           <li><NuxtLink to="/delivery" class="no-underline hover:text-link">Покупка и доставка</NuxtLink></li>
+          <li><NuxtLink to="/info/sizes" class="no-underline hover:text-link">Размеры и мерки</NuxtLink></li>
+          <li><NuxtLink to="/info/materials" class="no-underline hover:text-link">Материалы и уход</NuxtLink></li>
           <li><NuxtLink to="/cart" class="no-underline hover:text-link">Корзина</NuxtLink></li>
         </ul>
       </nav>

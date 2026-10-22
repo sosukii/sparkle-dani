@@ -13,7 +13,7 @@ function staticRoutes(): string[] {
     .map((f) => `/product/${JSON.parse(readFileSync(`${dir}/${f}`, 'utf8')).slug}`)
   const categories = JSON.parse(readFileSync(fileURLToPath(new URL('./data/categories.json', import.meta.url)), 'utf8'))
     .map((c: { slug: string }) => `/catalog/${c.slug}`)
-  return ['/api/catalog.json', '/cart', '/search', '/custom', ...categories, ...products]
+  return ['/api/catalog.json', '/cart', '/search', '/custom', '/info/materials', '/info/sizes', ...categories, ...products]
 }
 
 export default defineNuxtConfig({

@@ -12,6 +12,10 @@ export interface CartLine {
   /** null — наличие не известно (товар можно заказать, детали согласуются с Дани). */
   availability: Availability | null
   stock?: number
+  /** Выбранный размер (id из справочника); null/не задан — размер не выбирался или не применим. */
+  size?: string | null
+  /** Подпись размера на момент добавления: «M», «Один размер». */
+  sizeLabel?: string | null
   qty: number
   /** true — товар больше нет в каталоге (удалён/скрыт). */
   unavailable?: boolean
@@ -21,7 +25,10 @@ export interface CartLine {
 export type OrderableProduct = Product & { price: number }
 export const isOrderable = (product: Product): product is OrderableProduct => product.price !== null
 
-export function toCartLine(product: OrderableProduct, qty = 1): CartLine {
+/** Позиция корзины = товар + размер: один свитер в M и в L это две разные позиции. */
+export const lineKey = (l: Pick<CartLine, 'productId' | 'size'>): string => (l.size ? `${l.productId}:${l.size}` : l.productId)
+
+export function toCartLine(product: OrderableProduct, qty = 1, size: { id: string, label: string } | null = null): CartLine {
   const first = product.images[0]!
   return {
     productId: product.id,
@@ -31,6 +38,8 @@ export function toCartLine(product: OrderableProduct, qty = 1): CartLine {
     image: { src: first.src, alt: first.alt, width: first.width, height: first.height },
     availability: product.availability,
     stock: product.availability === 'in_stock' ? product.stock : undefined,
+    size: size?.id ?? null,
+    sizeLabel: size?.label ?? null,
     qty,
   }
 }
@@ -49,30 +58,39 @@ export interface AddResult {
   limited: boolean
 }
 
+/** Сколько штук товара уже в корзине во всех размерах (остаток общий на изделие, а не на размер). */
+export function productQty(lines: CartLine[], productId: string): number {
+  return lines.filter((l) => l.productId === productId).reduce((sum, l) => sum + l.qty, 0)
+}
+
 export function addLine(lines: CartLine[], incoming: CartLine, qty = 1): AddResult {
   const wanted = Math.max(1, Math.floor(qty))
-  const existing = lines.find((l) => l.productId === incoming.productId)
+  const key = lineKey(incoming)
+  const existing = lines.find((l) => lineKey(l) === key)
   const limit = maxQty(incoming)
-  const current = existing?.qty ?? 0
+  const current = productQty(lines, incoming.productId)
   const next = Math.min(current + wanted, limit)
   const added = next - current
   if (added <= 0) return { lines, added: 0, limited: true }
-  const updated = { ...(existing ?? incoming), ...incoming, qty: next }
+  const updated = { ...(existing ?? incoming), ...incoming, qty: (existing?.qty ?? 0) + added }
   const result = existing
-    ? lines.map((l) => (l.productId === incoming.productId ? updated : l))
+    ? lines.map((l) => (lineKey(l) === key ? updated : l))
     : [...lines, updated]
   return { lines: result, added, limited: added < wanted }
 }
 
-export function setLineQty(lines: CartLine[], productId: string, qty: number): CartLine[] {
-  if (!Number.isFinite(qty) || qty < 1) return lines.filter((l) => l.productId !== productId)
-  return lines.map((l) =>
-    l.productId === productId ? { ...l, qty: Math.min(Math.floor(qty), Math.max(maxQty(l), 1)) } : l,
-  )
+/** `key` — ключ позиции (`lineKey`); для товаров без размера он совпадает с id товара. */
+export function setLineQty(lines: CartLine[], key: string, qty: number): CartLine[] {
+  if (!Number.isFinite(qty) || qty < 1) return lines.filter((l) => lineKey(l) !== key)
+  return lines.map((l) => {
+    if (lineKey(l) !== key) return l
+    const others = productQty(lines, l.productId) - l.qty
+    return { ...l, qty: Math.min(Math.floor(qty), Math.max(maxQty(l) - others, 1)) }
+  })
 }
 
-export function removeLine(lines: CartLine[], productId: string): CartLine[] {
-  return lines.filter((l) => l.productId !== productId)
+export function removeLine(lines: CartLine[], key: string): CartLine[] {
+  return lines.filter((l) => lineKey(l) !== key)
 }
 
 export function cartTotals(lines: CartLine[]): { count: number, total: number } {
@@ -87,7 +105,9 @@ export function reconcileLines(lines: CartLine[], fresh: Product[]): CartLine[] 
   return lines.map((l) => {
     const product = byId.get(l.productId)
     if (!product || !isOrderable(product)) return { ...l, unavailable: true }
-    const next = toCartLine(product, l.qty)
+    // Выбранный размер больше не предлагается: позицию нельзя оформить как есть.
+    if (l.size && !product.sizes?.includes(l.size)) return { ...l, unavailable: true }
+    const next = toCartLine(product, l.qty, l.size ? { id: l.size, label: l.sizeLabel ?? l.size } : null)
     return { ...next, qty: Math.min(l.qty, Math.max(maxQty(next), 1)) }
   })
 }
@@ -98,7 +118,7 @@ export function buildOrderText(lines: CartLine[], origin = ''): string {
   const { total } = cartTotals(active)
   const rows = active.map(
     (l, i) =>
-      `${i + 1}. ${l.title} — ${l.qty} × ${formatPrice(l.price)} = ${formatPrice(l.price * l.qty)}${origin ? `\n   ${origin}/product/${l.slug}` : ''}`,
+      `${i + 1}. ${l.title}${l.sizeLabel ? `, размер ${l.sizeLabel}` : ''} — ${l.qty} × ${formatPrice(l.price)} = ${formatPrice(l.price * l.qty)}${origin ? `\n   ${origin}/product/${l.slug}` : ''}`,
   )
   return [`Здравствуйте, ${OWNER_NAME}! Хочу заказать:`, '', ...rows, '', `Итого: ${formatPrice(total)}`].join('\n')
 }

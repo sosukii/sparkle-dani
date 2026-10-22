@@ -99,7 +99,8 @@ const option = z.object({ id, label: z.string().min(1) })
 export const taxonomySchema = z.object({
   types: z.array(option),
   colors: z.array(option.extend({ hex: z.string().regex(/^#[0-9a-fA-F]{6}$/) })),
-  fits: z.array(option),
+  /** Посадки с пояснением, что это значит для выбора размера. */
+  fits: z.array(option.extend({ hint: z.string().optional() })),
   sizes: z.array(option),
   /** Какие измерения изделия бывают (ширина по груди, длина…). */
   measures: z.array(option),

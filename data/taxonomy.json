@@ -1,41 +1,138 @@
 {
   "types": [
-    { "id": "sweater", "label": "Свитер" },
-    { "id": "cardigan", "label": "Кардиган" },
-    { "id": "scarf", "label": "Шарф" },
-    { "id": "snood", "label": "Снуд" },
-    { "id": "mittens", "label": "Варежки" },
-    { "id": "beanie", "label": "Шапка" },
-    { "id": "amigurumi", "label": "Игрушка-амигуруми" }
+    {
+      "id": "sweater",
+      "label": "Свитер"
+    },
+    {
+      "id": "cardigan",
+      "label": "Кардиган"
+    },
+    {
+      "id": "scarf",
+      "label": "Шарф"
+    },
+    {
+      "id": "snood",
+      "label": "Снуд"
+    },
+    {
+      "id": "mittens",
+      "label": "Варежки"
+    },
+    {
+      "id": "beanie",
+      "label": "Шапка"
+    },
+    {
+      "id": "amigurumi",
+      "label": "Игрушка-амигуруми"
+    }
   ],
   "colors": [
-    { "id": "cream", "label": "Молочный", "hex": "#e8d1a7" },
-    { "id": "caramel", "label": "Карамель", "hex": "#84592b" },
-    { "id": "cocoa", "label": "Какао", "hex": "#442d1c" },
-    { "id": "wine", "label": "Винный", "hex": "#743014" },
-    { "id": "olive", "label": "Оливковый", "hex": "#9d9167" },
-    { "id": "gray", "label": "Серый", "hex": "#8b8680" },
-    { "id": "charcoal", "label": "Графит", "hex": "#3a3330" },
-    { "id": "black", "label": "Чёрный", "hex": "#1a1412" }
+    {
+      "id": "cream",
+      "label": "Молочный",
+      "hex": "#e8d1a7"
+    },
+    {
+      "id": "caramel",
+      "label": "Карамель",
+      "hex": "#84592b"
+    },
+    {
+      "id": "cocoa",
+      "label": "Какао",
+      "hex": "#442d1c"
+    },
+    {
+      "id": "wine",
+      "label": "Винный",
+      "hex": "#743014"
+    },
+    {
+      "id": "olive",
+      "label": "Оливковый",
+      "hex": "#9d9167"
+    },
+    {
+      "id": "gray",
+      "label": "Серый",
+      "hex": "#8b8680"
+    },
+    {
+      "id": "charcoal",
+      "label": "Графит",
+      "hex": "#3a3330"
+    },
+    {
+      "id": "black",
+      "label": "Чёрный",
+      "hex": "#1a1412"
+    }
   ],
   "fits": [
-    { "id": "regular", "label": "Обычная" },
-    { "id": "oversize", "label": "Оверсайз" }
+    {
+      "id": "regular",
+      "label": "Обычная",
+      "hint": "Умеренно облегает: размер обычно выбирают по своим меркам."
+    },
+    {
+      "id": "oversize",
+      "label": "Оверсайз",
+      "hint": "Свободный крой: изделие намеренно шире и длиннее. Свободу посадки можно регулировать размером; если сомневаетесь, спросите Дани."
+    }
   ],
   "sizes": [
-    { "id": "xs", "label": "XS" },
-    { "id": "s", "label": "S" },
-    { "id": "m", "label": "M" },
-    { "id": "l", "label": "L" },
-    { "id": "xl", "label": "XL" },
-    { "id": "one-size", "label": "Один размер" }
+    {
+      "id": "xs",
+      "label": "XS"
+    },
+    {
+      "id": "s",
+      "label": "S"
+    },
+    {
+      "id": "m",
+      "label": "M"
+    },
+    {
+      "id": "l",
+      "label": "L"
+    },
+    {
+      "id": "xl",
+      "label": "XL"
+    },
+    {
+      "id": "one-size",
+      "label": "Один размер"
+    }
   ],
   "measures": [
-    { "id": "chest", "label": "Ширина изделия по груди" },
-    { "id": "length", "label": "Длина" },
-    { "id": "sleeve", "label": "Длина рукава" },
-    { "id": "shoulder", "label": "Ширина плеч" },
-    { "id": "circumference", "label": "Обхват" },
-    { "id": "height", "label": "Высота" }
+    {
+      "id": "chest",
+      "label": "Ширина изделия по груди"
+    },
+    {
+      "id": "length",
+      "label": "Длина"
+    },
+    {
+      "id": "sleeve",
+      "label": "Длина рукава"
+    },
+    {
+      "id": "shoulder",
+      "label": "Ширина плеч"
+    },
+    {
+      "id": "circumference",
+      "label": "Обхват"
+    },
+    {
+      "id": "height",
+      "label": "Высота"
+    }
   ]
 }

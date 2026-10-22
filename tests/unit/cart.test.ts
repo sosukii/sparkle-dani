@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   addLine,
+  lineKey,
+  productQty,
   isOrderable,
   buildOrderText,
   cartTotals,
@@ -92,5 +94,44 @@ describe('buildOrderText', () => {
     expect(text).toContain('1. Мишка — 2 ×')
     expect(text).toContain('https://example.com/product/p1')
     expect(text).toMatch(/Итого: 2\s?500/)
+  })
+})
+
+describe('размеры в корзине', () => {
+  const sweater = (size: string) => toCartLine(orderable({ id: 's1', title: 'Свитер', price: 5000, sizes: ['m', 'l'], stock: 3 }), 1, { id: size, label: size.toUpperCase() })
+
+  it('один товар в разных размерах — разные позиции, одинаковый размер складывается', () => {
+    let { lines } = addLine([], sweater('m'))
+    ;({ lines } = addLine(lines, sweater('l')))
+    ;({ lines } = addLine(lines, sweater('m')))
+    expect(lines.map((l) => [lineKey(l), l.qty])).toEqual([['s1:m', 2], ['s1:l', 1]])
+  })
+
+  it('остаток общий на изделие, а не на каждый размер', () => {
+    let { lines } = addLine([], sweater('m'), 2)
+    const r = addLine(lines, sweater('l'), 5)
+    expect(r.added).toBe(1) // остаток 3: две штуки уже лежат в размере M
+    expect(r.limited).toBe(true)
+    lines = r.lines
+    expect(productQty(lines, 's1')).toBe(3)
+    expect(addLine(lines, sweater('m')).added).toBe(0)
+  })
+
+  it('количество и удаление работают по ключу позиции, соседний размер не затрагивается', () => {
+    const { lines } = addLine(addLine([], sweater('m'), 1).lines, sweater('l'), 1)
+    expect(setLineQty(lines, 's1:m', 5).map((l) => l.qty)).toEqual([2, 1]) // 3 в сумме — потолок остатка
+    expect(removeLine(lines, 's1:l').map(lineKey)).toEqual(['s1:m'])
+  })
+
+  it('размер попадает в текст заказа', () => {
+    const { lines } = addLine([], sweater('m'))
+    expect(buildOrderText(lines)).toContain('1. Свитер, размер M — 1 ×')
+  })
+
+  it('если выбранный размер больше не предлагается, позиция помечается недоступной', () => {
+    const { lines } = addLine([], sweater('m'))
+    const fresh = [product({ id: 's1', title: 'Свитер', price: 5000, sizes: ['l'] })]
+    expect(reconcileLines(lines, fresh)[0]!.unavailable).toBe(true)
+    expect(reconcileLines(lines, [product({ id: 's1', price: 5000, sizes: ['m', 'l'] })])[0]!.unavailable).toBeUndefined()
   })
 })
